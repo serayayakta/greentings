@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import colors from "../config/colors";
 
+//hi
 function WelcomeScreen(props) {
   return (
     <ImageBackground
