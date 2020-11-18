@@ -1,8 +1,8 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.10/libexec/bin/yarn.js install
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.10/libexec/bin/yarn.js add expo
 
 PATH: 
-  /opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/serayayakta/.npm-global/bin:/Users/serayayakta/.rvm/bin
+  /opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/npm/bin:~/.npm-global/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/opt/local/bin:/opt/local/sbin:/Users/serayayakta/.npm-global/bin:/Users/serayayakta/.rvm/bin:/Users/serayayakta/.npm-global/bin
 
 Yarn version: 
   1.22.10
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/expo: tunneling socket could not be established, cause=getaddrinfo ENOTFOUND proxy.example.com
+  Error: https://registry.yarnpkg.com/expo-status-bar: tunneling socket could not be established, cause=getaddrinfo ENOTFOUND proxy.example.com
       at ClientRequest.onError (/usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:152235:17)
       at Object.onceWrapper (events.js:422:26)
       at ClientRequest.emit (events.js:315:20)
