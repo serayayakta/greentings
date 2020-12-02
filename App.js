@@ -37,8 +37,18 @@ export default class App extends Component {
     );
   }
 }*/
+import { createStackNavigator } from "@react-navigation/stack";
+
+const Stack = createStackNavigator();
 
 export default function App() {
-  return <RegisterScreen />;
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+        <Stack.Screen name="MainScreen" component={MainScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
   //or return <LoginScreen/>;
 }

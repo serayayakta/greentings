@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 
-export default class RegisterScreen extends Component {
+export default class RegisterScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -47,7 +47,10 @@ export default class RegisterScreen extends Component {
     fetch("http://127.0.0.1:8000/signup/", requestOptions)
       .then((response) => response.json())
       .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
+      .catch((error) => console.log("error", error))
+      .finally(() => {
+        this.props.navigation.navigate("MainScreen");
+      });
   };
   render() {
     return (
