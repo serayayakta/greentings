@@ -10,9 +10,44 @@ import {
 } from "react-native";
 
 export default class RegisterScreen extends Component {
-  state = {
-    email: "",
-    password: "",
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+      surname: "",
+      email: "",
+      phoneNumber: "",
+      password: "",
+      confirmPassword: "",
+      errorMessage: "",
+    };
+  }
+
+  onSignUp = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      first_name: this.state.name,
+      last_name: this.state.surname,
+      email: this.state.email,
+      phone_number: this.state.phoneNumber,
+      password: this.state.confirmPassword,
+      verified: false,
+      user_type: "Customer",
+    });
+    console.log(raw);
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch("http://127.0.0.1:8000/signup/", requestOptions)
+      .then((response) => response.json())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
   };
   render() {
     return (
@@ -34,20 +69,34 @@ export default class RegisterScreen extends Component {
 
         <View style={styles.inputView}>
           <TextInput
-            secureTextEntry
             style={styles.inputText}
             placeholder="Name..."
             placeholderTextColor="#003f5c"
-            onChangeText={(text) => this.setState({ password: text })}
+            onChangeText={(text) => this.setState({ name: text })}
           />
         </View>
         <View style={styles.inputView}>
           <TextInput
-            secureTextEntry
+            style={styles.inputText}
+            placeholder="Surname..."
+            placeholderTextColor="#003f5c"
+            onChangeText={(text) => this.setState({ surname: text })}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <TextInput
             style={styles.inputText}
             placeholder="Email..."
             placeholderTextColor="#003f5c"
-            onChangeText={(text) => this.setState({ password: text })}
+            onChangeText={(text) => this.setState({ email: text })}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.inputText}
+            placeholder="Phone number..."
+            placeholderTextColor="#003f5c"
+            onChangeText={(text) => this.setState({ phoneNumber: text })}
           />
         </View>
         <View style={styles.inputView}>
@@ -63,14 +112,14 @@ export default class RegisterScreen extends Component {
           <TextInput
             secureTextEntry
             style={styles.inputText}
-            placeholder="Confirm password"
+            placeholder="Confirm password..."
             placeholderTextColor="#003f5c"
-            onChangeText={(text) => this.setState({ password: text })}
+            onChangeText={(text) => this.setState({ confirmPassword: text })}
           />
         </View>
 
         <View style={{ flex: 0.15 }}></View>
-        <TouchableOpacity style={styles.loginBtn}>
+        <TouchableOpacity style={styles.loginBtn} onPress={this.onSignUp}>
           <Text style={styles.loginText}>SIGN ME UP!</Text>
         </TouchableOpacity>
         <TouchableOpacity>
