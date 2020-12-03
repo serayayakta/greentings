@@ -12,6 +12,7 @@ import {
 export default class RegisterScreen extends React.Component {
   constructor(props) {
     super(props);
+    this.onSignUp = this.onSignUp.bind(this);
     this.state = {
       name: "",
       surname: "",
@@ -20,6 +21,7 @@ export default class RegisterScreen extends React.Component {
       password: "",
       confirmPassword: "",
       errorMessage: "",
+      responseStatus: 0,
     };
   }
 
@@ -36,7 +38,7 @@ export default class RegisterScreen extends React.Component {
       verified: false,
       user_type: "Customer",
     });
-    console.log(raw);
+
     var requestOptions = {
       method: "POST",
       headers: myHeaders,
@@ -45,12 +47,17 @@ export default class RegisterScreen extends React.Component {
     };
 
     fetch("http://127.0.0.1:8000/signup/", requestOptions)
-      .then((response) => response.json())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error))
-      .finally(() => {
-        this.props.navigation.navigate("MainScreen");
-      });
+      .then((response) => {
+        response.json();
+        this.setState({ responseStatus: response.status });
+        console.log("response statusssss ", this.state.responseStatus);
+      })
+      .then(() => {
+        if (this.state.responseStatus == 201) {
+          this.props.navigation.navigate("MainScreen");
+        }
+      })
+      .catch((error) => console.log("error", error));
   };
   render() {
     return (
