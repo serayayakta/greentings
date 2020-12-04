@@ -13,8 +13,6 @@ import {
 import MainScreen from "./app/screens/MainScreen";
 import LoginScreen from "./app/screens/LoginScreen";
 import RegisterScreen from "./app/screens/RegisterScreen";
-import ViewImageScreen from "./app/screens/ViewImageScreen";
-import WelcomeScreen from "./app/screens/WelcomeScreen";
 import React, { Component } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 
@@ -41,14 +39,26 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 const Stack = createStackNavigator();
 
-export default function App() {
+const AppNavigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        initialRouteName="LoginScreen"
+        screenOptions={{ headerShown: false }}
+      >
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen name="MainScreen" component={MainScreen} />
       </Stack.Navigator>
     </NavigationContainer>
+  );
+};
+
+export default function App(props) {
+  return (
+    <>
+      <AppNavigation />
+    </>
   );
   //or return <LoginScreen/>;
 }

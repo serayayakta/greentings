@@ -8,6 +8,7 @@ import {
   ImageBackground,
   Image,
 } from "react-native";
+import LoginScreen from "./LoginScreen";
 
 export default class RegisterScreen extends React.Component {
   constructor(props) {
@@ -132,7 +133,9 @@ export default class RegisterScreen extends React.Component {
         <TouchableOpacity style={styles.loginBtn} onPress={this.onSignUp}>
           <Text style={styles.loginText}>SIGN ME UP!</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate(LoginScreen)}
+        >
           <Text style={styles.loginText}>Back To Login</Text>
         </TouchableOpacity>
       </ImageBackground>
