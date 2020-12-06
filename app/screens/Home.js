@@ -9,13 +9,10 @@ import {
   ScrollView,
   TouchableOpacity,
   ImageBackground,
-  Button,
 } from "react-native";
 import Product from "./Product";
-import ProductDetailScreen from "./ProductDetailScreen";
-import colors from "../config/colors";
 
-class Home extends React.Component {
+class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,23 +35,13 @@ class Home extends React.Component {
     this.fetchProducts();
   }
   renderItemComponent = (data) => (
-    <TouchableOpacity
-      onPress={() => {
-        // Navigate using the `navigation` prop that you received
-        this.props.navigation.navigate(ProductDetailScreen);
-        console.log("sara");
-      }}
-    >
-      <Product
-        product={data.item}
-        image={data.item.img}
-        brand_name={data.item.brand_name}
-        product_name={data.item.product_name}
-        rating={data.item.rating}
-        price={data.item.price}
-        navigation={this.props.navigation}
-      />
-    </TouchableOpacity>
+    <Product
+      image={data.item.img}
+      brand_name={data.item.brand_name}
+      product_name={data.item.product_name}
+      rating={data.item.rating}
+      price={data.item.price}
+    />
   );
   FlatListHeader = () => {
     const image = {
@@ -67,20 +54,19 @@ class Home extends React.Component {
         style={{
           height: 300,
           width: "100%",
+          margin: 5,
           border: 2.9,
           borderColor: "black",
           alignSelf: "center",
-          shadowColor: "black",
+          shadowColor: "#000",
           shadowOffset: {
             width: 0,
-            height: 2,
+            height: 16,
           },
-          shadowOpacity: 1, //increase if shadow needed
+          shadowOpacity: 1,
           shadowRadius: 7.49,
-          borderTop: 0,
           borderBottomLeftRadius: 20,
           borderBottomRightRadius: 20,
-          marginBottom: 15,
         }}
       >
         <ImageBackground
@@ -104,8 +90,8 @@ class Home extends React.Component {
   ItemSeparator = () => (
     <View
       style={{
-        height: 0.4,
-        backgroundColor: "rgba(0,0,0,0.1)",
+        height: 2,
+        backgroundColor: "rgba(0,0,0,0.5)",
         marginLeft: 15,
         marginRight: 15,
       }}
@@ -122,8 +108,14 @@ class Home extends React.Component {
     //const products = JSON.stringify(productsJSON);
     //console.log(products);
 
+    const Item = ({ product_id }) => (
+      <View>
+        <Text>{product_id}</Text>
+      </View>
+    );
+
     return (
-      <View styles={styles.container}>
+      <SafeAreaView>
         <ScrollView>
           <FlatList
             data={this.state.dataSource}
@@ -135,7 +127,7 @@ class Home extends React.Component {
             onRefresh={this.handleRefresh}
           ></FlatList>
         </ScrollView>
-      </View>
+      </SafeAreaView>
     );
   }
 }
@@ -152,7 +144,10 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   container: {
-    backgroundColor: "black",
+    height: 300,
+    margin: 10,
+    backgroundColor: "#FFF",
+    borderRadius: 6,
   },
   image: {
     borderRadius: 4,

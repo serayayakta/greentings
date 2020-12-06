@@ -29,7 +29,7 @@ class Search extends Component {
   }
   componentWillMount() {
     //for android view to be ok, may cause issues
-    this.startHeaderHeight = 80;
+    //this.startHeaderHeight = 80;
     if (Platform.OS == "android") {
       this.startHeaderHeight = 100 + StatusBar.currentHeight;
     }
@@ -70,9 +70,11 @@ class Search extends Component {
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, alignItems: 'stretch'}}>
+          <View style={{ flex: 1, alignItems: 'stretch'}}>
           <View
             style={{
+              //flex:0.2,
               height: this.startHeaderHeight,
               backgroundColor: "white",
               borderBottomWidth: 1,
@@ -107,7 +109,7 @@ class Search extends Component {
               </TouchableOpacity>
             </View>
           </View>
-          <ScrollView scrollEventThrottle={16}>
+          <ScrollView  scrollEventThrottle={12} >
             <View style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}>
               <Text
                 style={{
@@ -119,7 +121,7 @@ class Search extends Component {
                 What can we help you find Ilgin?
               </Text>
 
-              <View style={{ height: 130, MarginTop: 20 }}>
+              <View style={{ height: 110, MarginTop: 20 }}>
                 <ScrollView
                   horizontal={true}
                   showsHorizontalScrollIndicator={false}
@@ -143,10 +145,12 @@ class Search extends Component {
                           resizeMode: "cover",
                         }}
                       />
-                    </View>
-                    <View style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}>
+                                          <View style={{ flex:0.5, paddingLeft: 10, paddingTop: 10 }}>
                       <Text>Fashion</Text>
                     </View>
+                      
+                    </View>
+
                   </View>
 
                   <View
@@ -225,17 +229,22 @@ class Search extends Component {
               </View>
             </View>
           </ScrollView>
-          <ScrollView>
-          <FlatList
-            data={this.state.dataSource}
-            //ListHeaderComponent={this.FlatListHeader}
-            renderItem={(item) => this.renderItemComponent(item)}
-            keyExtractor={(item) => item.product_id.toString()}
-            ItemSeparatorComponent={this.ItemSeparator}
-            refreshing={this.state.refreshing}
-            onRefresh={this.handleRefresh}
-          ></FlatList>
-        </ScrollView>
+          </View >
+          <View style={{ flex: 2, alignItems: 'stretch'}}>
+          <ScrollView style={styles.scrollStyle}>
+            <FlatList 
+              data={this.state.dataSource}
+              //ListHeaderComponent={this.FlatListHeader}
+              renderItem={(item) => this.renderItemComponent(item)}
+              keyExtractor={(item) => item.product_id.toString()}
+              ItemSeparatorComponent={this.ItemSeparator}
+              refreshing={this.state.refreshing}
+              onRefresh={this.handleRefresh}
+            ></FlatList>
+          </ScrollView>
+          </View>
+
+          
         </View>
       </SafeAreaView>
     )
@@ -299,4 +308,7 @@ const styles = StyleSheet.create({
   topLogoArea: {
     height: "20%",
   },
+  scrollStyle:{
+    //height: '55%'
+  }
 });
