@@ -17,6 +17,7 @@ import React, { Component } from "react";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
 import { createMaterialTopTabNavigator } from "react-navigation";
+import colors from "../config/colors";
 //export default function App() {
 // return <WelcomeScreen />;
 //}
@@ -24,9 +25,9 @@ import { createMaterialTopTabNavigator } from "react-navigation";
 export default class MainScreen extends Component {
   render() {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#f2f2f2" }}>
+      <View style={{ flex: 1, backgroundColor: "#f2f2f2", marginBottom: 0 }}>
         <AppTabNavigator />
-      </SafeAreaView>
+      </View>
     );
   }
 }

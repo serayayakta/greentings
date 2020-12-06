@@ -36,6 +36,14 @@ export default class App extends Component {
   }
 }*/
 import { createStackNavigator } from "@react-navigation/stack";
+import ProductDetailScreen from "./app/screens/ProductDetailScreen";
+import Product from "./app/screens/Product";
+import Home from "./app/screens/Home";
+import Search from "./app/screens/Search";
+import Basket from "./app/screens/Basket";
+import Profile from "./app/screens/Profile";
+import Icon from "react-native-vector-icons/Ionicons";
+import AppTabNavigator from "./app/screens/AppTabNavigator";
 
 const Stack = createStackNavigator();
 
@@ -49,6 +57,10 @@ const AppNavigation = () => {
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen name="MainScreen" component={MainScreen} />
+        <Stack.Screen
+          name="ProductDetailScreen"
+          component={ProductDetailScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -62,3 +74,54 @@ export default function App(props) {
   );
   //or return <LoginScreen/>;
 }
+/*
+//const MainStack = createBottomTabNavigator();
+const Tab = createStackNavigator();
+
+function MainStackScreen() {
+  return (
+    <MainStack.Navigator>
+      <MainStack.Screen
+        name="Home"
+        component={Home}
+        options={{
+          title: "My home",
+          headerTintColor: "#fff",
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+          headerStyle: {
+            backgroundColor: "black",
+            position: "absolute",
+            tabBarPosition: "bottom",
+          },
+        }}
+      />
+      <MainStack.Screen name="Search" component={Search} />
+      <MainStack.Screen name="Basket" component={Basket} />
+      <MainStack.Screen name="Profile" component={Profile} />
+    </MainStack.Navigator>
+  );
+}
+
+const AppNavigation = () => {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator screenOptions={{ headerShown: false }}>
+        <Tab.Screen name="LoginScreen" component={LoginScreen} />
+        <Tab.Screen name="RegisterScreen" component={RegisterScreen} />
+        <Tab.Screen name="MainScreen" component={AppTabNavigator} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default function App() {
+  return (
+    <>
+      <AppNavigation />
+    </>
+  );
+  //normally return <AppNavigation />;
+}
+*/

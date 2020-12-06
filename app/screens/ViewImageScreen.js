@@ -2,7 +2,7 @@ import React from "react";
 import { Image, View, StyleSheet, Text } from "react-native";
 import colors from "../config/colors";
 
-function ViewImageScreen(props) {
+function ViewImageScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.closeIcon}>

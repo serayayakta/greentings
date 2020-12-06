@@ -12,7 +12,7 @@ import {
 import colors from "../config/colors";
 
 //hi
-function WelcomeScreen(props) {
+function WelcomeScreen() {
   return (
     <ImageBackground
       style={styles.background}

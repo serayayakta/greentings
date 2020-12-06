@@ -14,55 +14,33 @@ import React, { Component } from "react";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
 import { createMaterialTopTabNavigator } from "react-navigation";
-//export default function App() {
-// return <WelcomeScreen />;
-//}
 import Home from "./Home";
 import Basket from "./Basket";
 import Search from "./Search";
 import Profile from "./Profile";
+import ProductDetailScreen from "./ProductDetailScreen";
+import Product from "./Product";
+import WelcomeScreen from "./WelcomeScreen";
 
-/*class HomeScreen extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text> Tab nav </Text>
-      </View>
-    );
-  }
-}
-class SearchScreen extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text> search tab </Text>
-      </View>
-    );
-  }
-}
-class BasketScreen extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text> Basket tab </Text>
-      </View>
-    );
-  }
-}
-class ProfileScreen extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text> Profile tab </Text>
-      </View>
-    );
-  }
-}*/
+import { createStackNavigator } from "react-navigation";
 
-const AppTabNavigator = createMaterialTopTabNavigator(
+const HomePlus = createStackNavigator(
   {
     Home: {
       screen: Home,
+    }, //this is the "global" screen
+    ProductDetailScreen: { screen: ProductDetailScreen }, //change this for each page
+    //Product: { screen: Product },
+  },
+  {
+    headerMode: "none",
+  }
+);
+
+const AppTabNavigator = createMaterialTopTabNavigator(
+  {
+    HomePlus: {
+      screen: HomePlus,
       navigationOptions: {
         tabBarLabel: "Home",
         tabBarIcon: ({ tintColor }) => (
@@ -99,15 +77,13 @@ const AppTabNavigator = createMaterialTopTabNavigator(
     },
   },
   {
-    initialRouteName: "Home",
     tabBarPosition: "bottom",
     //swipeEnabled:false -->to disable swipe
-    //order: ["Home", "Settings"],
     tabBarOptions: {
       activeTintColor: "darkseagreen",
-      inactiveTintColor: "grey",
+      inactiveTintColor: "#f2f2f2",
       style: {
-        backgroundColor: "#f2f2f2",
+        backgroundColor: "black",
         borderTopColor: "grey",
         borderTopWidth: 0.2,
       },
@@ -118,13 +94,5 @@ const AppTabNavigator = createMaterialTopTabNavigator(
     },
   }
 );
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
 
 export default AppTabNavigator;

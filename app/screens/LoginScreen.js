@@ -45,7 +45,7 @@ export default class LoginScreen extends Component {
         console.log("response statusssss ", this.state.responseStatus);
       })
       .then(() => {
-        if (this.state.responseStatus == 201) {
+        if (this.state.responseStatus == 202) {
           this.props.navigation.navigate("MainScreen");
         }
       })
