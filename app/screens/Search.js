@@ -9,12 +9,24 @@ import {
   StatusBar,
   ScrollView,
   Image,
+  FlatList
 } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 import Icon from "react-native-vector-icons/Ionicons";
+import Product from "./Product"
 import Category from "./Category";
 
 class Search extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataSource: [],
+      searchKey :'',
+      refreshing: true,
+      searchUrl: "http://127.0.0.1:8000/search/?search="
+    };
+  }
   componentWillMount() {
     //for android view to be ok, may cause issues
     this.startHeaderHeight = 80;
@@ -22,6 +34,39 @@ class Search extends Component {
       this.startHeaderHeight = 100 + StatusBar.currentHeight;
     }
   }
+  searchFunc =(searchKey) => {console.log(searchKey)}
+  state ={
+    seachKey:'',
+  }
+  handleSearchkey = (text) => {
+    this.setState({searchKey : text})
+  }
+  /*componentDidMount() {
+    this.fetchProducts();
+  }*/
+  
+  fetchProducts() {
+    fetch(this.state.searchUrl )
+      .then((response) => response.json())
+      .then((result) => {
+        this.setState({
+          dataSource: result,
+          refreshing: false,
+        });
+      })
+      .catch((error) => console.log("fetch error", error));
+  }
+
+
+  renderItemComponent = (data) => (
+    <Product
+      image={data.item.img}
+      brand_name={data.item.brand_name}
+      product_name={data.item.product_name}
+      rating={data.item.rating}
+      price={data.item.price}
+    />
+  );
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -47,13 +92,19 @@ class Search extends Component {
                 MarginTop: Platform.OS == "android" ? 30 : null,
               }}
             >
-              <Icon name="ios-search" size={20} />
+
               <TextInput
                 underlineColorAndroid="transparent"
                 placeholder="Search here"
                 placeholderTextColor="grey"
                 style={{ flex: 1, fontWeight: "700", backgroundColor: "white" }}
+                onChangeText={(text) => {this.setState({ searchKey: text}); 
+                  
+                 }}
               />
+              <TouchableOpacity activeOpacity = {0.5} onPress={() => this.searchResult(this.state.searchKey)}>
+                <Icon name="ios-search" size={20} /> 
+              </TouchableOpacity>
             </View>
           </View>
           <ScrollView scrollEventThrottle={16}>
@@ -174,10 +225,28 @@ class Search extends Component {
               </View>
             </View>
           </ScrollView>
+          <ScrollView>
+          <FlatList
+            data={this.state.dataSource}
+            //ListHeaderComponent={this.FlatListHeader}
+            renderItem={(item) => this.renderItemComponent(item)}
+            keyExtractor={(item) => item.product_id.toString()}
+            ItemSeparatorComponent={this.ItemSeparator}
+            refreshing={this.state.refreshing}
+            onRefresh={this.handleRefresh}
+          ></FlatList>
+        </ScrollView>
         </View>
       </SafeAreaView>
-    );
+    )
   }
+  searchResult= (searchKey) => {
+    const fetchUrl = "http://127.0.0.1:8000/search/?search=";
+    this.setState({searchUrl: fetchUrl + this.state.searchKey});
+    this.fetchProducts();
+    
+    console.log("Enter searchResult",searchKey);
+  };
 }
 export default Search;
 
@@ -186,5 +255,48 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  aboutUs: {
+    color: "white",
+    fontSize: 12,
+    textAlign: "center",
+    textShadowColor: "black",
+    textShadowOffset: { width: 1, height: 3 },
+    textShadowRadius: 10,
+    textDecorationLine: "underline",
+  },
+  container: {
+    height: 300,
+    margin: 10,
+    backgroundColor: "#FFF",
+    borderRadius: 6,
+  },
+  image: {
+    borderRadius: 4,
+    flex: 1,
+    justifyContent: "center",
+  },
+  slogan: {
+    color: "white",
+    fontSize: 14,
+    textAlign: "center",
+    textShadowColor: "black",
+    textShadowOffset: { width: 1, height: 3 },
+    textShadowRadius: 10,
+    fontFamily: "Helvetica Neue",
+  },
+  text: {
+    color: "white",
+    fontSize: 42,
+    fontFamily: "Helvetica Neue",
+    fontWeight: "bold",
+    textAlign: "center",
+    //backgroundColor: "#004d4d",
+    textShadowColor: "black",
+    textShadowOffset: { width: 1, height: 3 },
+    textShadowRadius: 10,
+  },
+  topLogoArea: {
+    height: "20%",
   },
 });
