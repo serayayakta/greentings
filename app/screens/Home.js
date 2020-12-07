@@ -38,23 +38,25 @@ class Home extends React.Component {
     this.fetchProducts();
   }
   renderItemComponent = (data) => (
-    <TouchableOpacity
-      onPress={() => {
-        // Navigate using the `navigation` prop that you received
-        this.props.navigation.navigate(ProductDetailScreen);
-        console.log("sara");
-      }}
+    <View
+    //onPress={() => {
+    // Navigate using the `navigation` prop that you received
+
+    //console.log("ilgin");
+    //}}
     >
       <Product
         product={data.item}
-        image={data.item.img}
+        product_id={data.item.product_id}
+        img={data.item.img}
         brand_name={data.item.brand_name}
         product_name={data.item.product_name}
         rating={data.item.rating}
         price={data.item.price}
         navigation={this.props.navigation}
+        description={data.item.description}
       />
-    </TouchableOpacity>
+    </View>
   );
   FlatListHeader = () => {
     const image = {

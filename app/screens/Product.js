@@ -20,18 +20,34 @@ class Product extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity>
-          <Image
-            style={styles.iconContainer}
-            source={require("../assets/icon_heart.png")}
-          />
-        </TouchableOpacity>
-        <Image style={styles.image} source={{ uri: this.props.image }} />
+        <TouchableOpacity
+          onPress={() => {
+            // Navigate using the `navigation` prop that you received
+            this.props.navigation.navigate("ProductDetailScreen", {
+              product_id: this.props.product_id,
+              img: this.props.img,
+              brande_name: this.props.brand_name,
+              product_name: this.props.product_name,
+              rating: this.props.rating,
+              price: this.props.price,
+              description: this.props.description,
+            });
+          }}
+        >
+          <TouchableOpacity>
+            <Image
+              style={styles.iconContainer}
+              source={require("../assets/icon_heart.png")}
+            />
+          </TouchableOpacity>
 
-        <Text style={styles.text}>{this.props.product_name}</Text>
-        <Text style={styles.brandName}>{this.props.brand_name}</Text>
-        <Text style={styles.text}>price: ${this.props.price}</Text>
-        <Text style={styles.text}>rating: {this.props.rating}/5</Text>
+          <Image style={styles.image} source={{ uri: this.props.img }} />
+
+          <Text style={styles.text}>{this.props.product_name}</Text>
+          <Text style={styles.brandName}>{this.props.brand_name}</Text>
+          <Text style={styles.text}>price: ${this.props.price}</Text>
+          <Text style={styles.text}>rating: {this.props.rating}/5</Text>
+        </TouchableOpacity>
       </View>
     );
   }

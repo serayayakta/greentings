@@ -29,7 +29,9 @@ const HomePlus = createStackNavigator(
     Home: {
       screen: Home,
     }, //this is the "global" screen
-    ProductDetailScreen: { screen: ProductDetailScreen }, //change this for each page
+    ProductDetailScreen: {
+      screen: ProductDetailScreen,
+    }, //change this for each page
     //Product: { screen: Product },
   },
   {

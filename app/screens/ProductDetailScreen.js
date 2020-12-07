@@ -24,28 +24,40 @@ export default class ProductDetailScreen extends Component {
   }
 
   render() {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.goBackButton}>
-          <Button title="Go back" onPress={() => navigation.goBack()} />
-        </View>
+    const { navigation } = this.props;
 
+    return (
+      <View style={styles.container}>
+        <View style={styles.goBackButton}>
+          <Button
+            title="< Products"
+            onPress={() => this.props.navigation.goBack()}
+          />
+        </View>
         <ScrollView>
           <View style={styles.box}>
             <Image
               style={styles.productImg}
               source={{
-                uri:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3v7KDJN7TAoJa5sFaPWcp1HX8JFcpF3z5K3ngz4L6kWoEP7Ca",
+                uri: navigation.getParam("img"),
               }}
+              resizeMode={"cover"}
             />
-            <Text style={styles.name}>Super Soft T-Shirt</Text>
+            <Text style={styles.name}>
+              {JSON.stringify(navigation.getParam("product_name", "no name"))}
+            </Text>
             <Text style={styles.price}>$ 12.22</Text>
+            <Text>
+              image url
+              {JSON.stringify(
+                navigation.getParam(
+                  "img",
+                  "https://unsplash.com/a/img/empty-states/photos.png"
+                )
+              )}
+            </Text>
             <Text style={styles.description}>
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-              commodo ligula eget dolor. Aenean massa. Cum sociis natoque
-              penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-              Donec quam felis, ultricies nec
+              {navigation.getParam("description", "no description")}
             </Text>
           </View>
           <View style={styles.separator}></View>
@@ -58,7 +70,7 @@ export default class ProductDetailScreen extends Component {
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      </View>
     );
   }
 }
@@ -117,17 +129,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 20,
-    backgroundColor: "white",
+    backgroundColor: "#f2f2f2",
   },
   description: {
     textAlign: "center",
     marginTop: 10,
-    color: "#696969",
+    color: "black",
   },
   goBackButton: {
     marginTop: 15,
     height: 45,
-    backgroundColor: colors.secondary,
+    backgroundColor: "transparent",
     alignItems: "flex-start",
     justifyContent: "center",
   },
@@ -143,8 +155,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   productImg: {
-    width: 200,
-    height: 200,
+    height: "50%",
   },
   star: {
     width: 40,
