@@ -35,30 +35,17 @@ class Home extends Component {
     this.fetchProducts();
   }
   renderItemComponent = (data) => (
-<<<<<<< HEAD
-   
-    //onPress={() => {
-    // Navigate using the `navigation` prop that you received
-
-    //console.log("ilgin");
-    //}}
-   
-      <Product
-      image={data.item.img}
-      brand_name={data.item.brand_name}
-      product_name={data.item.product_name}
-      rating={data.item.rating}
-      price={data.item.price}
-    />
-=======
     <Product
-      image={data.item.img}
+      product={data.item}
+      product_id={data.item.product_id}
+      img={data.item.img}
       brand_name={data.item.brand_name}
       product_name={data.item.product_name}
       rating={data.item.rating}
       price={data.item.price}
+      navigation={this.props.navigation}
+      description={data.item.description}
     />
->>>>>>> abe578287e500a72ab37111ce835341c5e2fbbe8
   );
   FlatListHeader = () => {
     const image = {
@@ -71,16 +58,16 @@ class Home extends Component {
         style={{
           height: 300,
           width: "100%",
-          margin: 5,
+          marginBottom: 5,
           border: 2.9,
           borderColor: "black",
           alignSelf: "center",
           shadowColor: "#000",
           shadowOffset: {
             width: 0,
-            height: 16,
+            height: 8,
           },
-          shadowOpacity: 1,
+          shadowOpacity: 0.8,
           shadowRadius: 7.49,
           borderBottomLeftRadius: 20,
           borderBottomRightRadius: 20,
@@ -107,10 +94,10 @@ class Home extends Component {
   ItemSeparator = () => (
     <View
       style={{
-        height: 2,
+        height: 0.1,
         backgroundColor: "rgba(0,0,0,0.5)",
-        marginLeft: 15,
-        marginRight: 15,
+        marginLeft: 30,
+        marginRight: 30,
       }}
     />
   );
@@ -132,7 +119,7 @@ class Home extends Component {
     );
 
     return (
-      <SafeAreaView>
+      <View>
         <ScrollView>
           <FlatList
             data={this.state.dataSource}
@@ -144,7 +131,7 @@ class Home extends Component {
             onRefresh={this.handleRefresh}
           ></FlatList>
         </ScrollView>
-      </SafeAreaView>
+      </View>
     );
   }
 }

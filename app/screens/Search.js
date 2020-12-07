@@ -9,12 +9,12 @@ import {
   StatusBar,
   ScrollView,
   Image,
-  FlatList
+  FlatList,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import Icon from "react-native-vector-icons/Ionicons";
-import Product from "./Product"
+import Product from "./Product";
 import Category from "./Category";
 
 class Search extends Component {
@@ -22,31 +22,33 @@ class Search extends Component {
     super(props);
     this.state = {
       dataSource: [],
-      searchKey :'',
+      searchKey: "",
       refreshing: true,
-      searchUrl: "http://127.0.0.1:8000/search/?search="
+      searchUrl: "http://127.0.0.1:8000/search/?search=",
     };
   }
   componentWillMount() {
     //for android view to be ok, may cause issues
-    //this.startHeaderHeight = 80;
+    this.startHeaderHeight = 80;
     if (Platform.OS == "android") {
       this.startHeaderHeight = 100 + StatusBar.currentHeight;
     }
   }
-  searchFunc =(searchKey) => {console.log(searchKey)}
-  state ={
-    seachKey:'',
-  }
+  searchFunc = (searchKey) => {
+    console.log(searchKey);
+  };
+  state = {
+    seachKey: "",
+  };
   handleSearchkey = (text) => {
-    this.setState({searchKey : text})
-  }
+    this.setState({ searchKey: text });
+  };
   /*componentDidMount() {
     this.fetchProducts();
   }*/
-  
+
   fetchProducts() {
-    fetch(this.state.searchUrl )
+    fetch(this.state.searchUrl)
       .then((response) => response.json())
       .then((result) => {
         this.setState({
@@ -57,10 +59,9 @@ class Search extends Component {
       .catch((error) => console.log("fetch error", error));
   }
 
-
   renderItemComponent = (data) => (
     <Product
-      image={data.item.img}
+      img={data.item.img}
       brand_name={data.item.brand_name}
       product_name={data.item.product_name}
       rating={data.item.rating}
@@ -70,191 +71,202 @@ class Search extends Component {
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
-        <View style={{ flex: 1, alignItems: 'stretch'}}>
-          <View style={{ flex: 1, alignItems: 'stretch'}}>
-          <View
-            style={{
-              //flex:0.2,
-              height: this.startHeaderHeight,
-              backgroundColor: "white",
-              borderBottomWidth: 1,
-              borderBottomColor: "#dddddd",
-            }}
-          >
+        <View style={{ flex: 1 }}>
+          <View style={{ flex: 1 }}>
             <View
               style={{
-                flexDirection: "row",
-                padding: 10,
+                height: this.startHeaderHeight,
                 backgroundColor: "white",
-                marginHorizontal: 20,
-                shadowOffset: { width: 0, height: 0 }, //might not work w android,
-                shadowColor: "black",
-                shadowOpacity: 0.2,
-                elevation: 1, //for android
-                MarginTop: Platform.OS == "android" ? 30 : null,
+                borderBottomWidth: 1,
+                borderBottomColor: "#dddddd",
               }}
             >
-
-              <TextInput
-                underlineColorAndroid="transparent"
-                placeholder="Search here"
-                placeholderTextColor="grey"
-                style={{ flex: 1, fontWeight: "700", backgroundColor: "white" }}
-                onChangeText={(text) => {this.setState({ searchKey: text}); 
-                  
-                 }}
-              />
-              <TouchableOpacity activeOpacity = {0.5} onPress={() => this.searchResult(this.state.searchKey)}>
-                <Icon name="ios-search" size={20} /> 
-              </TouchableOpacity>
-            </View>
-          </View>
-          <ScrollView  scrollEventThrottle={12} >
-            <View style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}>
-              <Text
+              <View
                 style={{
-                  fontSize: 24,
-                  fontWeight: "700",
-                  paddingHorizontal: 20,
+                  flexDirection: "row",
+                  padding: 10,
+                  backgroundColor: "white",
+                  marginHorizontal: 20,
+                  shadowOffset: { width: 0, height: 0 }, //might not work w android,
+                  shadowColor: "black",
+                  shadowOpacity: 0.2,
+                  elevation: 1, //for android
+                  MarginTop: Platform.OS == "android" ? 30 : null,
                 }}
               >
-                What can we help you find Ilgin?
-              </Text>
-
-              <View style={{ height: 110, MarginTop: 20 }}>
-                <ScrollView
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
+                <TextInput
+                  underlineColorAndroid="transparent"
+                  placeholder="Search here"
+                  placeholderTextColor="grey"
+                  style={{
+                    flex: 1,
+                    fontWeight: "700",
+                    backgroundColor: "white",
+                  }}
+                  onChangeText={(text) => {
+                    this.setState({ searchKey: text });
+                  }}
+                />
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={() => this.searchResult(this.state.searchKey)}
                 >
-                  <View
-                    style={{
-                      height: 130,
-                      width: 130,
-                      marginLeft: 20,
-                      borderBottomWidth: 0.5,
-                      borderColor: "#dddddd",
-                    }}
-                  >
-                    <View style={{ flex: 2 }}>
-                      <Image
-                        source={require("../assets/categ2.jpeg")}
-                        style={{
-                          flex: 1,
-                          height: null,
-                          width: null,
-                          resizeMode: "cover",
-                        }}
-                      />
-                                          <View style={{ flex:0.5, paddingLeft: 10, paddingTop: 10 }}>
-                      <Text>Fashion</Text>
-                    </View>
-                      
-                    </View>
-
-                  </View>
-
-                  <View
-                    style={{
-                      height: 130,
-                      width: 130,
-                      marginLeft: 20,
-                      borderBottomWidth: 0.5,
-                      borderColor: "#dddddd",
-                    }}
-                  >
-                    <View style={{ flex: 2 }}>
-                      <Image
-                        source={require("../assets/categ1.jpeg")}
-                        style={{
-                          flex: 1,
-                          height: null,
-                          width: null,
-                          resizeMode: "cover",
-                        }}
-                      />
-                    </View>
-                    <View style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}>
-                      <Text>Accessories</Text>
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      height: 130,
-                      width: 130,
-                      marginLeft: 20,
-                      borderBottomWidth: 0.5,
-                      borderColor: "#dddddd",
-                    }}
-                  >
-                    <View style={{ flex: 2 }}>
-                      <Image
-                        source={require("../assets/categ3.jpeg")}
-                        style={{
-                          flex: 1,
-                          height: null,
-                          width: null,
-                          resizeMode: "cover",
-                        }}
-                      />
-                    </View>
-                    <View style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}>
-                      <Text>Interior</Text>
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      height: 130,
-                      width: 130,
-                      marginLeft: 20,
-                      borderBottomWidth: 0.5,
-                      borderColor: "#dddddd",
-                    }}
-                  >
-                    <View style={{ flex: 2 }}>
-                      <Image
-                        source={require("../assets/categ4.jpeg")}
-                        style={{
-                          flex: 1,
-                          height: null,
-                          width: null,
-                          resizeMode: "cover",
-                        }}
-                      />
-                    </View>
-                    <View style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}>
-                      <Text>Beauty/Skincare</Text>
-                    </View>
-                  </View>
-                </ScrollView>
+                  <Icon name="ios-search" size={20} />
+                </TouchableOpacity>
               </View>
             </View>
-          </ScrollView>
-          </View >
-          <View style={{ flex: 2, alignItems: 'stretch'}}>
-          <ScrollView style={styles.scrollStyle}>
-            <FlatList 
-              data={this.state.dataSource}
-              //ListHeaderComponent={this.FlatListHeader}
-              renderItem={(item) => this.renderItemComponent(item)}
-              keyExtractor={(item) => item.product_id.toString()}
-              ItemSeparatorComponent={this.ItemSeparator}
-              refreshing={this.state.refreshing}
-              onRefresh={this.handleRefresh}
-            ></FlatList>
-          </ScrollView>
-          </View>
+            <ScrollView scrollEventThrottle={16}>
+              <View
+                style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}
+              >
+                <Text
+                  style={{
+                    fontSize: 24,
+                    fontWeight: "700",
+                    paddingHorizontal: 20,
+                  }}
+                >
+                  What can we help you find Ilgin?
+                </Text>
 
-          
+                <View style={{ height: 130, MarginTop: 20 }}>
+                  <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                  >
+                    <View
+                      style={{
+                        height: 130,
+                        width: 130,
+                        marginLeft: 20,
+                        borderBottomWidth: 0.5,
+                        borderColor: "#dddddd",
+                      }}
+                    >
+                      <View style={{ flex: 2 }}>
+                        <Image
+                          source={require("../assets/categ2.jpeg")}
+                          style={{
+                            flex: 1,
+                            height: null,
+                            width: null,
+                            resizeMode: "cover",
+                          }}
+                        />
+                      </View>
+                      <View
+                        style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
+                      >
+                        <Text>Fashion</Text>
+                      </View>
+                    </View>
+
+                    <View
+                      style={{
+                        height: 130,
+                        width: 130,
+                        marginLeft: 20,
+                        borderBottomWidth: 0.5,
+                        borderColor: "#dddddd",
+                      }}
+                    >
+                      <View style={{ flex: 2 }}>
+                        <Image
+                          source={require("../assets/categ1.jpeg")}
+                          style={{
+                            flex: 1,
+                            height: null,
+                            width: null,
+                            resizeMode: "cover",
+                          }}
+                        />
+                      </View>
+                      <View
+                        style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
+                      >
+                        <Text>Accessories</Text>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        height: 130,
+                        width: 130,
+                        marginLeft: 20,
+                        borderBottomWidth: 0.5,
+                        borderColor: "#dddddd",
+                      }}
+                    >
+                      <View style={{ flex: 2 }}>
+                        <Image
+                          source={require("../assets/categ3.jpeg")}
+                          style={{
+                            flex: 1,
+                            height: null,
+                            width: null,
+                            resizeMode: "cover",
+                          }}
+                        />
+                      </View>
+                      <View
+                        style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
+                      >
+                        <Text>Interior</Text>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        height: 130,
+                        width: 130,
+                        marginLeft: 20,
+                        borderBottomWidth: 0.5,
+                        borderColor: "#dddddd",
+                      }}
+                    >
+                      <View style={{ flex: 2 }}>
+                        <Image
+                          source={require("../assets/categ4.jpeg")}
+                          style={{
+                            flex: 1,
+                            height: null,
+                            width: null,
+                            resizeMode: "cover",
+                          }}
+                        />
+                      </View>
+                      <View
+                        style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
+                      >
+                        <Text>Beauty/Skincare</Text>
+                      </View>
+                    </View>
+                  </ScrollView>
+                </View>
+              </View>
+            </ScrollView>
+          </View>
+          <View style={{ flex: 2 }}>
+            <ScrollView>
+              <FlatList
+                data={this.state.dataSource}
+                //ListHeaderComponent={this.FlatListHeader}
+                renderItem={(item) => this.renderItemComponent(item)}
+                keyExtractor={(item) => item.product_id.toString()}
+                ItemSeparatorComponent={this.ItemSeparator}
+                refreshing={this.state.refreshing}
+                onRefresh={this.handleRefresh}
+              ></FlatList>
+            </ScrollView>
+          </View>
         </View>
       </SafeAreaView>
-    )
+    );
   }
-  searchResult= (searchKey) => {
+  searchResult = (searchKey) => {
     const fetchUrl = "http://127.0.0.1:8000/search/?search=";
-    this.setState({searchUrl: fetchUrl + this.state.searchKey});
+    this.setState({ searchUrl: fetchUrl + this.state.searchKey });
     this.fetchProducts();
-    
-    console.log("Enter searchResult",searchKey);
+
+    console.log("Enter searchResult", searchKey);
   };
 }
 export default Search;
@@ -308,7 +320,4 @@ const styles = StyleSheet.create({
   topLogoArea: {
     height: "20%",
   },
-  scrollStyle:{
-    //height: '55%'
-  }
 });
