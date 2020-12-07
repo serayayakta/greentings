@@ -75,7 +75,7 @@ class Search extends Component {
           <View style={{ flex: 1 }}>
             <View
               style={{
-                height: this.startHeaderHeight,
+                height: 50,
                 backgroundColor: "white",
                 borderBottomWidth: 1,
                 borderBottomColor: "#dddddd",
@@ -263,9 +263,9 @@ class Search extends Component {
   }
   searchResult = (searchKey) => {
     const fetchUrl = "http://127.0.0.1:8000/search/?search=";
-    this.setState({ searchUrl: fetchUrl + this.state.searchKey });
-    this.fetchProducts();
-
+    this.setState({ searchUrl: fetchUrl + this.state.searchKey }, () => {
+      this.fetchProducts();
+    });
     console.log("Enter searchResult", searchKey);
   };
 }

@@ -110,20 +110,12 @@ export default class RegisterScreen extends React.Component {
             onChangeText={(text) => this.setState({ phoneNumber: text })}
           />
         </View>
+
         <View style={styles.inputView}>
           <TextInput
-            secureTextEntry
+            secureTextEntry={true}
             style={styles.inputText}
             placeholder="Password..."
-            placeholderTextColor="#003f5c"
-            onChangeText={(text) => this.setState({ password: text })}
-          />
-        </View>
-        <View style={styles.inputView}>
-          <TextInput
-            secureTextEntry
-            style={styles.inputText}
-            placeholder="Confirm password..."
             placeholderTextColor="#003f5c"
             onChangeText={(text) => this.setState({ confirmPassword: text })}
           />
