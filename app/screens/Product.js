@@ -11,16 +11,21 @@ import {
 } from "react-native";
 import ProductDetailScreen from "./ProductDetailScreen";
 import { withNavigation } from "react-navigation";
+import Icon from "react-native-vector-icons/Fontisto";
 
 class Product extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      user: 1,
+    };
   }
 
   render() {
     return (
-      <View style={styles.container}>
+      <View>
         <TouchableOpacity
+          style={styles.container}
           onPress={() => {
             // Navigate using the `navigation` prop that you received
             this.props.navigation.navigate("ProductDetailScreen", {
@@ -34,23 +39,58 @@ class Product extends Component {
             });
           }}
         >
-          <TouchableOpacity>
-            <Image
-              style={styles.iconContainer}
-              source={require("../assets/icon_heart.png")}
-            />
-          </TouchableOpacity>
-
-          <Image style={styles.image} source={{ uri: this.props.img }} />
-
-          <Text style={styles.text}>{this.props.product_name}</Text>
-          <Text style={styles.brandName}>{this.props.brand_name}</Text>
-          <Text style={styles.text}>price: ${this.props.price}</Text>
-          <Text style={styles.text}>rating: {this.props.rating}/5</Text>
+          <View styles={{ height: "100%" }}>
+            <View styles={{ flex: 3 }}>
+              <Image style={styles.image} source={{ uri: this.props.img }} />
+            </View>
+            <View styles={{ flex: 3 }}>
+              <Text style={styles.text}>{this.props.product_name}</Text>
+              <Text style={styles.brandName}>{this.props.brand_name}</Text>
+              <Text style={styles.text}>price: ${this.props.price}</Text>
+              <Text style={styles.text}>rating: {this.props.rating}/5</Text>
+            </View>
+            <View styles={{ flex: 1, width: "80%" }}>
+              <TouchableOpacity style={{ width: "10%" }}>
+                <Image
+                  style={styles.iconContainer}
+                  source={require("../assets/icon_heart.png")}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ width: "10%", alignSelf: "flex-end" }}
+                activeOpacity={0.5}
+                onPress={() => this.addToBasket()}
+              >
+                <Icon
+                  name="shopping-basket-add"
+                  size={20}
+                  style={styles.iconContainer2}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
         </TouchableOpacity>
       </View>
     );
   }
+  addToBasket = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({ product: this.props.product_id, quantity: 1 });
+    console.log(raw);
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch("http://127.0.0.1:8000/basket/1/", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
 }
 const styles = StyleSheet.create({
   brandName: {
@@ -72,20 +112,30 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.8,
     shadowRadius: 7.5,
-    padding: 20,
+    padding: 15,
     position: "relative",
+    flex: 1,
   },
   iconContainer: {
     right: 10,
     height: 40,
     width: 40,
     position: "absolute",
-    right: -20,
-    top: -15,
+    right: -5,
+    top: -45,
+    flex: 1,
+  },
+  iconContainer2: {
+    right: 10,
+    height: 40,
+    width: 40,
+    position: "absolute",
+    right: -5,
+    top: -30,
+    flex: 1,
   },
   image: {
-    margin: 10,
-    height: "70%",
+    height: 200,
     borderRadius: 4,
   },
   text: {
