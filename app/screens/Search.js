@@ -10,6 +10,7 @@ import {
   ScrollView,
   Image,
   FlatList,
+  ImageBackground,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
@@ -57,6 +58,52 @@ class Search extends Component {
         });
       })
       .catch((error) => console.log("fetch error", error));
+  }
+  fetchCategoryItems(id) {
+    if (id == 1) {
+      fetch("http://127.0.0.1:8000/categoryitems/1/")
+        .then((response) => response.json())
+        .then((result) => {
+          this.setState({
+            dataSource: result,
+            refreshing: false,
+          });
+        })
+        .catch((error) => console.log("fetch error", error));
+    }
+    if (id == 2) {
+      fetch("http://127.0.0.1:8000/categoryitems/2/")
+        .then((response) => response.json())
+        .then((result) => {
+          this.setState({
+            dataSource: result,
+            refreshing: false,
+          });
+        })
+        .catch((error) => console.log("fetch error", error));
+    }
+    if (id == 3) {
+      fetch("http://127.0.0.1:8000/categoryitems/3/")
+        .then((response) => response.json())
+        .then((result) => {
+          this.setState({
+            dataSource: result,
+            refreshing: false,
+          });
+        })
+        .catch((error) => console.log("fetch error", error));
+    }
+    if (id == 4) {
+      fetch("http://127.0.0.1:8000/categoryitems/4/")
+        .then((response) => response.json())
+        .then((result) => {
+          this.setState({
+            dataSource: result,
+            refreshing: false,
+          });
+        })
+        .catch((error) => console.log("fetch error", error));
+    }
   }
 
   renderItemComponent = (data) => (
@@ -134,111 +181,130 @@ class Search extends Component {
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                   >
-                    <View
-                      style={{
-                        height: 130,
-                        width: 130,
-                        marginLeft: 20,
-                        borderBottomWidth: 0.5,
-                        borderColor: "#dddddd",
-                      }}
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      onPress={() => this.fetchCategoryItems(1)}
                     >
-                      <View style={{ flex: 2 }}>
-                        <Image
-                          source={require("../assets/categ2.jpeg")}
-                          style={{
-                            flex: 1,
-                            height: null,
-                            width: null,
-                            resizeMode: "cover",
-                          }}
-                        />
-                      </View>
                       <View
-                        style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
+                        style={{
+                          height: 130,
+                          width: 130,
+                          marginLeft: 20,
+                          borderBottomWidth: 0.5,
+                          borderColor: "#dddddd",
+                        }}
                       >
-                        <Text>Fashion</Text>
+                        <View style={{ flex: 2 }}>
+                          <Image
+                            source={require("../assets/categ2.jpeg")}
+                            style={{
+                              flex: 1,
+                              height: null,
+                              width: null,
+                              resizeMode: "cover",
+                            }}
+                          />
+                        </View>
+                        <View
+                          style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
+                        >
+                          <Text>Clothing</Text>
+                        </View>
                       </View>
-                    </View>
-
-                    <View
-                      style={{
-                        height: 130,
-                        width: 130,
-                        marginLeft: 20,
-                        borderBottomWidth: 0.5,
-                        borderColor: "#dddddd",
-                      }}
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      onPress={() => this.fetchCategoryItems(2)}
                     >
-                      <View style={{ flex: 2 }}>
-                        <Image
-                          source={require("../assets/categ1.jpeg")}
-                          style={{
-                            flex: 1,
-                            height: null,
-                            width: null,
-                            resizeMode: "cover",
-                          }}
-                        />
-                      </View>
                       <View
-                        style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
+                        style={{
+                          height: 130,
+                          width: 130,
+                          marginLeft: 20,
+                          borderBottomWidth: 0.5,
+                          borderColor: "#dddddd",
+                        }}
                       >
-                        <Text>Accessories</Text>
+                        <View style={{ flex: 2 }}>
+                          <Image
+                            source={require("../assets/categ1.jpeg")}
+                            style={{
+                              flex: 1,
+                              height: null,
+                              width: null,
+                              resizeMode: "cover",
+                            }}
+                          />
+                        </View>
+                        <View
+                          style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
+                        >
+                          <Text>Home</Text>
+                        </View>
                       </View>
-                    </View>
-                    <View
-                      style={{
-                        height: 130,
-                        width: 130,
-                        marginLeft: 20,
-                        borderBottomWidth: 0.5,
-                        borderColor: "#dddddd",
-                      }}
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      onPress={() => this.fetchCategoryItems(3)}
                     >
-                      <View style={{ flex: 2 }}>
-                        <Image
-                          source={require("../assets/categ3.jpeg")}
-                          style={{
-                            flex: 1,
-                            height: null,
-                            width: null,
-                            resizeMode: "cover",
-                          }}
-                        />
-                      </View>
                       <View
-                        style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
+                        style={{
+                          height: 130,
+                          width: 130,
+                          marginLeft: 20,
+                          borderBottomWidth: 0.5,
+                          borderColor: "#dddddd",
+                        }}
                       >
-                        <Text>Interior</Text>
+                        <View style={{ flex: 2 }}>
+                          <Image
+                            source={require("../assets/categ3.jpeg")}
+                            style={{
+                              flex: 1,
+                              height: null,
+                              width: null,
+                              resizeMode: "cover",
+                            }}
+                          />
+                        </View>
+                        <View
+                          style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
+                        >
+                          <Text>Furniture</Text>
+                        </View>
                       </View>
-                    </View>
-                    <View
-                      style={{
-                        height: 130,
-                        width: 130,
-                        marginLeft: 20,
-                        borderBottomWidth: 0.5,
-                        borderColor: "#dddddd",
-                      }}
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      onPress={() => this.fetchCategoryItems(4)}
                     >
-                      <View style={{ flex: 2 }}>
-                        <Image
-                          source={require("../assets/categ4.jpeg")}
-                          style={{
-                            flex: 1,
-                            height: null,
-                            width: null,
-                            resizeMode: "cover",
-                          }}
-                        />
-                      </View>
                       <View
-                        style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
+                        style={{
+                          height: 130,
+                          width: 130,
+                          marginLeft: 20,
+                          borderBottomWidth: 0.5,
+                          borderColor: "#dddddd",
+                        }}
                       >
-                        <Text>Beauty/Skincare</Text>
+                        <View style={{ flex: 2 }}>
+                          <Image
+                            source={require("../assets/categ4.jpeg")}
+                            style={{
+                              flex: 1,
+                              height: null,
+                              width: null,
+                              resizeMode: "cover",
+                            }}
+                          />
+                        </View>
+                        <View
+                          style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
+                        >
+                          <Text>Cosmetics</Text>
+                        </View>
                       </View>
-                    </View>
+                    </TouchableOpacity>
                   </ScrollView>
                 </View>
               </View>
