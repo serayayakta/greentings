@@ -316,8 +316,9 @@ class Search extends Component {
           <View style={{ flex: 0.1, backgroundColor: "white" }}>
             <RNPickerSelect
               placeholder={{ label: "Sort by:", color: "black" }}
-              onValueChange={(value) => {
-                this.setState({ value: Item.value });
+              onValueChange={(param) => {
+                //console.log("log sort value", param);
+                this.sortResult(this.state.searchKey, param);
               }}
               items={[
                 { label: "Price descending", value: "-price" },
@@ -351,18 +352,18 @@ class Search extends Component {
     });
     console.log("Enter searchResult", searchKey);
   };
-  sortResult = (searchKey, value) => {
+  sortResult = (searchKey, param) => {
     const fetchUrl = "http://127.0.0.1:8000/search/?search=";
     this.setState(
       {
-        searchUrl:
-          fetchUrl + this.state.searchKey + "ordering=" + this.state.value,
+        searchUrl: fetchUrl + this.state.searchKey + "&ordering=" + param,
       },
       () => {
         this.fetchProducts();
       }
     );
-    console.log("Enter searchResult", searchKey);
+    console.log("Enter sortResult", searchKey);
+    console.log("Enter sortResult", param);
   };
 }
 
