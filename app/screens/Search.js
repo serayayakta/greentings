@@ -13,6 +13,8 @@ import {
   ImageBackground,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { Picker } from "@react-native-picker/picker";
+import RNPickerSelect from "react-native-picker-select";
 
 import Icon from "react-native-vector-icons/Ionicons";
 import Product from "./Product";
@@ -26,6 +28,7 @@ class Search extends Component {
       searchKey: "",
       refreshing: true,
       searchUrl: "http://127.0.0.1:8000/search/?search=",
+      value: "",
     };
   }
   componentWillMount() {
@@ -119,7 +122,7 @@ class Search extends Component {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, backgroundColor: "white" }}>
             <View
               style={{
                 height: 50,
@@ -310,6 +313,20 @@ class Search extends Component {
               </View>
             </ScrollView>
           </View>
+          <View style={{ flex: 0.1, backgroundColor: "white" }}>
+            <RNPickerSelect
+              placeholder={{ label: "Sort by:", color: "black" }}
+              onValueChange={(value) => {
+                this.setState({ value: Item.value });
+              }}
+              items={[
+                { label: "Price descending", value: "-price" },
+                { label: "Price ascending", value: "price" },
+                { label: "Rating descending", value: "-rating" },
+                { label: "Rating ascending", value: "rating" },
+              ]}
+            />
+          </View>
           <View style={{ flex: 2 }}>
             <ScrollView>
               <FlatList
@@ -334,7 +351,21 @@ class Search extends Component {
     });
     console.log("Enter searchResult", searchKey);
   };
+  sortResult = (searchKey, value) => {
+    const fetchUrl = "http://127.0.0.1:8000/search/?search=";
+    this.setState(
+      {
+        searchUrl:
+          fetchUrl + this.state.searchKey + "ordering=" + this.state.value,
+      },
+      () => {
+        this.fetchProducts();
+      }
+    );
+    console.log("Enter searchResult", searchKey);
+  };
 }
+
 export default Search;
 
 const styles = StyleSheet.create({
