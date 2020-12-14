@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import BasketItem from "./BasketItem";
 import colors from "../config/colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class Basket extends Component {
   constructor(props) {
@@ -18,10 +19,26 @@ class Basket extends Component {
     this.state = {
       dataSource: [],
       refreshing: true,
+      user_id: "1",
     };
   }
+  async getId() {
+    try {
+      const value = await AsyncStorage.getItem("@user_id");
+      if (value !== null) {
+        console.log("value of id in basket", value);
+        this.setState({ user_id: value });
+        // value previously stored
+      } else {
+        console.log("value of id is null");
+      }
+    } catch (e) {
+      console.log("error in value id ", e);
+      // error reading value
+    }
+  }
   fetchBasketItems() {
-    fetch("http://127.0.0.1:8000/basket/1/")
+    fetch("http://127.0.0.1:8000/basket/" + this.state.user_id + "/")
       .then((response) => response.json())
       .then((result) => {
         this.setState({
@@ -39,6 +56,7 @@ class Basket extends Component {
       () => this.fetchBasketItems()
       // run function that updates the data on entering the screen
     );
+    this.getId();
   }
   renderItemComponent = (data) => (
     <BasketItem

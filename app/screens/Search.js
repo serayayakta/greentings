@@ -64,7 +64,7 @@ class Search extends Component {
   }
   fetchCategoryItems(id) {
     if (id == 1) {
-      fetch("http://127.0.0.1:8000/categoryitems/1/")
+      fetch("http://127.0.0.1:8000/categoryitems/5/")
         .then((response) => response.json())
         .then((result) => {
           this.setState({
@@ -75,7 +75,7 @@ class Search extends Component {
         .catch((error) => console.log("fetch error", error));
     }
     if (id == 2) {
-      fetch("http://127.0.0.1:8000/categoryitems/2/")
+      fetch("http://127.0.0.1:8000/categoryitems/6/")
         .then((response) => response.json())
         .then((result) => {
           this.setState({
@@ -86,7 +86,7 @@ class Search extends Component {
         .catch((error) => console.log("fetch error", error));
     }
     if (id == 3) {
-      fetch("http://127.0.0.1:8000/categoryitems/3/")
+      fetch("http://127.0.0.1:8000/categoryitems/7/")
         .then((response) => response.json())
         .then((result) => {
           this.setState({
@@ -97,7 +97,7 @@ class Search extends Component {
         .catch((error) => console.log("fetch error", error));
     }
     if (id == 4) {
-      fetch("http://127.0.0.1:8000/categoryitems/4/")
+      fetch("http://127.0.0.1:8000/categoryitems/8/")
         .then((response) => response.json())
         .then((result) => {
           this.setState({
@@ -174,12 +174,19 @@ class Search extends Component {
                     fontSize: 24,
                     fontWeight: "700",
                     paddingHorizontal: 20,
+                    paddingVertical: 10,
+                    fontFamily: "Helvetica Neue",
                   }}
                 >
-                  What can we help you find Ilgin?
+                  Categories
                 </Text>
 
-                <View style={{ height: 130, MarginTop: 20 }}>
+                <View
+                  style={{
+                    height: 130,
+                    MarginTop: 20,
+                  }}
+                >
                   <ScrollView
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
@@ -211,7 +218,7 @@ class Search extends Component {
                         <View
                           style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
                         >
-                          <Text>Clothing</Text>
+                          <Text>T-shirt</Text>
                         </View>
                       </View>
                     </TouchableOpacity>
@@ -242,7 +249,7 @@ class Search extends Component {
                         <View
                           style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
                         >
-                          <Text>Home</Text>
+                          <Text>Sweatshirt</Text>
                         </View>
                       </View>
                     </TouchableOpacity>
@@ -273,7 +280,7 @@ class Search extends Component {
                         <View
                           style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
                         >
-                          <Text>Furniture</Text>
+                          <Text>Bag</Text>
                         </View>
                       </View>
                     </TouchableOpacity>
@@ -304,7 +311,7 @@ class Search extends Component {
                         <View
                           style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
                         >
-                          <Text>Cosmetics</Text>
+                          <Text>Technology</Text>
                         </View>
                       </View>
                     </TouchableOpacity>

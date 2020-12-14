@@ -11,6 +11,7 @@ import {
 
 import RegisterScreen from "./RegisterScreen";
 import MainScreen from "./MainScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default class LoginScreen extends Component {
   constructor(props) {
@@ -20,7 +21,29 @@ export default class LoginScreen extends Component {
       email: "",
       password: "",
       responseStatus: 0,
+      user_id: "2",
     };
+  }
+  async setId() {
+    try {
+      await AsyncStorage.setItem("@user_id", this.state.user_id);
+    } catch (e) {
+      console.log("error", e);
+    }
+  }
+  async getId() {
+    try {
+      const value = await AsyncStorage.getItem("@user_id");
+      if (value !== null) {
+        console.log("value of id", value);
+        // value previously stored
+      } else {
+        console.log("value of id is null");
+      }
+    } catch (e) {
+      console.log("error in value id ", e);
+      // error reading value
+    }
   }
   onLogin = () => {
     var myHeaders = new Headers();
@@ -44,13 +67,17 @@ export default class LoginScreen extends Component {
         this.setState({ responseStatus: response.status });
         console.log("response statusssss ", this.state.responseStatus);
       })
-      .then(() => {
+      .then((result) => {
         if (this.state.responseStatus == 202) {
           this.props.navigation.navigate("MainScreen");
+          //this.setState({ user_id: result.data.user_id });
+          this.setId();
+          this.getId();
         }
       })
       .catch((error) => console.log("error", error));
   };
+
   render() {
     return (
       <ImageBackground
