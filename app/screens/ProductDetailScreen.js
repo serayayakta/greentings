@@ -35,14 +35,13 @@ export default class ProductDetailScreen extends Component {
           />
         </View>
         <ScrollView>
+          <Image
+            style={styles.productImg}
+            source={{
+              uri: navigation.getParam("img"),
+            }}
+          />
           <View style={styles.box}>
-            <Image
-              style={styles.productImg}
-              source={{
-                uri: navigation.getParam("img"),
-              }}
-              resizeMode={"cover"}
-            />
             <Text style={styles.name}>
               {JSON.stringify(navigation.getParam("product_name", "no name"))}
             </Text>
@@ -95,6 +94,8 @@ const styles = StyleSheet.create({
   box: {
     alignItems: "center",
     margin: 30,
+    position: "relative",
+    flex: 1,
   },
   btnColor: {
     height: 30,
@@ -155,7 +156,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   productImg: {
-    height: "50%",
+    height: 300,
+    resizeMode: "contain",
   },
   star: {
     width: 40,
