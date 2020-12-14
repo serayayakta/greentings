@@ -27,12 +27,17 @@ class Product extends Component {
         <View style={styles.container}>
           <Image style={styles.image} source={{ uri: this.props.img }} />
 
-          <View styles={{ width: "75%", flexDirection: "column" }}>
-            <View styles={{ flex: 3 }}>
+          <View styles={{ flexDirection: "column" }}>
+            <View styles={{ flex: 8 }}>
               <Text style={styles.text}>{this.props.product_name}</Text>
               <Text style={styles.brandName}>{this.props.brand_name}</Text>
             </View>
-            <View styles={{ flex: 1, flexDirection: "row" }}>
+            <View
+              styles={{
+                flex: 4,
+                flexDirection: "row",
+              }}
+            >
               <View styles={{ flex: 3 }}>
                 <Text style={styles.text}>quantity: {this.props.quantity}</Text>
               </View>
@@ -67,26 +72,8 @@ const styles = StyleSheet.create({
     shadowRadius: 7.5,
     padding: 15,
     position: "relative",
-    flex: 1,
+    flex: 12,
     flexDirection: "row",
-  },
-  iconContainer: {
-    right: 10,
-    height: 40,
-    width: 40,
-    position: "absolute",
-    right: -5,
-    top: -45,
-    flex: 1,
-  },
-  iconContainer2: {
-    right: 10,
-    height: 40,
-    width: 40,
-    position: "absolute",
-    right: -5,
-    top: -30,
-    flex: 1,
   },
   image: {
     width: "45%",
