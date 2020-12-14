@@ -11,7 +11,6 @@ import {
 } from "react-native";
 
 import React, { Component } from "react";
-import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
 import { createMaterialTopTabNavigator } from "react-navigation";
 import Home from "./Home";
@@ -19,8 +18,6 @@ import Basket from "./Basket";
 import Search from "./Search";
 import Profile from "./Profile";
 import ProductDetailScreen from "./ProductDetailScreen";
-import Product from "./Product";
-import WelcomeScreen from "./WelcomeScreen";
 
 import { createStackNavigator } from "react-navigation";
 
