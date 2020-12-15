@@ -9,6 +9,7 @@ import {
   Image,
 } from "react-native";
 import LoginScreen from "./LoginScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default class RegisterScreen extends React.Component {
   constructor(props) {
@@ -23,7 +24,29 @@ export default class RegisterScreen extends React.Component {
       confirmPassword: "",
       errorMessage: "",
       responseStatus: 0,
+      user_id: "0",
     };
+  }
+  async setId() {
+    try {
+      await AsyncStorage.setItem("@user_id", this.state.user_id);
+    } catch (e) {
+      console.log("error", e);
+    }
+  }
+  async getId() {
+    try {
+      const value = await AsyncStorage.getItem("@user_id");
+      if (value !== null) {
+        console.log("value of id", value);
+        // value previously stored
+      } else {
+        console.log("value of id is null");
+      }
+    } catch (e) {
+      console.log("error in value id ", e);
+      // error reading value
+    }
   }
 
   onSignUp = () => {
@@ -49,13 +72,18 @@ export default class RegisterScreen extends React.Component {
 
     fetch("http://127.0.0.1:8000/signup/", requestOptions)
       .then((response) => {
-        response.json();
         this.setState({ responseStatus: response.status });
         console.log("response statusssss ", this.state.responseStatus);
-      })
-      .then(() => {
         if (this.state.responseStatus == 201) {
-          this.props.navigation.navigate("MainScreen");
+          response.json().then((data) => {
+            this.setState({ user_id: data.user_id.toString() }, () => {
+              console.log("data.user_id", data.user_id);
+              console.log("data.user_id string", data.user_id.toString());
+              this.setId();
+              this.getId();
+              this.props.navigation.navigate("MainScreen");
+            });
+          });
         }
       })
       .catch((error) => console.log("error", error));

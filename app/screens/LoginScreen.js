@@ -21,7 +21,7 @@ export default class LoginScreen extends Component {
       email: "",
       password: "",
       responseStatus: 0,
-      user_id: "2",
+      user_id: "0",
     };
   }
   async setId() {
@@ -63,16 +63,18 @@ export default class LoginScreen extends Component {
 
     fetch("http://127.0.0.1:8000/login/", requestOptions)
       .then((response) => {
-        response.json();
         this.setState({ responseStatus: response.status });
         console.log("response statusssss ", this.state.responseStatus);
-      })
-      .then((result) => {
         if (this.state.responseStatus == 202) {
-          this.props.navigation.navigate("MainScreen");
-          //this.setState({ user_id: result.data.user_id });
-          this.setId();
-          this.getId();
+          response.json().then((data) => {
+            this.setState({ user_id: data.user_id.toString() }, () => {
+              console.log("data.user_id", data.user_id);
+              console.log("data.user_id string", data.user_id.toString());
+              this.setId();
+              this.getId();
+              this.props.navigation.navigate("MainScreen");
+            });
+          });
         }
       })
       .catch((error) => console.log("error", error));

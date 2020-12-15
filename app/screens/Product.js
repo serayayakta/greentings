@@ -12,15 +12,33 @@ import {
 import ProductDetailScreen from "./ProductDetailScreen";
 import { withNavigation } from "react-navigation";
 import Icon from "react-native-vector-icons/Fontisto";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class Product extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: 1,
+      user_id: 1,
     };
   }
-
+  async getId() {
+    try {
+      const value = await AsyncStorage.getItem("@user_id");
+      if (value !== null) {
+        console.log("value of id in basket", value);
+        this.setState({ user_id: value });
+        // value previously stored
+      } else {
+        console.log("value of id is null");
+      }
+    } catch (e) {
+      console.log("error in value id ", e);
+      // error reading value
+    }
+  }
+  componentDidMount() {
+    this.getId();
+  }
   render() {
     return (
       <View>
@@ -86,7 +104,10 @@ class Product extends Component {
       redirect: "follow",
     };
 
-    fetch("http://127.0.0.1:8000/basket/1/", requestOptions)
+    fetch(
+      "http://127.0.0.1:8000/basket/" + this.state.user_id + "/",
+      requestOptions
+    )
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
