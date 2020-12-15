@@ -90,26 +90,27 @@ class Basket extends Component {
           </Text>
         </View>
       );
+    } else {
+      return (
+        <View style={styles.container}>
+          <ScrollView>
+            <FlatList
+              data={this.state.dataSource}
+              renderItem={(item) => this.renderItemComponent(item)}
+              keyExtractor={(item) => item.product_id.toString()}
+              refreshing={this.state.refreshing}
+              onRefresh={() => this.handleRefresh()}
+            ></FlatList>
+            <TouchableOpacity
+              style={styles.checkoutButton}
+              onPress={() => this.clickEventListener()}
+            >
+              <Text>Checkout</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
+      );
     }
-    return (
-      <View style={styles.container}>
-        <ScrollView>
-          <FlatList
-            data={this.state.dataSource}
-            renderItem={(item) => this.renderItemComponent(item)}
-            keyExtractor={(item) => item.product_id.toString()}
-            refreshing={this.state.refreshing}
-            onRefresh={() => this.handleRefresh()}
-          ></FlatList>
-          <TouchableOpacity
-            style={styles.checkoutButton}
-            onPress={() => this.clickEventListener()}
-          >
-            <Text>Checkout</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-    );
   }
 }
 export default Basket;
