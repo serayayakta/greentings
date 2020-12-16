@@ -5,8 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   FlatList,
-  Image,
-  Button,
   TouchableOpacity,
 } from "react-native";
 import BasketItem from "./BasketItem";

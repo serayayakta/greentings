@@ -21,7 +21,7 @@ export default class LoginScreen extends Component {
       email: "",
       password: "",
       responseStatus: 0,
-      user_id: "0",
+      user_id: "1",
     };
   }
   async setId() {

@@ -112,12 +112,6 @@ class Home extends Component {
     //const products = JSON.stringify(productsJSON);
     //console.log(products);
 
-    const Item = ({ product_id }) => (
-      <View>
-        <Text>{product_id}</Text>
-      </View>
-    );
-
     return (
       <View>
         <ScrollView>
