@@ -1,15 +1,5 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  SafeAreaView,
-  Button,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
-import ProductDetailScreen from "./ProductDetailScreen";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { withNavigation } from "react-navigation";
 import Icon from "react-native-vector-icons/Fontisto";
 import AsyncStorage from "@react-native-async-storage/async-storage";

@@ -218,7 +218,7 @@ class Search extends Component {
                         <View
                           style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
                         >
-                          <Text>T-shirt</Text>
+                          <Text>Clothing</Text>
                         </View>
                       </View>
                     </TouchableOpacity>
@@ -249,7 +249,7 @@ class Search extends Component {
                         <View
                           style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
                         >
-                          <Text>Sweatshirt</Text>
+                          <Text>Accessories</Text>
                         </View>
                       </View>
                     </TouchableOpacity>

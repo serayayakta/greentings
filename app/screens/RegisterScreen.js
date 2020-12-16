@@ -6,7 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
   ImageBackground,
-  Image,
 } from "react-native";
 import LoginScreen from "./LoginScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -24,7 +23,7 @@ export default class RegisterScreen extends React.Component {
       confirmPassword: "",
       errorMessage: "",
       responseStatus: 0,
-      user_id: "0",
+      user_id: "1",
     };
   }
   async setId() {
