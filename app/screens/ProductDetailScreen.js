@@ -40,12 +40,6 @@ export default class ProductDetailScreen extends Component {
       // error reading value
     }
   }
-  componentDidMount() {
-    this.getId();
-    console.log(this.props.product_id);
-    this.fetchComments();
-    console.log("comments", this.state.comments);
-  }
 
   clickEventListener() {
     Alert.alert("Success", "Product has beed added to cart");
@@ -67,7 +61,12 @@ export default class ProductDetailScreen extends Component {
       })
       .catch((error) => console.log("fetch error", error));
   }
-
+  componentDidMount() {
+    this.getId();
+    console.log(this.props.product_id);
+    this.fetchComments();
+    console.log("comments", this.state.comments);
+  }
   renderItemComponent = (data) => (
     <Comment
       comment_id={data.comment_id}
