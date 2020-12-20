@@ -206,7 +206,7 @@ class Search extends Component {
                       >
                         <View style={{ flex: 2 }}>
                           <Image
-                            source={require("../assets/categ2.jpeg")}
+                            source={require("../assets/feature-block-1-image.jpg")}
                             style={{
                               flex: 1,
                               height: null,
@@ -268,7 +268,7 @@ class Search extends Component {
                       >
                         <View style={{ flex: 2 }}>
                           <Image
-                            source={require("../assets/categ3.jpeg")}
+                            source={require("../assets/categ2.jpeg")}
                             style={{
                               flex: 1,
                               height: null,
@@ -299,7 +299,7 @@ class Search extends Component {
                       >
                         <View style={{ flex: 2 }}>
                           <Image
-                            source={require("../assets/categ4.jpeg")}
+                            source={require("../assets/b9579863bcfbdc7596a12aebc8d567ae.jpg")}
                             style={{
                               flex: 1,
                               height: null,

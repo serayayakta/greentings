@@ -18,6 +18,7 @@ import Basket from "./Basket";
 import Search from "./Search";
 import Profile from "./Profile";
 import ProductDetailScreen from "./ProductDetailScreen";
+import PasswordDetailScreen from "./PasswordDetailScreen";
 
 import { createStackNavigator } from "react-navigation";
 
@@ -30,6 +31,20 @@ const HomePlus = createStackNavigator(
       screen: ProductDetailScreen,
     }, //change this for each page
     //Product: { screen: Product },
+  },
+  {
+    headerMode: "none",
+  }
+);
+
+const ProfilePlus = createStackNavigator(
+  {
+    Profile: {
+      screen: Profile,
+    }, //this is the "global" screen
+    PasswordDetailScreen: {
+      screen: PasswordDetailScreen,
+    }, //change this for each page
   },
   {
     headerMode: "none",
@@ -65,8 +80,8 @@ const AppTabNavigator = createMaterialTopTabNavigator(
         ),
       },
     },
-    Profile: {
-      screen: Profile,
+    ProfilePlus: {
+      screen: ProfilePlus,
       navigationOptions: {
         tabBarLabel: "Profile",
         tabBarIcon: ({ tintColor }) => (
