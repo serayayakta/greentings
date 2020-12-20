@@ -22,7 +22,8 @@ export default class PasswordDetailScreen extends Component {
       dataSource: [],
       refreshing: true,
       user_id: "1",
-      password: "",
+      old_password: "",
+      new_password: "",
     };
   }
   async getId() {
@@ -48,8 +49,9 @@ export default class PasswordDetailScreen extends Component {
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
-      curr_password: this.state.curr_email,
+      old_password: this.state.old_password,
       new_password: this.state.new_password,
+      user_id: this.state.user_id,
     });
 
     var requestOptions = {
@@ -63,16 +65,8 @@ export default class PasswordDetailScreen extends Component {
       .then((response) => {
         this.setState({ responseStatus: response.status });
         console.log("response statusssss ", this.state.responseStatus);
-        if (this.state.responseStatus == 202) {
-          response.json().then((data) => {
-            this.setState({ user_id: data.user_id.toString() }, () => {
-              console.log("data.user_id", data.user_id);
-              console.log("data.user_id string", data.user_id.toString());
-              this.setId();
-              this.getId();
-              this.props.navigation.navigate("MainScreen");
-            });
-          });
+        if (this.state.responseStatus == 200) {
+          //alert - successful change
         }
       })
       .catch((error) => console.log("error", error));
@@ -98,8 +92,8 @@ export default class PasswordDetailScreen extends Component {
               secureTextEntry
               autoCorrect={false}
               onChangeText={(text) => {
-                this.setState({ curr_password: text }),
-                  console.log("hey", this.state.curr_password);
+                this.setState({ old_password: text }),
+                  console.log("hey", this.state.old_password);
               }}
 
               //onChangeText={() => {
@@ -133,7 +127,7 @@ export default class PasswordDetailScreen extends Component {
           <View style={styles.separator}></View>
           <View style={{ alignItems: "center" }}>
             <TouchableOpacity style={styles.loginBtn} onPress={this.onUpdate}>
-              <Text style={styles.loginText}>Update</Text>
+              <Text style={styles.btnText}>Update</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -206,12 +200,16 @@ const styles = StyleSheet.create({
   },
   loginBtn: {
     width: "80%",
-    backgroundColor: `#9acd32`,
+    //backgroundColor: `#9acd32`,
     borderRadius: 25,
     height: 50,
     alignItems: "center",
     justifyContent: "center",
     marginTop: 40,
     marginBottom: 10,
+    backgroundColor: colors.primary,
+  },
+  btnText: {
+    color: "white",
   },
 });
