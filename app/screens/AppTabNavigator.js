@@ -1,16 +1,4 @@
-//import { StatusBar } from "expo-status-bar";
-//import React from "react";
-import {
-  StyleSheet,
-  SafeAreaView,
-  Text,
-  View,
-  Platform,
-  StatusBar,
-  Image,
-} from "react-native";
-
-import React, { Component } from "react";
+import React from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 import { createMaterialTopTabNavigator } from "react-navigation";
 import Home from "./Home";
@@ -19,6 +7,7 @@ import Search from "./Search";
 import Profile from "./Profile";
 import ProductDetailScreen from "./ProductDetailScreen";
 import PasswordDetailScreen from "./PasswordDetailScreen";
+import PaymentScreen from "./PaymentScreen";
 
 import { createStackNavigator } from "react-navigation";
 
@@ -31,6 +20,20 @@ const HomePlus = createStackNavigator(
       screen: ProductDetailScreen,
     }, //change this for each page
     //Product: { screen: Product },
+  },
+  {
+    headerMode: "none",
+  }
+);
+
+const BasketPlus = createStackNavigator(
+  {
+    Basket: {
+      screen: Basket,
+    },
+    PaymentScreen: {
+      screen: PaymentScreen,
+    },
   },
   {
     headerMode: "none",
@@ -71,8 +74,8 @@ const AppTabNavigator = createMaterialTopTabNavigator(
         ),
       },
     },
-    Basket: {
-      screen: Basket,
+    BasketPlus: {
+      screen: BasketPlus,
       navigationOptions: {
         tabBarLabel: "Basket",
         tabBarIcon: ({ tintColor }) => (

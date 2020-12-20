@@ -101,9 +101,11 @@ class Basket extends Component {
             ></FlatList>
             <TouchableOpacity
               style={styles.checkoutButton}
-              onPress={() => this.clickEventListener()}
+              onPress={() => {
+                this.props.navigation.navigate("PaymentScreen", {});
+              }}
             >
-              <Text>Checkout</Text>
+              <Text style={{ color: "white" }}>Checkout</Text>
             </TouchableOpacity>
           </ScrollView>
         </View>
