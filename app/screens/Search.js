@@ -146,6 +146,7 @@ class Search extends Component {
               >
                 <TextInput
                   underlineColorAndroid="transparent"
+                  autoCorrect={false}
                   placeholder="Search here"
                   placeholderTextColor="grey"
                   style={{

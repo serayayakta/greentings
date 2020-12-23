@@ -5,8 +5,32 @@ import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
 
 import Icon from "react-native-vector-icons/Ionicons";
 import PasswordDetailScreen from "./PasswordDetailScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class Profile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataSource: [],
+      refreshing: true,
+      user_id: "1",
+    };
+  }
+  async getId() {
+    try {
+      const value = await AsyncStorage.getItem("@user_id");
+      if (value !== null) {
+        console.log("value of id in profile", value);
+        this.setState({ user_id: value });
+        // value previously stored
+      } else {
+        console.log("value of id is null");
+      }
+    } catch (e) {
+      console.log("error in value id ", e);
+      // error reading value
+    }
+  }
   render() {
     return (
       <SafeAreaView style={styles.container}>

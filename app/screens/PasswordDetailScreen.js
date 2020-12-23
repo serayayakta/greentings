@@ -13,8 +13,65 @@ import {
   TextInput,
 } from "react-native";
 import colors from "../config/colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default class PasswordDetailScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataSource: [],
+      refreshing: true,
+      user_id: "1",
+      old_password: "",
+      new_password: "",
+    };
+  }
+  async getId() {
+    try {
+      const value = await AsyncStorage.getItem("@user_id");
+      if (value !== null) {
+        console.log("value of id in profile", value);
+        this.setState({ user_id: value });
+        // value previously stored
+      } else {
+        console.log("value of id is null");
+      }
+    } catch (e) {
+      console.log("error in value id ", e);
+      // error reading value
+    }
+  }
+  componentDidMount() {
+    this.getId();
+  }
+  onUpdate = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      old_password: this.state.old_password,
+      new_password: this.state.new_password,
+      user_id: this.state.user_id,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch("http://127.0.0.1:8000/pass/", requestOptions)
+      .then((response) => {
+        this.setState({ responseStatus: response.status });
+        console.log("response statusssss ", this.state.responseStatus);
+        if (this.state.responseStatus == 200) {
+          //alert - successful change
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   render() {
     const { navigation } = this.props;
     return (
@@ -27,11 +84,18 @@ export default class PasswordDetailScreen extends Component {
         </View>
         <View style={styles.menuWrapper}>
           <View style={styles.menuItem}>
-            <Text style={{ marginLeft: 10 }}>Favorites</Text>
+            <Text style={{ marginLeft: 10 }}>Current Password</Text>
             <TextInput
-              placeholder="Search here"
+              placeholder="Enter current password"
               placeholderTextColor="grey"
               style={styles.inputText}
+              secureTextEntry
+              autoCorrect={false}
+              onChangeText={(text) => {
+                this.setState({ old_password: text }),
+                  console.log("hey", this.state.old_password);
+              }}
+
               //onChangeText={() => {
               //this.setState({ searchKey: text });
               //}}
@@ -39,7 +103,32 @@ export default class PasswordDetailScreen extends Component {
           </View>
           <View style={styles.separator}></View>
           <View style={styles.menuItem}>
-            <Text style={{ marginLeft: 10 }}>yes</Text>
+            <Text style={{ marginLeft: 10 }}>New Password</Text>
+            <TextInput
+              placeholder="Enter new password"
+              placeholderTextColor="grey"
+              style={styles.inputText}
+              secureTextEntry
+              autoCorrect={false}
+              onChangeText={(text) => {
+                this.setState({ new_password: text }),
+                  console.log("hey", this.state.new_password);
+              }}
+            />
+          </View>
+          <View style={styles.separator}></View>
+          <View style={styles.separator}></View>
+          <View style={styles.menuItem}>
+            <Text style={{ marginLeft: 10 }}>
+              New password needs to contain uppercase, number and special
+              characters.
+            </Text>
+          </View>
+          <View style={styles.separator}></View>
+          <View style={{ alignItems: "center" }}>
+            <TouchableOpacity style={styles.loginBtn} onPress={this.onUpdate}>
+              <Text style={styles.btnText}>Update</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -72,9 +161,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 3,
   },
   inputText: {
-    marginLeft: 70,
     flex: 1,
     fontWeight: "700",
+    marginStart: 40, //marginLeft de aynı oldu
+    alignSelf: "center",
   },
   btnSize: {
     height: 40,
@@ -107,5 +197,19 @@ const styles = StyleSheet.create({
     backgroundColor: "grey",
     marginTop: 5,
     marginHorizontal: 20,
+  },
+  loginBtn: {
+    width: "80%",
+    //backgroundColor: `#9acd32`,
+    borderRadius: 25,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 40,
+    marginBottom: 10,
+    backgroundColor: colors.primary,
+  },
+  btnText: {
+    color: "white",
   },
 });
