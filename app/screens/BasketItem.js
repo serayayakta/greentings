@@ -1,24 +1,33 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  SafeAreaView,
-  Button,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
-import ProductDetailScreen from "./ProductDetailScreen";
+import { View, Text, Image, StyleSheet } from "react-native";
 import { withNavigation } from "react-navigation";
-import Icon from "react-native-vector-icons/Fontisto";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-class Product extends Component {
+class BasketItem extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      user: 1,
-    };
+  }
+  /*
+  async addPrice() {
+    try {
+      const price = this.props.price;
+      try {
+        const total = await AsyncStorage.getItem("@total");
+        try {
+          await AsyncStorage.setItem("@total", (total + price).toString());
+        } catch (e) {
+          console.log("error in incrementing total price", e);
+        }
+      } catch (e) {
+        console.log("error reading total price from local storage", e);
+      }
+    } catch (e) {
+      console.log("error geting price props from basket", e);
+    }
+  }
+*/
+  componentDidMount() {
+    () => this.addPrice();
   }
 
   render() {
@@ -50,6 +59,11 @@ class Product extends Component {
       </View>
     );
   }
+  addPrice = () => {
+    const price = this.props.price;
+    const total = AsyncStorage.getItem("@total");
+    AsyncStorage.setItem("@total", (total + price).toString());
+  };
 }
 const styles = StyleSheet.create({
   brandName: {
@@ -87,4 +101,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withNavigation(Product);
+export default withNavigation(BasketItem);

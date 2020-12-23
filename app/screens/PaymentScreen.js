@@ -36,6 +36,12 @@ export default class PaymentScreen extends Component {
           />
         </View>
         <ScrollView style={styles.container}>
+          <Text>
+            Total:{" "}
+            {JSON.stringify(
+              this.props.navigation.getParam("total", "no total")
+            )}
+          </Text>
           <View style={styles.titles}>
             <Text style={styles.titlesText}>Shipping Address</Text>
           </View>
@@ -102,7 +108,9 @@ const styles = StyleSheet.create({
     height: 120,
     marginHorizontal: 45,
     justifyContent: "center",
-    padding: 20,
+    paddingTop: 5,
+    paddingLeft: 15,
+    paddingRight: 10,
   },
   payButton: {
     margin: 10,

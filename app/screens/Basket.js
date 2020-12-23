@@ -17,35 +17,54 @@ class Basket extends Component {
     this.state = {
       dataSource: [],
       refreshing: true,
-      user_id: "1",
+      total: 0,
     };
   }
-  async getId() {
+
+  async setTotalZero() {
     try {
-      const value = await AsyncStorage.getItem("@user_id");
-      if (value !== null) {
-        console.log("value of id in basket", value);
-        this.setState({ user_id: value });
-        // value previously stored
-      } else {
-        console.log("value of id is null");
-      }
+      await AsyncStorage.setItem("@total", (0).toString());
     } catch (e) {
-      console.log("error in value id ", e);
-      // error reading value
+      console.log("error setting total zero", e);
     }
   }
-  fetchBasketItems() {
-    fetch("http://127.0.0.1:8000/basket/" + this.state.user_id + "/")
-      .then((response) => response.json())
-      .then((result) => {
+
+  async getTotal() {
+    try {
+      const total = await AsyncStorage.getItem("@total");
+      if (total !== null) {
+        console.log("value of total in basket", total);
         this.setState({
-          dataSource: result,
-          refreshing: false,
+          total: total,
         });
-      })
-      .catch((error) => console.log("fetch error", error));
-    this.setState({ refreshing: false });
+      } else {
+        console.log("value of total in basket is null");
+      }
+    } catch (e) {
+      console.log("error in total ", e);
+    }
+  }
+
+  async fetchBasketItems() {
+    try {
+      const user_id = await AsyncStorage.getItem("@user_id");
+      if (user_id !== null) {
+        fetch("http://127.0.0.1:8000/basket/" + user_id + "/")
+          .then((response) => response.json())
+          .then((result) => {
+            this.setState({
+              dataSource: result,
+              refreshing: false,
+            });
+          })
+          .catch((error) => console.log("fetch error", error));
+        this.setState({ refreshing: false });
+      } else {
+        console.log("user_id is null");
+      }
+    } catch (e) {
+      console.log("error in value user_id ", e);
+    }
   }
   componentDidMount() {
     const { navigation } = this.props;
@@ -54,7 +73,7 @@ class Basket extends Component {
       () => this.fetchBasketItems()
       // run function that updates the data on entering the screen
     );
-    this.getId();
+    this.setTotalZero();
   }
   renderItemComponent = (data) => (
     <BasketItem
@@ -99,10 +118,16 @@ class Basket extends Component {
               refreshing={this.state.refreshing}
               onRefresh={() => this.handleRefresh()}
             ></FlatList>
+            <TouchableOpacity>
+              <Text style={{ color: "black" }}>{this.state.total}</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               style={styles.checkoutButton}
               onPress={() => {
-                this.props.navigation.navigate("PaymentScreen", {});
+                this.getTotal();
+                this.props.navigation.navigate("PaymentScreen", {
+                  total: this.state.total,
+                });
               }}
             >
               <Text style={{ color: "white" }}>Checkout</Text>

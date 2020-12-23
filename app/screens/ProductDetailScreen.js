@@ -11,34 +11,19 @@ import {
   Button,
   SafeAreaView,
 } from "react-native";
-
+import { withNavigation } from "react-navigation";
 import colors from "../config/colors";
 import Comment from "./Comment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default class ProductDetailScreen extends Component {
+class ProductDetailScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user_id: 1,
       comments: [],
       refreshing: false,
+      user_id: "0",
     };
-  }
-  async getId() {
-    try {
-      const value = await AsyncStorage.getItem("@user_id");
-      if (value !== null) {
-        console.log("value of id in product detail", value);
-        this.setState({ user_id: value });
-        // value previously stored
-      } else {
-        console.log("value of id is null");
-      }
-    } catch (e) {
-      console.log("error in value id ", e);
-      // error reading value
-    }
   }
 
   clickEventListener() {
@@ -62,7 +47,6 @@ export default class ProductDetailScreen extends Component {
       .catch((error) => console.log("fetch error", error));
   }
   componentDidMount() {
-    this.getId();
     console.log(this.props.product_id);
     this.fetchComments();
     console.log("comments", this.state.comments);
@@ -135,26 +119,41 @@ export default class ProductDetailScreen extends Component {
       </View>
     );
   }
+  async getId() {
+    try {
+      const user_id = await AsyncStorage.getItem("@user_id");
+      if (user_id !== null) {
+        this.setState({ user_id: user_id.toString() });
+      } else {
+        console.log("value of user_id is null");
+      }
+    } catch (e) {
+      console.log("error in value user_id ", e);
+    }
+  }
   addToBasket = () => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+    const product_id = JSON.stringify(
+      this.props.navigation.getParam("product_id", "no id")
+    );
 
-    var raw = JSON.stringify({ product: this.props.product_id, quantity: 1 });
-    console.log(raw);
+    var raw = JSON.stringify({ product: product_id });
+    //console.log(raw);
     var requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: raw,
       redirect: "follow",
     };
-
+    this.getId();
     fetch(
       "http://127.0.0.1:8000/basket/" + this.state.user_id + "/",
       requestOptions
     )
       .then((response) => response.text())
       .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
+      .catch((error) => console.log("error"));
   };
 }
 
@@ -254,3 +253,4 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
 });
+export default withNavigation(ProductDetailScreen);
