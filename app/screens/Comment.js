@@ -30,15 +30,34 @@ class Comment extends Component {
     this.getId();
   }
   render() {
+    const { navigation } = this.props;
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>comment id {this.props.comment_id}</Text>
-        <Text style={styles.text}> date{this.props.date}</Text>
-        <Text style={styles.text}>nickname {this.props.nickname}</Text>
-        <Text style={styles.text}>product {this.props.product}</Text>
-        <Text style={styles.text}>rating {this.props.rating}</Text>
-        <Text style={styles.text}>text {this.props.text}</Text>
-        <Text style={styles.text}>validation {this.props.validation}</Text>
+        <Text style={styles.text}>
+          comment id{" "}
+          {JSON.stringify(navigation.getParam("comment_id", "no comment"))}
+        </Text>
+        <Text style={styles.text}>
+          {" "}
+          date {JSON.stringify(navigation.getParam("date", "no date"))}
+        </Text>
+        <Text style={styles.text}>
+          nickname{" "}
+          {JSON.stringify(navigation.getParam("nickname", "no nickname"))}
+        </Text>
+        <Text style={styles.text}>
+          product {JSON.stringify(navigation.getParam("product", "no product"))}
+        </Text>
+        <Text style={styles.text}>
+          rating {JSON.stringify(navigation.getParam("rating", "no rating"))}
+        </Text>
+        <Text style={styles.text}>
+          text {JSON.stringify(navigation.getParam("text", "no text"))}
+        </Text>
+        <Text style={styles.text}>
+          validation{" "}
+          {JSON.stringify(navigation.getParam("validation", "no validation"))}
+        </Text>
       </View>
     );
   }

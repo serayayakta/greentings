@@ -36,13 +36,11 @@ export default class LoginScreen extends Component {
       const value = await AsyncStorage.getItem("@user_id");
       if (value !== null) {
         console.log("value of id", value);
-        // value previously stored
       } else {
         console.log("value of id is null");
       }
     } catch (e) {
       console.log("error in value id ", e);
-      // error reading value
     }
   }
   onLogin = () => {

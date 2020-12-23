@@ -44,6 +44,7 @@ class Product extends Component {
               rating: this.props.rating,
               price: this.props.price,
               description: this.props.description,
+              navigation: this.props.navigation,
             });
           }}
         >
