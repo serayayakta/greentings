@@ -5,6 +5,7 @@ import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
 
 import Icon from "react-native-vector-icons/Ionicons";
 import PasswordDetailScreen from "./PasswordDetailScreen";
+import OrdersDetailScreen from "./OrdersDetailScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class Profile extends Component {
@@ -53,7 +54,11 @@ class Profile extends Component {
               <Text style={{ marginLeft: 10 }}>Favorites</Text>
             </View>
           </TouchableRipple>
-          <TouchableRipple onPress={() => {}}>
+          <TouchableRipple
+            onPress={() => {
+              this.props.navigation.navigate("OrdersDetailScreen", {});
+            }}
+          >
             <View style={styles.menuItem}>
               <Icon name="ios-archive" size={25} />
               <Text style={{ marginLeft: 10 }}>Orders</Text>

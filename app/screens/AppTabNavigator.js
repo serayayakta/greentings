@@ -21,6 +21,7 @@ import ProductDetailScreen from "./ProductDetailScreen";
 import PasswordDetailScreen from "./PasswordDetailScreen";
 
 import { createStackNavigator } from "react-navigation";
+import OrdersDetailScreen from "./OrdersDetailScreen";
 
 const HomePlus = createStackNavigator(
   {
@@ -45,6 +46,9 @@ const ProfilePlus = createStackNavigator(
     PasswordDetailScreen: {
       screen: PasswordDetailScreen,
     }, //change this for each page
+    OrdersDetailScreen: {
+      screen: OrdersDetailScreen,
+    },
   },
   {
     headerMode: "none",
