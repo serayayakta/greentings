@@ -21,7 +21,7 @@ export default class PasswordDetailScreen extends Component {
     this.state = {
       dataSource: [],
       refreshing: true,
-      user_id: "1",
+      user_id: "",
       old_password: "",
       new_password: "",
     };
@@ -66,7 +66,10 @@ export default class PasswordDetailScreen extends Component {
         this.setState({ responseStatus: response.status });
         console.log("response statusssss ", this.state.responseStatus);
         if (this.state.responseStatus == 200) {
-          //alert - successful change
+          alert("Password successfully changed!");
+        }
+        if (this.state.responseStatus == 400) {
+          alert("Invalid password");
         }
       })
       .catch((error) => console.log("error", error));
