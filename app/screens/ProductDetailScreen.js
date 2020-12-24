@@ -60,14 +60,8 @@ class ProductDetailScreen extends Component {
       .catch((error) => console.log("fetch error", error));
   }
   componentDidMount() {
-<<<<<<< HEAD
     this.getId();
     console.log(this.props.product_id);
-=======
-    console.log(
-      JSON.stringify(this.props.navigation.getParam("product_id", "no id"))
-    );
->>>>>>> 01982ade726d41639bd603e363df9df87a1eddac
     this.fetchComments();
     console.log("comments", this.state.comments);
   }
