@@ -31,13 +31,7 @@ class Search extends Component {
       value: "",
     };
   }
-  componentWillMount() {
-    //for android view to be ok, may cause issues
-    this.startHeaderHeight = 80;
-    if (Platform.OS == "android") {
-      this.startHeaderHeight = 100 + StatusBar.currentHeight;
-    }
-  }
+
   searchFunc = (searchKey) => {
     console.log(searchKey);
   };
