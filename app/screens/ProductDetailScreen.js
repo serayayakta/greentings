@@ -47,7 +47,9 @@ class ProductDetailScreen extends Component {
       .catch((error) => console.log("fetch error", error));
   }
   componentDidMount() {
-    console.log(this.props.product_id);
+    console.log(
+      JSON.stringify(this.props.navigation.getParam("product_id", "no id"))
+    );
     this.fetchComments();
     console.log("comments", this.state.comments);
   }
@@ -109,7 +111,7 @@ class ProductDetailScreen extends Component {
           </View>
 
           <FlatList
-            data={this.state.dataSource}
+            data={this.state.comments}
             renderItem={(item) => this.renderItemComponent(item)}
             keyExtractor={(item) => item.comment_id.toString()}
             refreshing={this.state.refreshing}
