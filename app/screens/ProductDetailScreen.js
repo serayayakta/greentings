@@ -22,12 +22,25 @@ class ProductDetailScreen extends Component {
     this.state = {
       comments: [],
       refreshing: false,
-      user_id: "0",
+      user_id: "1",
     };
   }
 
   clickEventListener() {
     Alert.alert("Success", "Product has beed added to cart");
+  }
+
+  async getId() {
+    try {
+      const user_id = await AsyncStorage.getItem("@user_id");
+      if (user_id !== null) {
+        this.setState({ user_id: user_id.toString() });
+      } else {
+        console.log("value of user_id is null");
+      }
+    } catch (e) {
+      console.log("error in value user_id ", e);
+    }
   }
 
   fetchComments() {
@@ -47,6 +60,7 @@ class ProductDetailScreen extends Component {
       .catch((error) => console.log("fetch error", error));
   }
   componentDidMount() {
+    this.getId();
     console.log(this.props.product_id);
     this.fetchComments();
     console.log("comments", this.state.comments);
@@ -119,18 +133,7 @@ class ProductDetailScreen extends Component {
       </View>
     );
   }
-  async getId() {
-    try {
-      const user_id = await AsyncStorage.getItem("@user_id");
-      if (user_id !== null) {
-        this.setState({ user_id: user_id.toString() });
-      } else {
-        console.log("value of user_id is null");
-      }
-    } catch (e) {
-      console.log("error in value user_id ", e);
-    }
-  }
+
   addToBasket = () => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
