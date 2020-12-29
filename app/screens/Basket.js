@@ -21,30 +21,6 @@ class Basket extends Component {
     };
   }
 
-  async setTotalZero() {
-    try {
-      await AsyncStorage.setItem("@total", (0).toString());
-    } catch (e) {
-      console.log("error setting total zero", e);
-    }
-  }
-
-  async getTotal() {
-    try {
-      const total = await AsyncStorage.getItem("@total");
-      if (total !== null) {
-        console.log("value of total in basket", total);
-        this.setState({
-          total: total,
-        });
-      } else {
-        console.log("value of total in basket is null");
-      }
-    } catch (e) {
-      console.log("error in total ", e);
-    }
-  }
-
   async fetchBasketItems() {
     try {
       const user_id = await AsyncStorage.getItem("@user_id");
@@ -56,6 +32,15 @@ class Basket extends Component {
               dataSource: result,
               refreshing: false,
             });
+            var total = 0;
+            for (var i = 0; i < result.length; i++) {
+              var price = Number(result[i].price);
+              total = total + price;
+              console.log("total now: ", total);
+            }
+            this.setState({
+              total: total,
+            });
           })
           .catch((error) => console.log("fetch error", error));
         this.setState({ refreshing: false });
@@ -65,7 +50,23 @@ class Basket extends Component {
     } catch (e) {
       console.log("error in value user_id ", e);
     }
-  }
+  } /*
+  async getTotal() {
+    try {
+      const totalstr = await AsyncStorage.getItem("@total");
+      const total = Number(totalstr);
+      if (total !== null) {
+        console.log("value of total in basket", total);
+        this.setState({
+          total: total,
+        });
+      } else {
+        console.log("value of total in basket is null");
+      }
+    } catch (e) {
+      console.log("error in total ", e);
+    }
+  }*/
   componentDidMount() {
     const { navigation } = this.props;
     navigation.addListener(
@@ -73,7 +74,6 @@ class Basket extends Component {
       () => this.fetchBasketItems()
       // run function that updates the data on entering the screen
     );
-    this.setTotalZero();
   }
   renderItemComponent = (data) => (
     <BasketItem
@@ -119,12 +119,13 @@ class Basket extends Component {
               onRefresh={() => this.handleRefresh()}
             ></FlatList>
             <TouchableOpacity>
-              <Text style={{ color: "black" }}>{this.state.total}</Text>
+              <Text style={styles.totalPriceText}>Total Price</Text>
+              <Text style={styles.totalPriceText}>$ {this.state.total}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.checkoutButton}
               onPress={() => {
-                this.getTotal();
+                //this.getTotal();
                 this.props.navigation.navigate("PaymentScreen", {
                   total: this.state.total,
                 });
@@ -155,5 +156,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 30,
     backgroundColor: colors.primary,
+  },
+  totalPriceText: {
+    margin: 10,
+    fontSize: 20,
+    fontFamily: "Helvetica Neue",
+    textShadowColor: "black",
+    textShadowOffset: { width: 0.2, height: 0.5 },
+    textShadowRadius: 2,
+    textAlign: "right",
+    marginRight: 15,
   },
 });

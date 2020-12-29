@@ -7,16 +7,33 @@ class BasketItem extends Component {
   constructor(props) {
     super(props);
   }
-  /*
+
   async addPrice() {
     try {
       const price = this.props.price;
       try {
-        const total = await AsyncStorage.getItem("@total");
-        try {
-          await AsyncStorage.setItem("@total", (total + price).toString());
-        } catch (e) {
-          console.log("error in incrementing total price", e);
+        const totalstr = await AsyncStorage.getItem("@total");
+
+        if (total != null) {
+          const total = Number(totalstr);
+          console.log("total now: ", totalstr);
+          try {
+            await AsyncStorage.setItem("@total", (total + price).toString());
+          } catch (e) {
+            console.log("error in incrementing total price", e);
+          }
+        } else {
+          try {
+            await AsyncStorage.setItem("@total", (0).toString());
+
+            try {
+              await AsyncStorage.setItem("@total", price.toString());
+            } catch (e) {
+              console.log("error in adding first price", e);
+            }
+          } catch (e) {
+            console.log("error in setting total price to zero", e);
+          }
         }
       } catch (e) {
         console.log("error reading total price from local storage", e);
@@ -25,9 +42,9 @@ class BasketItem extends Component {
       console.log("error geting price props from basket", e);
     }
   }
-*/
+
   componentDidMount() {
-    () => this.addPrice();
+    this.addPrice();
   }
 
   render() {

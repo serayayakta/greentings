@@ -36,8 +36,8 @@ export default class PaymentScreen extends Component {
           />
         </View>
         <ScrollView style={styles.container}>
-          <Text>
-            Total:{" "}
+          <Text style={styles.totalPriceText}>
+            Total: ${" "}
             {JSON.stringify(
               this.props.navigation.getParam("total", "no total")
             )}
@@ -128,5 +128,14 @@ const styles = StyleSheet.create({
   titlesText: {
     fontSize: 18,
     fontWeight: "bold",
+  },
+  totalPriceText: {
+    margin: 10,
+    fontSize: 20,
+    fontFamily: "Helvetica Neue",
+    textShadowColor: "black",
+    textShadowOffset: { width: 0.2, height: 0.5 },
+    textShadowRadius: 2,
+    textAlign: "center",
   },
 });
