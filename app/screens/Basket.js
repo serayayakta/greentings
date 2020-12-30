@@ -50,23 +50,7 @@ class Basket extends Component {
     } catch (e) {
       console.log("error in value user_id ", e);
     }
-  } /*
-  async getTotal() {
-    try {
-      const totalstr = await AsyncStorage.getItem("@total");
-      const total = Number(totalstr);
-      if (total !== null) {
-        console.log("value of total in basket", total);
-        this.setState({
-          total: total,
-        });
-      } else {
-        console.log("value of total in basket is null");
-      }
-    } catch (e) {
-      console.log("error in total ", e);
-    }
-  }*/
+  }
   componentDidMount() {
     const { navigation } = this.props;
     navigation.addListener(
@@ -118,21 +102,40 @@ class Basket extends Component {
               refreshing={this.state.refreshing}
               onRefresh={() => this.handleRefresh()}
             ></FlatList>
-            <TouchableOpacity>
-              <Text style={styles.totalPriceText}>Total Price</Text>
-              <Text style={styles.totalPriceText}>$ {this.state.total}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.checkoutButton}
-              onPress={() => {
-                //this.getTotal();
-                this.props.navigation.navigate("PaymentScreen", {
-                  total: this.state.total,
-                });
-              }}
-            >
-              <Text style={{ color: "white" }}>Checkout</Text>
-            </TouchableOpacity>
+            {this.state.total == 0 && (
+              <View>
+                <Text
+                  style={{
+                    fontFamily: "Helvetica Neue",
+                    textAlign: "center",
+                    fontSize: 20,
+                  }}
+                >
+                  Basket is empty...
+                </Text>
+              </View>
+            )}
+            {this.state.total > 0 && (
+              <View>
+                <TouchableOpacity>
+                  <Text style={styles.totalPriceText}>Total Price</Text>
+                  <Text style={styles.totalPriceText}>
+                    $ {this.state.total}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.checkoutButton}
+                  onPress={() => {
+                    //this.getTotal();
+                    this.props.navigation.navigate("PaymentScreen", {
+                      total: this.state.total,
+                    });
+                  }}
+                >
+                  <Text style={{ color: "white" }}>Checkout</Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </ScrollView>
         </View>
       );
