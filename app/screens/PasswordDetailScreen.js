@@ -89,7 +89,7 @@ export default class PasswordDetailScreen extends Component {
           <View style={styles.menuItem}>
             <Text style={{ marginLeft: 10 }}>Current Password</Text>
             <TextInput
-              placeholder="Enter current password"
+              placeholder="  Enter current password"
               placeholderTextColor="grey"
               style={styles.inputText}
               secureTextEntry
@@ -108,7 +108,7 @@ export default class PasswordDetailScreen extends Component {
           <View style={styles.menuItem}>
             <Text style={{ marginLeft: 10 }}>New Password</Text>
             <TextInput
-              placeholder="Enter new password"
+              placeholder="       Enter new password"
               placeholderTextColor="grey"
               style={styles.inputText}
               secureTextEntry
@@ -120,6 +120,20 @@ export default class PasswordDetailScreen extends Component {
             />
           </View>
           <View style={styles.separator}></View>
+          <View style={styles.menuItem}>
+            <Text style={{ marginLeft: 10 }}>Confirm Password</Text>
+            <TextInput
+              placeholder="Enter password again"
+              placeholderTextColor="grey"
+              style={styles.inputText}
+              secureTextEntry
+              autoCorrect={false}
+              onChangeText={(text) => {
+                this.setState({ new_password: text }),
+                  console.log("hey", this.state.new_password);
+              }}
+            />
+          </View>
           <View style={styles.separator}></View>
           <View style={styles.menuItem}>
             <Text style={{ marginLeft: 10 }}>
