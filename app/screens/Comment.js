@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { withNavigation } from "react-navigation";
 import Icon from "react-native-vector-icons/Fontisto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import StarRating from "react-native-star-rating";
 
 class Comment extends Component {
   constructor(props) {
@@ -33,30 +34,32 @@ class Comment extends Component {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>
-          comment id{" "}
-          {JSON.stringify(navigation.getParam("comment_id", "no comment"))}
+        <View style={{ flex: 1, alignItems: "flex-start" }}>
+          <StarRating
+            disabled={false}
+            maxStars={5}
+            rating={this.props.rating}
+            selectedStar={(rating) => this.onStarRatingPress(rating)}
+            fullStarColor={"darkgreen"}
+            starSize={14}
+          ></StarRating>
+        </View>
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.text_user}>{this.props.nickname} | </Text>
+          <Text style={styles.text_user}>{this.props.date} | </Text>
+          <Text style={styles.text_user}>comment {this.props.comment_id}</Text>
+        </View>
+        <Text style={styles.text_comment}>
+          for product {this.props.product}:
         </Text>
-        <Text style={styles.text}>
-          {" "}
-          date {JSON.stringify(navigation.getParam("date", "no date"))}
-        </Text>
-        <Text style={styles.text}>
-          nickname{" "}
-          {JSON.stringify(navigation.getParam("nickname", "no nickname"))}
-        </Text>
-        <Text style={styles.text}>
-          product {JSON.stringify(navigation.getParam("product", "no product"))}
-        </Text>
-        <Text style={styles.text}>
-          rating {JSON.stringify(navigation.getParam("rating", "no rating"))}
-        </Text>
-        <Text style={styles.text}>
-          text {JSON.stringify(navigation.getParam("text", "no text"))}
-        </Text>
-        <Text style={styles.text}>
-          validation{" "}
-          {JSON.stringify(navigation.getParam("validation", "no validation"))}
+        <View>
+          <Text style={styles.text_comment}>{this.props.text}</Text>
+        </View>
+        <Text style={{ alignSelf: "flex-end", fontSize: 10 }}>
+          validation:{" "}
+          {JSON.stringify(
+            navigation.getParam("validation", this.props.validation)
+          )}
         </Text>
       </View>
     );
@@ -111,6 +114,18 @@ const styles = StyleSheet.create({
     textTransform: "lowercase",
     fontFamily: "Helvetica Neue",
     textAlign: "center",
+  },
+  text_user: {
+    fontFamily: "Helvetica Neue",
+    textAlign: "left",
+    fontSize: 14,
+    color: "grey",
+  },
+  text_comment: {
+    fontFamily: "Helvetica Neue",
+    textAlign: "left",
+    fontSize: 14,
+    color: "black",
   },
 });
 

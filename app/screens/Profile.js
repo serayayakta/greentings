@@ -64,7 +64,11 @@ class Profile extends Component {
               <Text style={{ marginLeft: 10 }}>Orders</Text>
             </View>
           </TouchableRipple>
-          <TouchableRipple onPress={() => {}}>
+          <TouchableRipple
+            onPress={() => {
+              this.props.navigation.navigate("UserCommentsScreen", {});
+            }}
+          >
             <View style={styles.menuItem}>
               <Icon name="ios-chatbubbles" size={25} />
               <Text style={{ marginLeft: 10 }}>Reviews</Text>

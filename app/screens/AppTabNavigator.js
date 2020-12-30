@@ -11,6 +11,7 @@ import PaymentScreen from "./PaymentScreen";
 
 import { createStackNavigator } from "react-navigation";
 import OrdersDetailScreen from "./OrdersDetailScreen";
+import UserCommentsScreen from "./UserCommentsScreen";
 
 const HomePlus = createStackNavigator(
   {
@@ -51,6 +52,9 @@ const ProfilePlus = createStackNavigator(
     }, //change this for each page
     OrdersDetailScreen: {
       screen: OrdersDetailScreen,
+    },
+    UserCommentsScreen: {
+      screen: UserCommentsScreen,
     },
   },
   {
