@@ -50,23 +50,7 @@ class Basket extends Component {
     } catch (e) {
       console.log("error in value user_id ", e);
     }
-  } /*
-  async getTotal() {
-    try {
-      const totalstr = await AsyncStorage.getItem("@total");
-      const total = Number(totalstr);
-      if (total !== null) {
-        console.log("value of total in basket", total);
-        this.setState({
-          total: total,
-        });
-      } else {
-        console.log("value of total in basket is null");
-      }
-    } catch (e) {
-      console.log("error in total ", e);
-    }
-  }*/
+  }
   componentDidMount() {
     const { navigation } = this.props;
     navigation.addListener(
