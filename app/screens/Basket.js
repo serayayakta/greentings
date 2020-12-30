@@ -102,21 +102,40 @@ class Basket extends Component {
               refreshing={this.state.refreshing}
               onRefresh={() => this.handleRefresh()}
             ></FlatList>
-            <TouchableOpacity>
-              <Text style={styles.totalPriceText}>Total Price</Text>
-              <Text style={styles.totalPriceText}>$ {this.state.total}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.checkoutButton}
-              onPress={() => {
-                //this.getTotal();
-                this.props.navigation.navigate("PaymentScreen", {
-                  total: this.state.total,
-                });
-              }}
-            >
-              <Text style={{ color: "white" }}>Checkout</Text>
-            </TouchableOpacity>
+            {this.state.total == 0 && (
+              <View>
+                <Text
+                  style={{
+                    fontFamily: "Helvetica Neue",
+                    textAlign: "center",
+                    fontSize: 20,
+                  }}
+                >
+                  Basket is empty...
+                </Text>
+              </View>
+            )}
+            {this.state.total > 0 && (
+              <View>
+                <TouchableOpacity>
+                  <Text style={styles.totalPriceText}>Total Price</Text>
+                  <Text style={styles.totalPriceText}>
+                    $ {this.state.total}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.checkoutButton}
+                  onPress={() => {
+                    //this.getTotal();
+                    this.props.navigation.navigate("PaymentScreen", {
+                      total: this.state.total,
+                    });
+                  }}
+                >
+                  <Text style={{ color: "white" }}>Checkout</Text>
+                </TouchableOpacity>
+              </View>
+            )}
           </ScrollView>
         </View>
       );

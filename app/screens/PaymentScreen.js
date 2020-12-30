@@ -47,46 +47,63 @@ export default class PaymentScreen extends Component {
       console.log("value of id is null");
     }
   }
+
   componentDidMount() {
     this.getId();
   }
   finishPayment = () => {
     try {
       const user_id = parseInt(this.state.user_id);
-      console.log("user_id after finish and pay: ", user_id);
+      console.log("user_id in (the last) finish and pay: ", user_id);
       if (user_id !== null && this.state.isChecked) {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         var raw = JSON.stringify({
           user: user_id,
-          address: this.state.address,
-          total_price: this.props.navigation.getParam("total", "0"),
+          address: this.state.address_id,
+          total_price: this.props.navigation.getParam("total", 0),
         });
-
+        console.log("raw ord body: ", raw);
         var requestOptions = {
           method: "POST",
           headers: myHeaders,
           body: raw,
           redirect: "follow",
         };
-        fetch("http://127.0.0.1:8000/ord/")
-          .then((response) => response.json(), requestOptions)
+        fetch("http://127.0.0.1:8000/ord/", requestOptions)
           .then((response) => {
             if (response.status == 201) {
               //alert and navigate back
+
               console.log("başarılııı 201 :", response);
+              this.props.navigation.goBack();
             }
           })
           .catch((error) => console.log("fetch error", error));
         this.setState({ refreshing: false });
       } else {
-        console.log("user_id is null");
+        console.log("user_id is null in finishPayment");
       }
     } catch (e) {
       console.log("error in finish and pay block", e);
       //is checked alerti ver
     }
   };
+
+  async setAddressId(id) {
+    try {
+      await AsyncStorage.setItem("@address_id", id.toString());
+    } catch (e) {
+      console.log("error", e);
+    }
+    this.setState({ address_id: id }, this.finishPayment());
+    console.log(
+      "set state address id in async function is: ",
+      this.state.address_id
+    );
+    const address = await AsyncStorage.getItem("@address_id");
+    console.log("local storage address id in async function is: ", address);
+  }
 
   addAddressAndFinish = () => {
     try {
@@ -97,6 +114,7 @@ export default class PaymentScreen extends Component {
         myHeaders.append("Content-Type", "application/json");
         var raw = JSON.stringify({
           user: user_id,
+          address_id: 0,
           first_name: this.state.first_name,
           last_name: this.state.last_name,
           city: this.state.city,
@@ -114,18 +132,20 @@ export default class PaymentScreen extends Component {
         };
         fetch("http://127.0.0.1:8000/address/", requestOptions)
           .then((response) => {
-            response.json();
-          })
-          .then((data) => {
-            res = data.results;
-            console.log("response status", data.status);
-            if (data.status == "201") {
-              //call finish payment
-              console.log("adres olusturma başarılııı 201 :", data);
+            console.log("response status", response.status);
+            if (response.status == 201) {
+              response.json().then((data) => {
+                console.log("address_id console: ", data.address_id);
+                this.setState({ address_id: data.address_id }, function () {
+                  console.log("setState completed", this.state);
+                });
+                this.setAddressId(data.address_id);
+              });
+              // this.finishPayment();
             }
-            console.log("response data address id: ", data.address_id);
           })
           .catch((error) => console.log("fetch error", error));
+        //console.log("set state address id is: ", this.state.address_id);
         this.setState({ refreshing: false });
       } else {
         console.log("user_id is null");
@@ -134,6 +154,7 @@ export default class PaymentScreen extends Component {
       console.log("error in add new address and finish block", e);
       //is checked alerti ver
     }
+    console.log("out try set state address id is: ", this.state.address_id);
   };
   onFinishAndPay = () => {
     if (this.state.isNewAddress) {
