@@ -15,6 +15,9 @@ class Profile extends Component {
       dataSource: [],
       refreshing: true,
       user_id: "1",
+      first_name: "",
+      last_name: "",
+      email: "",
     };
   }
   async getId() {
@@ -32,6 +35,44 @@ class Profile extends Component {
       // error reading value
     }
   }
+  async fetchUserInfo() {
+    var raw = JSON.stringify({
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      email: this.state.email,
+    });
+
+    try {
+      const user_id = await AsyncStorage.getItem("@user_id");
+      if (user_id !== null) {
+        fetch("http://127.0.0.1:8000/user/" + user_id + "/")
+          .then((response) => response.json())
+          .then((result) => {
+            this.setState({
+              dataSource: result,
+              refreshing: false,
+            });
+            console.log(result);
+          })
+          .catch((error) => console.log("fetch error", error));
+        this.setState({ refreshing: false });
+      } else {
+        console.log("user_id is null");
+      }
+    } catch (e) {
+      console.log("error in value user_id ", e);
+    }
+  }
+  componentDidMount() {
+    this.getId();
+    this.fetchUserInfo();
+  }
+  handleRefresh = () => {
+    this.setState({ refreshing: false }, () => {
+      this.fetchUserInfo();
+    }); // call fetchCats after setting the state
+  };
+
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -43,8 +84,13 @@ class Profile extends Component {
             />
           </View>
           <View style={{ marginLeft: 10 }}>
-            <Title style={styles.title}>username</Title>
-            <Caption style={styles.caption}>@user_name</Caption>
+            <Text style={styles.title}>
+              {this.state.dataSource.first_name}{" "}
+              {this.state.dataSource.last_name}
+            </Text>
+            <Caption style={styles.caption}>
+              {this.state.dataSource.email}
+            </Caption>
           </View>
         </View>
         <View style={styles.menuWrapper}>
@@ -64,7 +110,11 @@ class Profile extends Component {
               <Text style={{ marginLeft: 10 }}>Orders</Text>
             </View>
           </TouchableRipple>
-          <TouchableRipple onPress={() => {}}>
+          <TouchableRipple
+            onPress={() => {
+              this.props.navigation.navigate("UserCommentsScreen", {});
+            }}
+          >
             <View style={styles.menuItem}>
               <Icon name="ios-chatbubbles" size={25} />
               <Text style={{ marginLeft: 10 }}>Reviews</Text>

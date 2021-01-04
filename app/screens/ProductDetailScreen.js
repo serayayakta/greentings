@@ -67,7 +67,7 @@ class ProductDetailScreen extends Component {
   }
   renderItemComponent = (data) => (
     <Comment
-      comment_id={data.comment_id}
+      comment_id={data.item.comment_id}
       date={data.item.date}
       nickname={data.item.nickname}
       product={data.item.product}
