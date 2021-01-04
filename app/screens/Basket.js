@@ -18,9 +18,19 @@ class Basket extends Component {
       dataSource: [],
       refreshing: true,
       total: 0,
+      user_id: "",
     };
   }
-
+  async getId() {
+    const value = await AsyncStorage.getItem("@user_id");
+    if (value !== null) {
+      console.log("value of id in basket screen", value);
+      this.setState({ user_id: value });
+      // value previously stored
+    } else {
+      console.log("value of id is null");
+    }
+  }
   async fetchBasketItems() {
     try {
       const user_id = await AsyncStorage.getItem("@user_id");
@@ -51,7 +61,11 @@ class Basket extends Component {
       console.log("error in value user_id ", e);
     }
   }
+
+  async decreaseQuantity() {}
+
   componentDidMount() {
+    this.getId();
     const { navigation } = this.props;
     navigation.addListener(
       "willFocus",
@@ -60,19 +74,147 @@ class Basket extends Component {
     );
   }
   renderItemComponent = (data) => (
-    <BasketItem
-      img={data.item.img}
-      brand_name={data.item.brand_name}
-      product_name={data.item.product_name}
-      quantity={data.item.quantity}
-      price={data.item.price}
-      navigation={this.props.navigation}
-    />
+    <View style={{ flex: 1, flexDirection: "row" }}>
+      <View style={{ width: "90%", backgroundColor: "black" }}>
+        <BasketItem
+          img={data.item.img}
+          brand_name={data.item.brand_name}
+          product_name={data.item.product_name}
+          quantity={data.item.quantity}
+          price={data.item.price}
+          navigation={this.props.navigation}
+        />
+      </View>
+      <View style={{ width: "10%", backgroundColor: "white" }}>
+        <View
+          style={{
+            flexDirection: "column",
+            flex: 1,
+            paddingVertical: 20,
+            marginTop: 10,
+          }}
+        >
+          <View style={{ height: "50%", backgroundColor: "white" }}>
+            <TouchableOpacity
+              style={styles.quantityButton}
+              onPress={() => {
+                this.increaseQuantity(data.item.product_id, data.item.quantity);
+                //this.getTotal()
+              }}
+            >
+              <Text style={{ fontSize: 20, color: "white" }}>+</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ height: "50%", backgroundColor: "white" }}>
+            <TouchableOpacity
+              style={styles.quantityButton}
+              onPress={() => {
+                this.decreaseQuantity(data.item.product_id, data.item.quantity);
+                //this.getTotal()
+              }}
+            >
+              <Text style={{ fontSize: 20, color: "white" }}>-</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </View>
   );
   handleRefresh = () => {
     this.setState({ refreshing: true }, () => {
       this.fetchBasketItems();
     });
+  };
+  increaseQuantity = (id, quantity) => {
+    try {
+      const user_id = this.state.user_id;
+      console.log("user_id in increase quantity: ", user_id);
+      if (user_id !== null) {
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        var raw = JSON.stringify({
+          product: id,
+          quantity: quantity + 1,
+        });
+        console.log("raw ord body: ", raw);
+        var requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
+        fetch("http://127.0.0.1:8000/basket/" + user_id + "/", requestOptions)
+          .then((response) => {
+            if (response.status == 200) {
+              //alert and navigate back
+
+              console.log("başarılııı 201 :", response);
+              alert("Quantity increased");
+              this.handleRefresh();
+            }
+            if (response.status == 406) {
+              console.log(" 406 stock not enough", response);
+              alert("Quantity increased");
+              this.handleRefresh();
+            }
+            if (response.status == 500) {
+              console.log(" 500????", response);
+            }
+          })
+          .catch((error) => console.log("fetch error", error));
+        this.setState({ refreshing: false });
+      } else {
+        console.log("user_id is null in increase quantity");
+      }
+    } catch (e) {
+      console.log("error in inc qty", e);
+      //is checked alerti ver
+    }
+  };
+  decreaseQuantity = (id, quantity) => {
+    try {
+      const user_id = this.state.user_id;
+      console.log("user_id in increase quantity: ", user_id);
+      if (user_id !== null) {
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        var raw = JSON.stringify({
+          product: id,
+          quantity: quantity - 1,
+        });
+        console.log("raw ord body: ", raw);
+        var requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
+        fetch("http://127.0.0.1:8000/basket/" + user_id + "/", requestOptions)
+          .then((response) => {
+            if (response.status == 200) {
+              //alert and navigate back
+
+              console.log("başarılııı 201 :", response);
+              alert("Quantity decreased");
+              this.handleRefresh();
+            }
+            if (response.status == 406) {
+              console.log(" 406 stock not enough", response);
+              this.handleRefresh();
+            }
+            if (response.status == 500) {
+              console.log(" 500????", response);
+            }
+          })
+          .catch((error) => console.log("fetch error", error));
+        this.setState({ refreshing: false });
+      } else {
+        console.log("user_id is null in decrease quantity");
+      }
+    } catch (e) {
+      console.log("error in dec qty", e);
+      //is checked alerti ver
+    }
   };
   render() {
     if (this.state.refreshing) {
@@ -146,7 +288,7 @@ export default Basket;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 100,
+    marginTop: 50,
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -169,5 +311,14 @@ const styles = StyleSheet.create({
     textShadowRadius: 2,
     textAlign: "right",
     marginRight: 15,
+  },
+  quantityButton: {
+    marginRight: 10,
+    height: 45,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 0,
+    backgroundColor: colors.primary,
   },
 });
