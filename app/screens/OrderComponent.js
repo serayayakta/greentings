@@ -35,7 +35,10 @@ class OrderComponent extends Component {
         onPress={() => {
           this.props.navigation.navigate("OrderInvoiceScreen", {
             order_id: this.props.order_id,
+            date: this.props.date,
+            address: this.props.address,
             navigation: this.props.navigation,
+            screen: "order",
           });
         }}
       >

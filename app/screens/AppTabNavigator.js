@@ -37,6 +37,9 @@ const BasketPlus = createStackNavigator(
     PaymentScreen: {
       screen: PaymentScreen,
     },
+    OrderInvoiceScreen: {
+      screen: OrderInvoiceScreen,
+    },
   },
   {
     headerMode: "none",
@@ -59,6 +62,9 @@ const ProfilePlus = createStackNavigator(
     },
     OrderInvoiceScreen: {
       screen: OrderInvoiceScreen,
+    },
+    ProductDetailScreen: {
+      screen: ProductDetailScreen,
     },
   },
   {

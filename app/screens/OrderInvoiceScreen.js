@@ -106,20 +106,46 @@ export default class PasswordDetailScreen extends Component {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
-        <View style={styles.goBackButton}>
-          <Button
-            title="< Orders"
-            onPress={() => this.props.navigation.goBack()}
-          />
-        </View>
+        {this.props.navigation.getParam("screen", "payment") == "order" && (
+          <View style={styles.goBackButton}>
+            <Button
+              title="< Orders"
+              onPress={() => this.props.navigation.goBack()}
+            />
+          </View>
+        )}
 
         <ScrollView>
           <View styles={{ alignItems: "center" }}>
+            {this.props.navigation.getParam("screen", "payment") ==
+              "payment" && (
+              <View style={{ alignItems: "center", marginTop: 30 }}>
+                <Text style={{ color: "green", fontSize: 20 }}>
+                  Order recieved!
+                </Text>
+              </View>
+            )}
             <Text style={styles.totalPriceText}>
               Order number:{" "}
               {JSON.stringify(this.props.navigation.getParam("order_id", "0"))}
             </Text>
+            <Text style={{ alignSelf: "center" }}>
+              Date: {this.props.navigation.getParam("date", "0")}
+            </Text>
+
+            <Text style={styles.totalPriceText}>Total Price</Text>
+            <Text style={styles.totalPriceText}>$ {this.state.total}</Text>
           </View>
+          {this.props.navigation.getParam("screen", "payment") == "payment" && (
+            <View style={{ alignItems: "center" }}>
+              <TouchableOpacity
+                style={styles.greenButton}
+                onPress={() => this.props.navigation.navigate("Basket")}
+              >
+                <Text style={{ color: "white" }}>Continue shopping</Text>
+              </TouchableOpacity>
+            </View>
+          )}
           <FlatList
             data={this.state.dataSource}
             renderItem={(item) => this.renderItemComponent(item)}
@@ -127,11 +153,6 @@ export default class PasswordDetailScreen extends Component {
             refreshing={this.state.refreshing}
             onRefresh={() => this.handleRefresh()}
           ></FlatList>
-
-          <View>
-            <Text style={styles.totalPriceText}>Total Price</Text>
-            <Text style={styles.totalPriceText}>$ {this.state.total}</Text>
-          </View>
         </ScrollView>
       </View>
     );
@@ -149,6 +170,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "center",
   },
+
   totalPriceText: {
     margin: 10,
     fontSize: 18,
@@ -157,5 +179,15 @@ const styles = StyleSheet.create({
     textShadowRadius: 2,
     textAlign: "center",
     marginRight: 15,
+  },
+  greenButton: {
+    margin: 10,
+    height: 45,
+    width: "60%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 30,
+    backgroundColor: colors.primary,
   },
 });

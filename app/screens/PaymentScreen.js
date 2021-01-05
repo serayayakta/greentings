@@ -73,10 +73,19 @@ export default class PaymentScreen extends Component {
         fetch("http://127.0.0.1:8000/ord/", requestOptions)
           .then((response) => {
             if (response.status == 201) {
-              //alert and navigate back
+              response.json().then((data) => {
+                console.log("order_id console: ", data.order_id);
 
-              console.log("başarılııı 201 :", response);
-              this.props.navigation.goBack();
+                console.log("başarılııı 201 :", response);
+                //this.props.navigation.goBack();
+                this.props.navigation.navigate("OrderInvoiceScreen", {
+                  order_id: data.order_id,
+                  date: data.date,
+                  address: data.address,
+                  navigation: this.props.navigation,
+                  screen: "payment",
+                });
+              });
             }
           })
           .catch((error) => console.log("fetch error", error));
