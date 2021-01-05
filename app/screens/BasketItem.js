@@ -49,13 +49,19 @@ class BasketItem extends Component {
 
   render() {
     return (
-      <View style={{ height: 150, width: "100%", backgroundColor: "black" }}>
+      <View style={{ height: 150, width: "100%" }}>
         <View style={styles.container}>
           <Image style={styles.image} source={{ uri: this.props.img }} />
 
           <View styles={{ flexDirection: "column" }}>
             <View styles={{ flex: 8 }}>
-              <Text style={styles.text}>{this.props.product_name}</Text>
+              <Text
+                style={styles.text}
+                numberOfLines={1}
+                ellipsizeMode="middle"
+              >
+                {this.props.product_name}
+              </Text>
               <Text style={styles.brandName}>{this.props.brand_name}</Text>
             </View>
             <View

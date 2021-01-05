@@ -15,6 +15,7 @@ import {
 import colors from "../config/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Comment from "./Comment";
+import ProductDetailScreen from "./ProductDetailScreen";
 
 export default class UserCommentsScreen extends Component {
   constructor(props) {
@@ -90,16 +91,26 @@ export default class UserCommentsScreen extends Component {
     }); // call fetchCats after setting the state
   };
   renderItemComponent = (data) => (
-    <Comment
-      comment_id={data.item.comment_id}
-      date={data.item.date}
-      nickname={data.item.nickname}
-      product={data.item.product}
-      rating={data.item.rating}
-      text={data.item.text}
-      validation={data.item.validation}
-      navigation={this.props.navigation}
-    />
+    <TouchableOpacity
+      onPress={() => {
+        this.props.navigation.navigate("ProductDetailScreen", {
+          product_id: data.item.product,
+
+          navigation: this.props.navigation,
+        });
+      }}
+    >
+      <Comment
+        comment_id={data.item.comment_id}
+        date={data.item.date}
+        nickname={data.item.nickname}
+        product={data.item.product}
+        rating={data.item.rating}
+        text={data.item.text}
+        validation={data.item.validation}
+        navigation={this.props.navigation}
+      />
+    </TouchableOpacity>
   );
   render() {
     const { navigation } = this.props;

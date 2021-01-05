@@ -12,6 +12,7 @@ import PaymentScreen from "./PaymentScreen";
 import { createStackNavigator } from "react-navigation";
 import OrdersDetailScreen from "./OrdersDetailScreen";
 import UserCommentsScreen from "./UserCommentsScreen";
+import OrderInvoiceScreen from "./OrderInvoiceScreen";
 
 const HomePlus = createStackNavigator(
   {
@@ -36,6 +37,9 @@ const BasketPlus = createStackNavigator(
     PaymentScreen: {
       screen: PaymentScreen,
     },
+    OrderInvoiceScreen: {
+      screen: OrderInvoiceScreen,
+    },
   },
   {
     headerMode: "none",
@@ -55,6 +59,12 @@ const ProfilePlus = createStackNavigator(
     },
     UserCommentsScreen: {
       screen: UserCommentsScreen,
+    },
+    OrderInvoiceScreen: {
+      screen: OrderInvoiceScreen,
+    },
+    ProductDetailScreen: {
+      screen: ProductDetailScreen,
     },
   },
   {

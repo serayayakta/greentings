@@ -31,7 +31,17 @@ class OrderComponent extends Component {
   }
   render() {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          this.props.navigation.navigate("OrderInvoiceScreen", {
+            order_id: this.props.order_id,
+            date: this.props.date,
+            address: this.props.address,
+            navigation: this.props.navigation,
+            screen: "order",
+          });
+        }}
+      >
         <View style={{ height: 150, width: "100%", backgroundColor: "white" }}>
           <View style={styles.container}>
             <View styles={{ flexDirection: "column" }}>
