@@ -79,7 +79,7 @@ export default class OrdersDetailScreen extends Component {
       <View style={styles.container}>
         <View style={styles.goBackButton}>
           <Button
-            title="< Orders"
+            title="< Profile"
             onPress={() => this.props.navigation.goBack()}
           />
         </View>
