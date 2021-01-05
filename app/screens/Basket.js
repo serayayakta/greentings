@@ -44,7 +44,7 @@ class Basket extends Component {
             });
             var total = 0;
             for (var i = 0; i < result.length; i++) {
-              var price = Number(result[i].price);
+              var price = Number(result[i].price * result[i].quantity);
               total = total + price;
               console.log("total now: ", total);
             }
@@ -75,7 +75,7 @@ class Basket extends Component {
   }
   renderItemComponent = (data) => (
     <View style={{ flex: 1, flexDirection: "row" }}>
-      <View style={{ width: "90%", backgroundColor: "black" }}>
+      <View style={{ width: "90%" }}>
         <BasketItem
           img={data.item.img}
           brand_name={data.item.brand_name}
@@ -85,7 +85,7 @@ class Basket extends Component {
           navigation={this.props.navigation}
         />
       </View>
-      <View style={{ width: "10%", backgroundColor: "white" }}>
+      <View style={{ width: "10%" }}>
         <View
           style={{
             flexDirection: "column",
@@ -94,7 +94,7 @@ class Basket extends Component {
             marginTop: 10,
           }}
         >
-          <View style={{ height: "50%", backgroundColor: "white" }}>
+          <View style={{ height: "50%" }}>
             <TouchableOpacity
               style={styles.quantityButton}
               onPress={() => {
@@ -105,7 +105,7 @@ class Basket extends Component {
               <Text style={{ fontSize: 20, color: "white" }}>+</Text>
             </TouchableOpacity>
           </View>
-          <View style={{ height: "50%", backgroundColor: "white" }}>
+          <View style={{ height: "50%" }}>
             <TouchableOpacity
               style={styles.quantityButton}
               onPress={() => {
@@ -172,48 +172,93 @@ class Basket extends Component {
     }
   };
   decreaseQuantity = (id, quantity) => {
-    try {
-      const user_id = this.state.user_id;
-      console.log("user_id in increase quantity: ", user_id);
-      if (user_id !== null) {
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        var raw = JSON.stringify({
-          product: id,
-          quantity: quantity - 1,
-        });
-        console.log("raw ord body: ", raw);
-        var requestOptions = {
-          method: "POST",
-          headers: myHeaders,
-          body: raw,
-          redirect: "follow",
-        };
-        fetch("http://127.0.0.1:8000/basket/" + user_id + "/", requestOptions)
-          .then((response) => {
-            if (response.status == 200) {
-              //alert and navigate back
+    if (quantity > 1) {
+      try {
+        const user_id = this.state.user_id;
+        console.log("user_id in increase quantity: ", user_id);
+        if (user_id !== null) {
+          var myHeaders = new Headers();
+          myHeaders.append("Content-Type", "application/json");
+          var raw = JSON.stringify({
+            product: id,
+            quantity: quantity - 1,
+          });
+          console.log("raw ord body: ", raw);
+          var requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow",
+          };
+          fetch("http://127.0.0.1:8000/basket/" + user_id + "/", requestOptions)
+            .then((response) => {
+              if (response.status == 200) {
+                //alert and navigate back
 
-              console.log("başarılııı 201 :", response);
-              alert("Quantity decreased");
-              this.handleRefresh();
-            }
-            if (response.status == 406) {
-              console.log(" 406 stock not enough", response);
-              this.handleRefresh();
-            }
-            if (response.status == 500) {
-              console.log(" 500????", response);
-            }
-          })
-          .catch((error) => console.log("fetch error", error));
-        this.setState({ refreshing: false });
-      } else {
-        console.log("user_id is null in decrease quantity");
+                console.log("başarılııı 201 :", response);
+                alert("Quantity decreased");
+                this.handleRefresh();
+              }
+              if (response.status == 406) {
+                console.log(" 406 stock not enough", response);
+                this.handleRefresh();
+              }
+              if (response.status == 500) {
+                console.log(" 500????", response);
+              }
+            })
+            .catch((error) => console.log("fetch error", error));
+          this.setState({ refreshing: false });
+        } else {
+          console.log("user_id is null in decrease quantity");
+        }
+      } catch (e) {
+        console.log("error in dec qty", e);
+        //is checked alerti ver
       }
-    } catch (e) {
-      console.log("error in dec qty", e);
-      //is checked alerti ver
+    } else {
+      try {
+        const user_id = this.state.user_id;
+        console.log("user_id in increase quantity: ", user_id);
+        if (user_id !== null) {
+          var myHeaders = new Headers();
+          myHeaders.append("Content-Type", "application/json");
+          var raw = JSON.stringify({
+            product: id,
+          });
+          console.log("raw ord body: ", raw);
+          var requestOptions = {
+            method: "DELETE",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow",
+          };
+          fetch("http://127.0.0.1:8000/basket/" + user_id + "/", requestOptions)
+            .then((response) => {
+              if (response.status == 204) {
+                //alert and navigate back
+
+                console.log("removal success 204 :", response);
+                alert("Product removed");
+                this.handleRefresh();
+              }
+              if (response.status == 404) {
+                console.log(" 404 item not found", response);
+                this.handleRefresh();
+              }
+              if (response.status == 500) {
+                console.log(" 500????", response);
+              }
+            })
+            .catch((error) => console.log("fetch error", error));
+          this.setState({ refreshing: false });
+        } else {
+          console.log("user_id is null in decrease quantity");
+        }
+      } catch (e) {
+        console.log("error in dec qty", e);
+        //is checked alerti ver
+      }
     }
   };
   render() {
@@ -259,23 +304,25 @@ class Basket extends Component {
             )}
             {this.state.total > 0 && (
               <View>
-                <TouchableOpacity>
+                <View>
                   <Text style={styles.totalPriceText}>Total Price</Text>
                   <Text style={styles.totalPriceText}>
                     $ {this.state.total}
                   </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.checkoutButton}
-                  onPress={() => {
-                    //this.getTotal();
-                    this.props.navigation.navigate("PaymentScreen", {
-                      total: this.state.total,
-                    });
-                  }}
-                >
-                  <Text style={{ color: "white" }}>Checkout</Text>
-                </TouchableOpacity>
+                </View>
+                <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    style={styles.checkoutButton}
+                    onPress={() => {
+                      //this.getTotal();
+                      this.props.navigation.navigate("PaymentScreen", {
+                        total: this.state.total,
+                      });
+                    }}
+                  >
+                    <Text style={{ color: "white" }}>Checkout</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             )}
           </ScrollView>
@@ -296,6 +343,7 @@ const styles = StyleSheet.create({
   checkoutButton: {
     margin: 10,
     height: 45,
+    width: "60%",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -304,12 +352,11 @@ const styles = StyleSheet.create({
   },
   totalPriceText: {
     margin: 10,
-    fontSize: 20,
-    fontFamily: "Helvetica Neue",
+    fontSize: 18,
     textShadowColor: "black",
     textShadowOffset: { width: 0.2, height: 0.5 },
     textShadowRadius: 2,
-    textAlign: "right",
+    textAlign: "center",
     marginRight: 15,
   },
   quantityButton: {

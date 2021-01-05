@@ -49,7 +49,7 @@ class BasketItem extends Component {
 
   render() {
     return (
-      <View style={{ height: 150, width: "100%", backgroundColor: "white" }}>
+      <View style={{ height: 150, width: "100%" }}>
         <View style={styles.container}>
           <Image style={styles.image} source={{ uri: this.props.img }} />
 
