@@ -15,6 +15,7 @@ import { withNavigation } from "react-navigation";
 import colors from "../config/colors";
 import Comment from "./Comment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import StarRating from "react-native-star-rating";
 
 class ProductDetailScreen extends Component {
   constructor(props) {
@@ -104,10 +105,25 @@ class ProductDetailScreen extends Component {
             <Text style={styles.name}>
               {JSON.stringify(navigation.getParam("product_name", "no name"))}
             </Text>
-
+            {navigation.getParam("discount", "false") == true && (
+              <Text style={styles.oldPrice}>
+                ${" "}
+                {JSON.stringify(navigation.getParam("base_price", "no price"))}
+              </Text>
+            )}
             <Text style={styles.price}>
               $ {JSON.stringify(navigation.getParam("price", "no price"))}
             </Text>
+            <View style={{ alignItems: "center", marginVertical: 10 }}>
+              <StarRating
+                disabled={false}
+                maxStars={5}
+                rating={navigation.getParam("rating", "0")}
+                selectedStar={(rating) => this.onStarRatingPress(rating)}
+                fullStarColor={"darkgreen"}
+                starSize={20}
+              ></StarRating>
+            </View>
             <Text style={styles.description}>
               {navigation.getParam("description", "no description")}
             </Text>
@@ -235,10 +251,18 @@ const styles = StyleSheet.create({
     color: "#696969",
     fontWeight: "bold",
   },
+  oldPrice: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "black",
+    fontWeight: "bold",
+    textDecorationLine: "line-through",
+    textDecorationColor: "red",
+  },
   price: {
     marginTop: 10,
     fontSize: 18,
-    color: "green",
+    color: "black",
     fontWeight: "bold",
   },
   productImg: {

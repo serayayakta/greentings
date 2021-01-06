@@ -83,6 +83,8 @@ class Basket extends Component {
           quantity={data.item.quantity}
           price={data.item.price}
           navigation={this.props.navigation}
+          discount={data.item.discount}
+          base_price={data.item.base_price}
         />
       </View>
       <View style={{ width: "10%" }}>
