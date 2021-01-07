@@ -28,7 +28,21 @@ class ProductDetailScreen extends Component {
       nickname: "",
       rating: "",
       text: "",
+      first_name: "",
+      last_name: "",
+      email: "",
+      dataSource: [],
+      starCount: 0,
     };
+  }
+  onStarRatingPress(value) {
+    this.setState({
+      starCount: value,
+    });
+    console.log(this.state.starCount);
+    this.setState({
+      rating: JSON.stringify(this.state.starCount),
+    });
   }
 
   clickEventListener() {
@@ -70,7 +84,7 @@ class ProductDetailScreen extends Component {
     myHeaders.append("Content-Type", "application/json");
     this.getId();
     var raw = JSON.stringify({
-      nickname: this.state.nickname,
+      nickname: this.state.dataSource.first_name,
       user_id: this.state.user_id,
       text: this.state.text,
       rating: this.state.rating,
@@ -99,6 +113,7 @@ class ProductDetailScreen extends Component {
     this.getId();
     console.log(this.props.product_id);
     this.fetchComments();
+    this.fetchUserInfo();
   }
   renderItemComponent = (data) => (
     <Comment
@@ -115,6 +130,7 @@ class ProductDetailScreen extends Component {
   handleRefresh = () => {
     this.setState({ refreshing: false }, () => {
       this.fetchComments();
+      this.fetchUserInfo();
     }); // call fetchCats after setting the state
   };
   render() {
@@ -171,42 +187,52 @@ class ProductDetailScreen extends Component {
               <Text style={styles.addButtonText}>Add To Cart</Text>
             </TouchableOpacity>
           </View>
-          <View>
-            <View>
-              <TextInput
-                placeholder="nickname"
-                onChangeText={(text) => {
-                  this.setState({ nickname: text }),
-                    console.log("nick", this.state.nickname);
-                }}
-              />
-            </View>
-            <View>
-              <TextInput
-                placeholder="comment"
-                onChangeText={(txt) => {
-                  this.setState({ text: txt }),
-                    console.log("comment", this.state.text);
-                }}
-              />
-            </View>
-            <View>
-              <TextInput
-                placeholder="rating"
-                onChangeText={(text) => {
-                  this.setState({ rating: text }),
+          <View style={styles.commentcontainer}>
+            <View style={styles.menuWrapper}>
+              <View style={styles.menuItem}>
+                <Text style={{ marginLeft: 10 }}>
+                  {this.state.dataSource.first_name}
+                </Text>
+              </View>
+              <View style={styles.separator}></View>
+              <View style={styles.menuItem}>
+                <StarRating
+                  disabled={false}
+                  maxStars={5}
+                  starSize={14}
+                  fullStarColor={"darkgreen"}
+                  rating={this.state.starCount}
+                  value={JSON.stringify(this.state.starCount)}
+                  selectedStar={(value) => {
+                    this.setState({ starCount: value });
+                    this.setState({ rating: value });
+                    console.log(this.state.starCount);
                     console.log("rating", this.state.rating);
-                }}
-              />
-            </View>
+                  }}
+                />
+              </View>
+              <View style={styles.separator}></View>
+              <View style={styles.menuItem}>
+                <TextInput
+                  placeholder="Comments..."
+                  placeholderTextColor="grey"
+                  style={styles.inputText}
+                  autoCorrect={false}
+                  onChangeText={(txt) => {
+                    this.setState({ text: txt }),
+                      console.log("comment", this.state.text);
+                  }}
+                />
+              </View>
 
-            <View style={{ alignItems: "center" }}>
-              <TouchableOpacity
-                style={styles.commentBtn}
-                onPress={this.addComment}
-              >
-                <Text style={styles.btnText}>Send</Text>
-              </TouchableOpacity>
+              <View style={{ alignItems: "center" }}>
+                <TouchableOpacity
+                  style={styles.commentBtn}
+                  onPress={this.addComment}
+                >
+                  <Text style={styles.btnText}>Send</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
 
@@ -222,6 +248,34 @@ class ProductDetailScreen extends Component {
     );
   }
 
+  async fetchUserInfo() {
+    var raw = JSON.stringify({
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      email: this.state.email,
+    });
+
+    try {
+      const user_id = await AsyncStorage.getItem("@user_id");
+      if (user_id !== null) {
+        fetch("http://127.0.0.1:8000/user/" + user_id + "/")
+          .then((response) => response.json())
+          .then((result) => {
+            this.setState({
+              dataSource: result,
+              refreshing: false,
+            });
+            console.log(result);
+          })
+          .catch((error) => console.log("fetch error", error));
+        this.setState({ refreshing: false });
+      } else {
+        console.log("user_id is null");
+      }
+    } catch (e) {
+      console.log("error in value user_id ", e);
+    }
+  }
   addToBasket = () => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -278,8 +332,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 3,
   },
   btnSize: {
-    height: 40,
-    width: 40,
+    height: 20,
+    width: 30,
     borderRadius: 40,
     borderColor: "#778899",
     borderWidth: 1,
@@ -288,6 +342,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+  },
+  btnText: {
+    color: "white",
   },
   contentColors: {
     justifyContent: "center",
@@ -348,11 +405,11 @@ const styles = StyleSheet.create({
   separator: {
     height: 2,
     backgroundColor: "#eeeeee",
-    marginTop: 20,
+
     marginHorizontal: 30,
   },
   commentBtn: {
-    width: "40%",
+    width: "30%",
     //backgroundColor: `#9acd32`,
     borderRadius: 25,
     height: 30,
@@ -361,6 +418,41 @@ const styles = StyleSheet.create({
     marginTop: 40,
     marginBottom: 10,
     backgroundColor: colors.primary,
+    alignSelf: "flex-end",
+  },
+  commentcontainer: {
+    marginHorizontal: 30,
+    marginVertical: 15,
+    backgroundColor: "#FFF",
+    borderRadius: 15,
+    shadowColor: "black",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.8,
+    shadowRadius: 7.5,
+    padding: 15,
+    position: "relative",
+    flex: 1,
+  },
+  menuWrapper: {
+    marginTop: 10,
+  },
+  menuItem: {
+    flexDirection: "row",
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    //borderWidth: 0.2,
+    //borderColor: "grey",
+  },
+  menuItemText: {
+    color: "#777777",
+    marginLeft: 20,
+    fontWeight: "600",
+    fontSize: 16,
+    lineHeight: 26,
+    flexDirection: "row",
   },
 });
 export default withNavigation(ProductDetailScreen);
