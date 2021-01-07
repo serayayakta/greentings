@@ -42,7 +42,7 @@ class OrderComponent extends Component {
           });
         }}
       >
-        <View style={{ height: 150, width: "100%", backgroundColor: "white" }}>
+        <View style={{ height: 150, width: "100%" }}>
           <View style={styles.container}>
             <View styles={{ flexDirection: "column" }}>
               <View styles={{ flex: 8 }}>
