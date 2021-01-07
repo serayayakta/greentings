@@ -9,8 +9,17 @@ class Product extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user_id: 1,
+      user_id: "0",
+      new_user: true,
     };
+  }
+  async setId(user_id) {
+    () => this.setState({ user_id: user_id, new_user: false });
+    try {
+      await AsyncStorage.setItem("@user_id", this.state.user_id);
+    } catch (e) {
+      console.log("error", e);
+    }
   }
   async getId() {
     try {
@@ -18,6 +27,11 @@ class Product extends Component {
       if (value !== null) {
         console.log("value of id in basket", value);
         this.setState({ user_id: value });
+        if (value == "0") {
+          this.setState({ new_user: true });
+        } else {
+          this.setState({ new_user: false });
+        }
         // value previously stored
       } else {
         console.log("value of id is null");
@@ -114,9 +128,23 @@ class Product extends Component {
       "http://127.0.0.1:8000/basket/" + this.state.user_id + "/",
       requestOptions
     )
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
+      .then((response) => {
+        console.log("response status for add to basket", response.status);
+        if (response.status == 201) {
+          response.json().then((data) => {
+            console.log("data: ", data);
+            console.log("new user id: ", data[0].user_id);
+            console.log("bool user_exists: ", data[0].user_exists);
+            if (this.state.new_user) {
+              console.log("new user added the first item.");
+              const user_id = data[0].user_id.toString();
+              this.setId(user_id);
+              console.log("new user id is: ", this.state.user_id);
+            }
+          });
+        }
+      })
+      .catch((error) => console.log("fetch error", error));
   };
 }
 const styles = StyleSheet.create({

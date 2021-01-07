@@ -124,7 +124,7 @@ class Home extends Component {
             keyExtractor={(item) => item.product_id.toString()}
             ItemSeparatorComponent={this.ItemSeparator}
             refreshing={this.state.refreshing}
-            onRefresh={this.handleRefresh}
+            onRefresh={() => this.handleRefresh()}
           ></FlatList>
         </ScrollView>
       </View>

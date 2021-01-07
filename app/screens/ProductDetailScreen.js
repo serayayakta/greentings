@@ -9,7 +9,6 @@ import {
   ScrollView,
   FlatList,
   Button,
-  SafeAreaView,
 } from "react-native";
 import { withNavigation } from "react-navigation";
 import colors from "../config/colors";
@@ -23,7 +22,7 @@ class ProductDetailScreen extends Component {
     this.state = {
       comments: [],
       refreshing: false,
-      user_id: "1",
+      user_id: "0",
     };
   }
 

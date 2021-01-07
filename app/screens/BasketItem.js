@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textDecorationLine: "line-through",
     fontSize: 17,
+    textDecorationColor: "red",
   },
   image: {
     width: "45%",

@@ -23,6 +23,9 @@ import colors from "../config/colors";
 //}
 
 export default class MainScreen extends Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: "#f2f2f2", marginBottom: 0 }}>

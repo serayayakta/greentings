@@ -78,6 +78,15 @@ export default class LoginScreen extends Component {
       .catch((error) => console.log("error", error));
   };
 
+  async setIdZero() {
+    try {
+      await AsyncStorage.setItem("@user_id", "0");
+      console.log("entered as a guest and id set to zero!");
+    } catch (e) {
+      console.log("error", e);
+    }
+  }
+
   render() {
     return (
       <ImageBackground
@@ -118,7 +127,10 @@ export default class LoginScreen extends Component {
         </View>
 
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate(MainScreen)}
+          onPress={() => {
+            this.setIdZero();
+            this.props.navigation.navigate(MainScreen);
+          }}
         >
           <Text style={styles.guest}>Continue without account...</Text>
         </TouchableOpacity>
