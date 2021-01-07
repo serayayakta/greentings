@@ -104,29 +104,48 @@ class Search extends Component {
   }
 
   renderItemComponent = (data) => (
-    <Product
-      product={data.item}
-      product_id={data.item.product_id}
-      img={data.item.img}
-      brand_name={data.item.brand_name}
-      product_name={data.item.product_name}
-      rating={data.item.rating}
-      price={data.item.price}
-      navigation={this.props.navigation}
-      description={data.item.description}
-      base_price={data.item.base_price}
-      discount={data.item.discount}
-    />
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => {
+        // Navigate using the `navigation` prop that you received
+        this.props.navigation.navigate("ProductDetailScreen", {
+          product_id: this.props.product_id,
+          img: this.props.img,
+          brande_name: this.props.brand_name,
+          product_name: this.props.product_name,
+          rating: this.props.rating,
+          base_price: this.props.base_price,
+          discount: this.props.discount,
+          price: this.props.price,
+          description: this.props.description,
+          navigation: this.props.navigation,
+          user_id: this.state.user_id,
+        });
+      }}
+    >
+      <Product
+        product={data.item}
+        product_id={data.item.product_id}
+        img={data.item.img}
+        brand_name={data.item.brand_name}
+        product_name={data.item.product_name}
+        rating={data.item.rating}
+        price={data.item.price}
+        navigation={this.props.navigation}
+        description={data.item.description}
+        base_price={data.item.base_price}
+        discount={data.item.discount}
+      />
+    </TouchableOpacity>
   );
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
-          <View style={{ flex: 1, backgroundColor: "white" }}>
+          <View style={{ flex: 1 }}>
             <View
               style={{
                 height: 50,
-                backgroundColor: "white",
                 borderBottomWidth: 1,
                 borderBottomColor: "#dddddd",
               }}
@@ -168,14 +187,14 @@ class Search extends Component {
             </View>
             <ScrollView scrollEventThrottle={16}>
               <View
-                style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}
+                style={{ flex: 1, backgroundColor: "white", paddingTop: 10 }}
               >
                 <Text
                   style={{
                     fontSize: 24,
                     fontWeight: "700",
                     paddingHorizontal: 20,
-                    paddingVertical: 10,
+                    paddingBottom: 10,
                     fontFamily: "Helvetica Neue",
                   }}
                 >
@@ -184,8 +203,7 @@ class Search extends Component {
 
                 <View
                   style={{
-                    height: 130,
-                    MarginTop: 20,
+                    height: 120,
                   }}
                 >
                   <ScrollView
@@ -336,7 +354,7 @@ class Search extends Component {
               ]}
             />
           </View>
-          <View style={{ flex: 2 }}>
+          <View style={{ flex: 2.5 }}>
             <ScrollView>
               <FlatList
                 data={this.state.dataSource}
@@ -378,11 +396,6 @@ class Search extends Component {
 export default Search;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   aboutUs: {
     color: "white",
     fontSize: 12,
@@ -394,9 +407,20 @@ const styles = StyleSheet.create({
   },
   container: {
     height: 300,
-    margin: 10,
+    marginHorizontal: 20,
+    marginVertical: 10,
     backgroundColor: "#FFF",
-    borderRadius: 6,
+    borderRadius: 15,
+    shadowColor: "black",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 7.5,
+    padding: 15,
+    position: "relative",
+    flex: 1,
   },
   image: {
     borderRadius: 4,
