@@ -25,6 +25,9 @@ class ProductDetailScreen extends Component {
       comments: [],
       refreshing: false,
       user_id: "1",
+      nickname: "",
+      rating: "",
+      text: "",
     };
   }
 
@@ -61,11 +64,41 @@ class ProductDetailScreen extends Component {
       })
       .catch((error) => console.log("fetch error", error));
   }
+  addComment = () => {
+    console.log("nick in addComm", this.state.nickname);
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    this.getId();
+    var raw = JSON.stringify({
+      nickname: this.state.nickname,
+      user_id: this.state.user_id,
+      text: this.state.text,
+      rating: this.state.rating,
+      validation: "false",
+    });
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+    console.log("nick in addComm", raw);
+    fetch(
+      "http://127.0.0.1:8000/comments/" +
+        JSON.stringify(this.props.navigation.getParam("product_id", "no id")) +
+        "/",
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error"));
+
+    this.setState({ nickname: "" });
+  };
   componentDidMount() {
     this.getId();
     console.log(this.props.product_id);
     this.fetchComments();
-    console.log("comments", this.state.comments);
   }
   renderItemComponent = (data) => (
     <Comment
@@ -139,10 +172,42 @@ class ProductDetailScreen extends Component {
             </TouchableOpacity>
           </View>
           <View>
-            <TextInput
-              placeholder="comment"
-              onChangeText={(text) => setText(text)}
-            />
+            <View>
+              <TextInput
+                placeholder="nickname"
+                onChangeText={(text) => {
+                  this.setState({ nickname: text }),
+                    console.log("nick", this.state.nickname);
+                }}
+              />
+            </View>
+            <View>
+              <TextInput
+                placeholder="comment"
+                onChangeText={(txt) => {
+                  this.setState({ text: txt }),
+                    console.log("comment", this.state.text);
+                }}
+              />
+            </View>
+            <View>
+              <TextInput
+                placeholder="rating"
+                onChangeText={(text) => {
+                  this.setState({ rating: text }),
+                    console.log("rating", this.state.rating);
+                }}
+              />
+            </View>
+
+            <View style={{ alignItems: "center" }}>
+              <TouchableOpacity
+                style={styles.commentBtn}
+                onPress={this.addComment}
+              >
+                <Text style={styles.btnText}>Send</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
           <FlatList
@@ -285,6 +350,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#eeeeee",
     marginTop: 20,
     marginHorizontal: 30,
+  },
+  commentBtn: {
+    width: "40%",
+    //backgroundColor: `#9acd32`,
+    borderRadius: 25,
+    height: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 40,
+    marginBottom: 10,
+    backgroundColor: colors.primary,
   },
 });
 export default withNavigation(ProductDetailScreen);
