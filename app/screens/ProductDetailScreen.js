@@ -10,6 +10,7 @@ import {
   FlatList,
   Button,
   SafeAreaView,
+  TextInput,
 } from "react-native";
 import { withNavigation } from "react-navigation";
 import colors from "../config/colors";
@@ -136,6 +137,12 @@ class ProductDetailScreen extends Component {
             >
               <Text style={styles.addButtonText}>Add To Cart</Text>
             </TouchableOpacity>
+          </View>
+          <View>
+            <TextInput
+              placeholder="comment"
+              onChangeText={(text) => setText(text)}
+            />
           </View>
 
           <FlatList
