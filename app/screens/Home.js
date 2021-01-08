@@ -45,6 +45,7 @@ class Home extends Component {
       price={data.item.price}
       navigation={this.props.navigation}
       description={data.item.description}
+      stock={data.item.stock}
     />
   );
   FlatListHeader = () => {

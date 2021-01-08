@@ -105,11 +105,13 @@ class Search extends Component {
 
   renderItemComponent = (data) => (
     <Product
+      product_id={data.item.product_id}
       img={data.item.img}
       brand_name={data.item.brand_name}
       product_name={data.item.product_name}
       rating={data.item.rating}
       price={data.item.price}
+      stock={data.item.stock}
     />
   );
   render() {
