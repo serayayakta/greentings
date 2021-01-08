@@ -74,7 +74,12 @@ class BasketItem extends Component {
                 <Text style={styles.text}>quantity: {this.props.quantity}</Text>
               </View>
               <View styles={{ flex: 1 }}>
-                <Text style={styles.text}>price: ${this.props.price}</Text>
+                {this.props.discount == true && (
+                  <Text style={styles.discountedText}>
+                    ${this.props.base_price}
+                  </Text>
+                )}
+                <Text style={styles.priceText}>price: ${this.props.price}</Text>
               </View>
             </View>
           </View>
@@ -105,17 +110,31 @@ const styles = StyleSheet.create({
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.8,
+    shadowOpacity: 0.5,
     shadowRadius: 7.5,
     padding: 15,
     position: "relative",
     flex: 12,
     flexDirection: "row",
   },
+  discountedText: {
+    textTransform: "lowercase",
+    fontFamily: "Helvetica Neue",
+    textAlign: "center",
+    textDecorationLine: "line-through",
+    fontSize: 17,
+    textDecorationColor: "red",
+  },
   image: {
     width: "45%",
     borderRadius: 4,
     resizeMode: "contain",
+  },
+  priceText: {
+    textTransform: "lowercase",
+    fontFamily: "Helvetica Neue",
+    textAlign: "center",
+    fontSize: 17,
   },
   text: {
     textTransform: "lowercase",

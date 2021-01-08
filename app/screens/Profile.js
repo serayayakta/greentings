@@ -73,6 +73,31 @@ class Profile extends Component {
     }); // call fetchCats after setting the state
   };
 
+  async onLogout() {
+    //const { state, goBack } = this.props.navigation;
+    //const params = state.params || {};
+    try {
+      await AsyncStorage.setItem("@user_id", "0");
+      await AsyncStorage.setItem("@total", "0");
+      console.log("logout button is pressed");
+      () => this.handleRefresh();
+      /*this.props.navigation.navigate(
+        "Stack",
+        {},
+        NavigationActions.navigate({
+          routeName: "LoginScreen",
+        })
+      );*/
+      //goBack(params.go_back_key);
+      //this.props.navigation.goBack("LoginScreen");
+      /*this.props.navigation.navigate("AppNavigation", {
+        screen: "LoginScreen",
+      });*/
+    } catch (e) {
+      console.log("error", e);
+    }
+  }
+
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -130,7 +155,11 @@ class Profile extends Component {
               <Text style={{ marginLeft: 10 }}>Change Password</Text>
             </View>
           </TouchableRipple>
-          <TouchableRipple onPress={() => {}}>
+          <TouchableRipple
+            onPress={() => {
+              this.onLogout();
+            }}
+          >
             <View style={styles.menuItem}>
               <Icon name="ios-exit" size={25} />
               <Text style={{ marginLeft: 10 }}>Logout</Text>

@@ -59,14 +59,77 @@ export default class OrdersDetailScreen extends Component {
       console.log("error in value user_id ", e);
     }
   }
+  cancelOrder = (order_id) => {
+    try {
+      var requestOptions = {
+        method: "PUT",
+        redirect: "follow",
+      };
+      fetch(
+        "http://127.0.0.1:8000/cancelorder/" + order_id + "/",
+        requestOptions
+      )
+        .then((response) => {
+          if (response.status == 200) {
+            console.log("cancel request  200 :", response);
+            alert("Order cancel request sent");
+            this.handleRefresh();
+          }
+        })
+        .catch((error) => console.log("fetch error", error));
+      this.setState({ refreshing: false });
+    } catch (e) {
+      console.log("error in cancel order", e);
+      //is checked alerti ver
+    }
+  };
   renderItemComponent = (data) => (
-    <OrderComponent
-      order_id={data.item.order_id}
-      date={data.item.date}
-      total_price={data.item.total_price}
-      adress={data.item.adress}
-      navigation={this.props.navigation}
-    />
+    <View style={{ flex: 1, flexDirection: "row" }}>
+      <View style={{ width: "80%" }}>
+        <OrderComponent
+          order_id={data.item.order_id}
+          date={data.item.date}
+          total_price={data.item.total_price}
+          adress={data.item.adress}
+          navigation={this.props.navigation}
+        />
+      </View>
+      <View style={{ width: "20%" }}>
+        <View
+          style={{
+            flexDirection: "column",
+            flex: 1,
+            paddingVertical: 20,
+            marginTop: 10,
+          }}
+        >
+          <View style={{ height: "50%" }}>
+            <TouchableOpacity
+              style={styles.quantityButton}
+              onPress={() => {
+                this.cancelOrder(data.item.order_id);
+                //this.cancelOrder();
+              }}
+            >
+              <Text style={{ fontSize: 12, color: "white" }}>Cancel Order</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ height: "50%" }}>
+            <TouchableOpacity
+              style={styles.quantityButton}
+              onPress={() => {
+                //this.decreaseQuantity(data.item.product_id, data.item.quantity);
+                //this.changeAdress
+              }}
+            >
+              <Text style={{ fontSize: 12, color: "white" }}>
+                Change adress
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </View>
   );
   handleRefresh = () => {
     this.setState({ refreshing: true }, () => {
@@ -142,14 +205,14 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
+
     marginTop: 20,
-    backgroundColor: "#f2f2f2",
   },
 
   goBackButton: {
     marginTop: 15,
     height: 45,
-    backgroundColor: "transparent",
+    //backgroundColor: "transparent",
     alignItems: "flex-start",
     justifyContent: "center",
   },
@@ -158,5 +221,14 @@ const styles = StyleSheet.create({
     backgroundColor: "grey",
     marginTop: 5,
     marginHorizontal: 20,
+  },
+  quantityButton: {
+    marginRight: 10,
+    height: 45,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 0,
+    backgroundColor: colors.primary,
   },
 });
