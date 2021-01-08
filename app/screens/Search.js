@@ -15,9 +15,10 @@ import {
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Picker } from "@react-native-picker/picker";
 import RNPickerSelect from "react-native-picker-select";
-
-import Icon from "react-native-vector-icons/Ionicons";
+import Icon from "react-native-vector-icons/Fontisto";
 import Product from "./Product";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Category from "./Category";
 
 class Search extends Component {
@@ -29,9 +30,23 @@ class Search extends Component {
       refreshing: true,
       searchUrl: "http://127.0.0.1:8000/search/?search=",
       value: "",
+      user_id: "0",
     };
   }
-
+  async getId() {
+    try {
+      const value = await AsyncStorage.getItem("@user_id");
+      if (value !== null) {
+        console.log("value of id / search page / ", value);
+        this.setState({ user_id: value });
+      } else {
+        console.log("value of id is null / search page / ");
+      }
+    } catch (e) {
+      console.log("error in value id / search page /", e);
+      // error reading value
+    }
+  }
   searchFunc = (searchKey) => {
     console.log(searchKey);
   };
@@ -79,17 +94,6 @@ class Search extends Component {
         })
         .catch((error) => console.log("fetch error", error));
     }
-    if (id == 3) {
-      fetch("http://127.0.0.1:8000/categoryitems/7/")
-        .then((response) => response.json())
-        .then((result) => {
-          this.setState({
-            dataSource: result,
-            refreshing: false,
-          });
-        })
-        .catch((error) => console.log("fetch error", error));
-    }
     if (id == 4) {
       fetch("http://127.0.0.1:8000/categoryitems/8/")
         .then((response) => response.json())
@@ -104,25 +108,121 @@ class Search extends Component {
   }
 
   renderItemComponent = (data) => (
-    <Product
-      product_id={data.item.product_id}
-      img={data.item.img}
-      brand_name={data.item.brand_name}
-      product_name={data.item.product_name}
-      rating={data.item.rating}
-      price={data.item.price}
-      stock={data.item.stock}
-    />
+    <View style={styles.container}>
+      <TouchableOpacity
+        onPress={() => {
+          this.props.navigation.navigate("ProductDetailScreen", {
+            product_id: data.item.product_id,
+            img: data.item.img,
+            brande_name: data.item.brand_name,
+            product_name: data.item.product_name,
+            rating: data.item.rating,
+            base_price: data.item.base_price,
+            discount: data.item.discount,
+            price: data.item.price,
+            description: data.item.description,
+            navigation: data.item.navigation,
+            user_id: data.item.user_id,
+            screen: "Continue searching",
+            stock: data.item.stock,
+          });
+        }}
+      >
+        <Product
+          product={data.item}
+          product_id={data.item.product_id}
+          img={data.item.img}
+          brand_name={data.item.brand_name}
+          product_name={data.item.product_name}
+          rating={data.item.rating}
+          price={data.item.price}
+          navigation={this.props.navigation}
+          description={data.item.description}
+          base_price={data.item.base_price}
+          discount={data.item.discount}
+          stock={data.item.stock}
+        />
+      </TouchableOpacity>
+      <View
+        styles={{
+          width: "80%",
+          flexDirection: "row",
+          height: "10%",
+        }}
+      >
+        {
+          //if we add favorites feature
+          false && (
+            <TouchableOpacity style={{ width: 50 }}>
+              <Image
+                style={styles.iconContainer}
+                source={require("../assets/icon_heart.png")}
+              />
+            </TouchableOpacity>
+          )
+        }
+        <View
+          style={{
+            height: 30,
+            marginBottom: 40,
+            bottom: 20,
+            width: 50,
+            alignSelf: "flex-end",
+          }}
+        >
+          {data.item.stock <= 1 && (
+            <View
+              style={{
+                width: "100%",
+                height: "100%",
+                alignItems: "center",
+                alignSelf: "flex-end",
+                bottom: 10,
+              }}
+            >
+              <Text>SOLD</Text>
+              <Text>OUT</Text>
+            </View>
+          )}
+          {data.item.stock > 1 && (
+            <TouchableOpacity
+              style={{
+                width: "100%",
+                height: "100%",
+                alignItems: "center",
+                alignSelf: "flex-end",
+              }}
+              activeOpacity={0.5}
+              onPress={() => {
+                console.log(
+                  "user id in add to basket /search page/",
+                  this.state.user_id
+                );
+                this.addToBasket(this.state.user_id, data.item.product_id);
+              }}
+            >
+              <Icon
+                name="shopping-basket-add"
+                size={20}
+                style={styles.iconContainer2}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
+    </View>
   );
+  componentDidMount() {
+    this.getId();
+  }
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
-          <View style={{ flex: 1, backgroundColor: "white" }}>
+          <View style={{ flex: 1 }}>
             <View
               style={{
                 height: 50,
-                backgroundColor: "white",
                 borderBottomWidth: 1,
                 borderBottomColor: "#dddddd",
               }}
@@ -158,20 +258,20 @@ class Search extends Component {
                   activeOpacity={0.5}
                   onPress={() => this.searchResult(this.state.searchKey)}
                 >
-                  <Icon name="ios-search" size={20} />
+                  <Icon name="search" size={20} />
                 </TouchableOpacity>
               </View>
             </View>
             <ScrollView scrollEventThrottle={16}>
               <View
-                style={{ flex: 1, backgroundColor: "white", paddingTop: 20 }}
+                style={{ flex: 1, backgroundColor: "white", paddingTop: 10 }}
               >
                 <Text
                   style={{
                     fontSize: 24,
                     fontWeight: "700",
                     paddingHorizontal: 20,
-                    paddingVertical: 10,
+                    paddingBottom: 10,
                     fontFamily: "Helvetica Neue",
                   }}
                 >
@@ -180,8 +280,7 @@ class Search extends Component {
 
                 <View
                   style={{
-                    height: 130,
-                    MarginTop: 20,
+                    height: 120,
                   }}
                 >
                   <ScrollView
@@ -250,37 +349,7 @@ class Search extends Component {
                         </View>
                       </View>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                      activeOpacity={0.5}
-                      onPress={() => this.fetchCategoryItems(3)}
-                    >
-                      <View
-                        style={{
-                          height: 130,
-                          width: 130,
-                          marginLeft: 20,
-                          borderBottomWidth: 0.5,
-                          borderColor: "#dddddd",
-                        }}
-                      >
-                        <View style={{ flex: 2 }}>
-                          <Image
-                            source={require("../assets/categ2.jpeg")}
-                            style={{
-                              flex: 1,
-                              height: null,
-                              width: null,
-                              resizeMode: "cover",
-                            }}
-                          />
-                        </View>
-                        <View
-                          style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
-                        >
-                          <Text>Bag</Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
+
                     <TouchableOpacity
                       activeOpacity={0.5}
                       onPress={() => this.fetchCategoryItems(4)}
@@ -332,7 +401,7 @@ class Search extends Component {
               ]}
             />
           </View>
-          <View style={{ flex: 2 }}>
+          <View style={{ flex: 2.5 }}>
             <ScrollView>
               <FlatList
                 data={this.state.dataSource}
@@ -349,6 +418,36 @@ class Search extends Component {
       </SafeAreaView>
     );
   }
+  addToBasket = (user_id, product_id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({ product: product_id, quantity: 1 });
+    console.log(raw);
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+    console.log(user_id);
+    fetch("http://127.0.0.1:8000/basket/" + user_id + "/", requestOptions)
+      .then((response) => {
+        console.log(
+          "response status for add to basket in search",
+          response.status
+        );
+        if (response.status == 201) {
+          response.json().then((data) => {
+            console.log("data for add to basket in search: ", data);
+            console.log("user id: ", data[0].user_id);
+            console.log("state new_user: ", this.state.new_user);
+            console.log("bool user_exists: ", data[0].user_exists);
+          });
+        }
+      })
+      .catch((error) => console.log("fetch error", error));
+  };
   searchResult = (searchKey) => {
     const fetchUrl = "http://127.0.0.1:8000/search/?search=";
     this.setState({ searchUrl: fetchUrl + this.state.searchKey }, () => {
@@ -374,11 +473,6 @@ class Search extends Component {
 export default Search;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   aboutUs: {
     color: "white",
     fontSize: 12,
@@ -390,9 +484,35 @@ const styles = StyleSheet.create({
   },
   container: {
     height: 300,
-    margin: 10,
+    marginHorizontal: 20,
+    marginTop: 10,
+    marginBottom: 5,
     backgroundColor: "#FFF",
-    borderRadius: 6,
+    borderRadius: 15,
+    shadowColor: "black",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 7.5,
+    padding: 15,
+    position: "relative",
+    flex: 1,
+  },
+  iconContainer: {
+    right: 10,
+    height: 40,
+    width: 40,
+    position: "absolute",
+    right: -5,
+    top: -45,
+    flex: 1,
+  },
+  iconContainer2: {
+    height: 40,
+    position: "absolute",
+    flex: 1,
   },
   image: {
     borderRadius: 4,

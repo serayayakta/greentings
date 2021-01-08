@@ -39,7 +39,6 @@ class Comment extends Component {
             disabled={false}
             maxStars={5}
             rating={this.props.rating}
-            selectedStar={(rating) => this.onStarRatingPress(rating)}
             fullStarColor={"darkgreen"}
             starSize={14}
           ></StarRating>
@@ -88,6 +87,7 @@ const styles = StyleSheet.create({
     position: "relative",
     flex: 1,
   },
+
   iconContainer: {
     right: 10,
     height: 40,

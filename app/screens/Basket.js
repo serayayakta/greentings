@@ -6,6 +6,7 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import BasketItem from "./BasketItem";
 import colors from "../config/colors";
@@ -83,6 +84,8 @@ class Basket extends Component {
           quantity={data.item.quantity}
           price={data.item.price}
           navigation={this.props.navigation}
+          discount={data.item.discount}
+          base_price={data.item.base_price}
         />
       </View>
       <View style={{ width: "10%" }}>
@@ -120,6 +123,16 @@ class Basket extends Component {
       </View>
     </View>
   );
+  FlatListHeader = () => {
+    return (
+      <View style={styles.logoContainer}>
+        <Image
+          style={styles.logo}
+          source={require("../assets/Greentings_3dots.png")}
+        />
+      </View>
+    );
+  };
   handleRefresh = () => {
     this.setState({ refreshing: true }, () => {
       this.fetchBasketItems();
@@ -283,6 +296,7 @@ class Basket extends Component {
         <View style={styles.container}>
           <ScrollView>
             <FlatList
+              ListHeaderComponent={this.FlatListHeader}
               data={this.state.dataSource}
               renderItem={(item) => this.renderItemComponent(item)}
               keyExtractor={(item) => item.product_id.toString()}
@@ -304,6 +318,15 @@ class Basket extends Component {
             )}
             {this.state.total > 0 && (
               <View>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    textAlign: "center",
+                    paddingBottom: 5,
+                  }}
+                >
+                  your basket looks yummy...
+                </Text>
                 <View>
                   <Text style={styles.totalPriceText}>Total Price</Text>
                   <Text style={styles.totalPriceText}>
@@ -350,6 +373,13 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: colors.primary,
   },
+  logoContainer: {
+    alignItems: "center",
+  },
+  logo: {
+    width: 300,
+    height: 70,
+  },
   totalPriceText: {
     margin: 10,
     fontSize: 18,
@@ -367,5 +397,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 0,
     backgroundColor: colors.primary,
+    shadowColor: "black",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 7.5,
   },
 });
