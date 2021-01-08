@@ -79,17 +79,6 @@ class Search extends Component {
         })
         .catch((error) => console.log("fetch error", error));
     }
-    if (id == 3) {
-      fetch("http://127.0.0.1:8000/categoryitems/7/")
-        .then((response) => response.json())
-        .then((result) => {
-          this.setState({
-            dataSource: result,
-            refreshing: false,
-          });
-        })
-        .catch((error) => console.log("fetch error", error));
-    }
     if (id == 4) {
       fetch("http://127.0.0.1:8000/categoryitems/8/")
         .then((response) => response.json())
@@ -272,37 +261,7 @@ class Search extends Component {
                         </View>
                       </View>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                      activeOpacity={0.5}
-                      onPress={() => this.fetchCategoryItems(3)}
-                    >
-                      <View
-                        style={{
-                          height: 130,
-                          width: 130,
-                          marginLeft: 20,
-                          borderBottomWidth: 0.5,
-                          borderColor: "#dddddd",
-                        }}
-                      >
-                        <View style={{ flex: 2 }}>
-                          <Image
-                            source={require("../assets/categ2.jpeg")}
-                            style={{
-                              flex: 1,
-                              height: null,
-                              width: null,
-                              resizeMode: "cover",
-                            }}
-                          />
-                        </View>
-                        <View
-                          style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
-                        >
-                          <Text>Bag</Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
+
                     <TouchableOpacity
                       activeOpacity={0.5}
                       onPress={() => this.fetchCategoryItems(4)}
