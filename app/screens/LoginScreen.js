@@ -24,6 +24,13 @@ export default class LoginScreen extends Component {
       user_id: "0",
     };
   }
+  async setUserExists(user_exists) {
+    try {
+      await AsyncStorage.setItem("@user_exists", user_exists);
+    } catch (e) {
+      console.log("error", e);
+    }
+  }
   async setId() {
     try {
       await AsyncStorage.setItem("@user_id", this.state.user_id);
@@ -70,6 +77,7 @@ export default class LoginScreen extends Component {
               console.log("data.user_id string", data.user_id.toString());
               this.setId();
               this.getId();
+              this.setUserExists("1");
               this.props.navigation.navigate("MainScreen");
             });
           });
@@ -107,6 +115,7 @@ export default class LoginScreen extends Component {
           .then((response) => {
             if (response.status == 204) {
               console.log("dummy product removed, 204");
+              this.setUserExists("0");
               this.props.navigation.navigate(MainScreen);
             }
             if (response.status == 404) {

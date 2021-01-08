@@ -112,17 +112,17 @@ class Search extends Component {
       <TouchableOpacity
         onPress={() => {
           this.props.navigation.navigate("ProductDetailScreen", {
-            product_id: this.props.product_id,
-            img: this.props.img,
-            brande_name: this.props.brand_name,
-            product_name: this.props.product_name,
-            rating: this.props.rating,
-            base_price: this.props.base_price,
-            discount: this.props.discount,
-            price: this.props.price,
-            description: this.props.description,
-            navigation: this.props.navigation,
-            user_id: this.state.user_id,
+            product_id: data.item.product_id,
+            img: data.item.img,
+            brande_name: data.item.brand_name,
+            product_name: data.item.product_name,
+            rating: data.item.rating,
+            base_price: data.item.base_price,
+            discount: data.item.discount,
+            price: data.item.price,
+            description: data.item.description,
+            navigation: data.item.navigation,
+            user_id: data.item.user_id,
             screen: "Continue searching",
           });
         }}
