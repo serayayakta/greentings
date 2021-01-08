@@ -9,20 +9,16 @@ import {
   Image,
 } from "react-native";
 
-import RegisterScreen from "./RegisterScreen";
 import MainScreen from "./MainScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import ForgotScreen from "./ForgotScreen";
 
-export default class LoginScreen extends Component {
+export default class ForgotScreen extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       email: "",
       password: "",
-      responseStatus: 0,
-      user_id: "0",
+      verification_code: "",
     };
   }
   async setId() {
@@ -44,13 +40,13 @@ export default class LoginScreen extends Component {
       console.log("error in value id ", e);
     }
   }
-  onLogin = () => {
+
+  onForgot = () => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
       email: this.state.email,
-      password: this.state.password,
     });
 
     var requestOptions = {
@@ -60,15 +56,51 @@ export default class LoginScreen extends Component {
       redirect: "follow",
     };
 
-    fetch("http://127.0.0.1:8000/login/", requestOptions)
+    fetch("http://127.0.0.1:8000/forgotmobile/", requestOptions)
       .then((response) => {
         this.setState({ responseStatus: response.status });
         console.log("response statusssss ", this.state.responseStatus);
-        if (this.state.responseStatus == 202) {
+        if (this.state.responseStatus == 200) {
+          console.log("email correct!");
           response.json().then((data) => {
-            this.setState({ user_id: data.user_id.toString() }, () => {
+            () => {
               console.log("data.user_id", data.user_id);
               console.log("data.user_id string", data.user_id.toString());
+            };
+          });
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  onVerify = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+      email: this.state.email,
+      password: this.state.password,
+      verification_code: this.state.verification_code,
+    });
+
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    console.log(this.state.password);
+    console.log(this.state.email);
+
+    fetch("http://127.0.0.1:8000/forgotmobile/", requestOptions)
+      .then((response) => {
+        this.setState({ responseStatus: response.status });
+        console.log("response statusssss ", this.state.responseStatus);
+        if (this.state.responseStatus == 200) {
+          this.props.navigation.navigate("MainScreen");
+          response.json().then((data) => {
+            this.setState({ user_id: data.user_id.toString() }, () => {
+              console.log("Password reset successful");
               this.setId();
               this.getId();
               this.props.navigation.navigate("MainScreen");
@@ -186,38 +218,36 @@ export default class LoginScreen extends Component {
             onChangeText={(text) => this.setState({ email: text })}
           />
         </View>
+        <TouchableOpacity
+          style={styles.loginBtn}
+          onPress={() => this.onForgot()}
+        >
+          <Text style={styles.loginText}>Send email</Text>
+        </TouchableOpacity>
+        <View style={{ flex: 0.15 }}></View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.inputText}
+            placeholder="Enter verification code"
+            placeholderTextColor="#003f5c"
+            onChangeText={(text) => this.setState({ verification_code: text })}
+          />
+        </View>
         <View style={styles.inputView}>
           <TextInput
             secureTextEntry
             style={styles.inputText}
-            placeholder="Password..."
+            placeholder="Enter new Password..."
             placeholderTextColor="#003f5c"
             onChangeText={(text) => this.setState({ password: text })}
           />
         </View>
 
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate(ForgotScreen)}
+          style={styles.loginBtn}
+          onPress={() => this.onVerify()}
         >
-          <Text style={styles.guest}>Forgot password?</Text>
-        </TouchableOpacity>
-        <View style={{ marginTop: 20 }}>
-          <TouchableOpacity
-            onPress={() => {
-              this.setIdZero().then(() => this.addToBasketDummy());
-            }}
-          >
-            <Text style={styles.guest}>Continue without account...</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ flex: 0.15 }}></View>
-        <TouchableOpacity style={styles.loginBtn} onPress={this.onLogin}>
-          <Text style={styles.loginText}>LOGIN</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate(RegisterScreen)}
-        >
-          <Text style={styles.loginText}>Signup</Text>
+          <Text style={styles.guest}>Update</Text>
         </TouchableOpacity>
       </ImageBackground>
     );
@@ -261,7 +291,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 40,
+    marginTop: 20,
     marginBottom: 10,
   },
   loginText: {
