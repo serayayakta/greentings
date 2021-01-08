@@ -107,6 +107,7 @@ export default class LoginScreen extends Component {
           .then((response) => {
             if (response.status == 204) {
               console.log("dummy product removed, 204");
+              this.props.navigation.navigate(MainScreen);
             }
             if (response.status == 404) {
               console.log(" 404 item not found in dummy", response);
@@ -196,9 +197,7 @@ export default class LoginScreen extends Component {
 
         <TouchableOpacity
           onPress={() => {
-            this.setIdZero();
-            this.addToBasketDummy();
-            this.props.navigation.navigate(MainScreen);
+            this.setIdZero().then(() => this.addToBasketDummy());
           }}
         >
           <Text style={styles.guest}>Continue without account...</Text>

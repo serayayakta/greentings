@@ -17,6 +17,8 @@ import { Picker } from "@react-native-picker/picker";
 import RNPickerSelect from "react-native-picker-select";
 import Icon from "react-native-vector-icons/Fontisto";
 import Product from "./Product";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Category from "./Category";
 
 class Search extends Component {
@@ -28,9 +30,23 @@ class Search extends Component {
       refreshing: true,
       searchUrl: "http://127.0.0.1:8000/search/?search=",
       value: "",
+      user_id: "0",
     };
   }
-
+  async getId() {
+    try {
+      const value = await AsyncStorage.getItem("@user_id");
+      if (value !== null) {
+        console.log("value of id / search page / ", value);
+        this.setState({ user_id: value });
+      } else {
+        console.log("value of id is null / search page / ");
+      }
+    } catch (e) {
+      console.log("error in value id / search page /", e);
+      // error reading value
+    }
+  }
   searchFunc = (searchKey) => {
     console.log(searchKey);
   };
@@ -92,44 +108,50 @@ class Search extends Component {
   }
 
   renderItemComponent = (data) => (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => {
-        // Navigate using the `navigation` prop that you received
-        this.props.navigation.navigate("ProductDetailScreen", {
-          product_id: this.props.product_id,
-          img: this.props.img,
-          brande_name: this.props.brand_name,
-          product_name: this.props.product_name,
-          rating: this.props.rating,
-          base_price: this.props.base_price,
-          discount: this.props.discount,
-          price: this.props.price,
-          description: this.props.description,
-          navigation: this.props.navigation,
-          user_id: this.state.user_id,
-          screen: "Continue searching",
-        });
-      }}
-    >
-      <Product
-        product={data.item}
-        product_id={data.item.product_id}
-        img={data.item.img}
-        brand_name={data.item.brand_name}
-        product_name={data.item.product_name}
-        rating={data.item.rating}
-        price={data.item.price}
-        navigation={this.props.navigation}
-        description={data.item.description}
-        base_price={data.item.base_price}
-        discount={data.item.discount}
-      />
-      <View styles={{ flex: 1, width: "80%" }}>
+    <View style={styles.container}>
+      <TouchableOpacity
+        onPress={() => {
+          this.props.navigation.navigate("ProductDetailScreen", {
+            product_id: this.props.product_id,
+            img: this.props.img,
+            brande_name: this.props.brand_name,
+            product_name: this.props.product_name,
+            rating: this.props.rating,
+            base_price: this.props.base_price,
+            discount: this.props.discount,
+            price: this.props.price,
+            description: this.props.description,
+            navigation: this.props.navigation,
+            user_id: this.state.user_id,
+            screen: "Continue searching",
+          });
+        }}
+      >
+        <Product
+          product={data.item}
+          product_id={data.item.product_id}
+          img={data.item.img}
+          brand_name={data.item.brand_name}
+          product_name={data.item.product_name}
+          rating={data.item.rating}
+          price={data.item.price}
+          navigation={this.props.navigation}
+          description={data.item.description}
+          base_price={data.item.base_price}
+          discount={data.item.discount}
+        />
+      </TouchableOpacity>
+      <View
+        styles={{
+          width: "80%",
+          flexDirection: "row",
+          height: "10%",
+        }}
+      >
         {
           //if we add favorites feature
           false && (
-            <TouchableOpacity style={{ width: "10%" }}>
+            <TouchableOpacity style={{ width: 50 }}>
               <Image
                 style={styles.iconContainer}
                 source={require("../assets/icon_heart.png")}
@@ -137,22 +159,44 @@ class Search extends Component {
             </TouchableOpacity>
           )
         }
-        <TouchableOpacity
-          style={{ width: "10%", alignSelf: "flex-end" }}
-          activeOpacity={0.5}
-          onPress={() => {
-            this.addToBasket(data.item.product_id);
+        <View
+          style={{
+            height: 30,
+            marginBottom: 40,
+            bottom: 20,
+            width: 50,
+            alignSelf: "flex-end",
           }}
         >
-          <Icon
-            name="shopping-basket-add"
-            size={20}
-            style={styles.iconContainer2}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              width: "100%",
+              height: "100%",
+              alignItems: "center",
+              alignSelf: "flex-end",
+            }}
+            activeOpacity={0.5}
+            onPress={() => {
+              console.log(
+                "user id in add to basket /search page/",
+                this.state.user_id
+              );
+              this.addToBasket(this.state.user_id, data.item.product_id);
+            }}
+          >
+            <Icon
+              name="shopping-basket-add"
+              size={20}
+              style={styles.iconContainer2}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
+  componentDidMount() {
+    this.getId();
+  }
   render() {
     return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -356,9 +400,7 @@ class Search extends Component {
       </SafeAreaView>
     );
   }
-  addToBasket = (product_id) => {
-    this.getId().then(console.log("getid worked in search add to basket."));
-
+  addToBasket = (user_id, product_id) => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -370,11 +412,8 @@ class Search extends Component {
       body: raw,
       redirect: "follow",
     };
-
-    fetch(
-      "http://127.0.0.1:8000/basket/" + this.state.user_id + "/",
-      requestOptions
-    )
+    console.log(user_id);
+    fetch("http://127.0.0.1:8000/basket/" + user_id + "/", requestOptions)
       .then((response) => {
         console.log(
           "response status for add to basket in search",
@@ -389,7 +428,6 @@ class Search extends Component {
           });
         }
       })
-      .then(() => this.handleUpdate())
       .catch((error) => console.log("fetch error", error));
   };
   searchResult = (searchKey) => {
@@ -429,7 +467,8 @@ const styles = StyleSheet.create({
   container: {
     height: 300,
     marginHorizontal: 20,
-    marginVertical: 10,
+    marginTop: 10,
+    marginBottom: 5,
     backgroundColor: "#FFF",
     borderRadius: 15,
     shadowColor: "black",
@@ -453,12 +492,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   iconContainer2: {
-    right: 10,
     height: 40,
-    width: 40,
     position: "absolute",
-    right: -5,
-    top: -30,
     flex: 1,
   },
   image: {
