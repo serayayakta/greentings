@@ -73,6 +73,7 @@ class Profile extends Component {
     }
   }
   componentDidMount() {
+    this.getUserExists();
     this.getId();
     this.fetchUserInfo();
   }

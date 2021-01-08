@@ -34,6 +34,7 @@ export default class LoginScreen extends Component {
   async setId() {
     try {
       await AsyncStorage.setItem("@user_id", this.state.user_id);
+      this.setUserExists("1");
     } catch (e) {
       console.log("error", e);
     }
@@ -77,7 +78,7 @@ export default class LoginScreen extends Component {
               console.log("data.user_id string", data.user_id.toString());
               this.setId();
               this.getId();
-              this.setUserExists("1");
+
               this.props.navigation.navigate("MainScreen");
             });
           });
