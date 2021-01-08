@@ -28,6 +28,19 @@ const HomePlus = createStackNavigator(
     headerMode: "none",
   }
 );
+const SearchPlus = createStackNavigator(
+  {
+    Search: {
+      screen: Search,
+    },
+    ProductDetailScreen: {
+      screen: ProductDetailScreen,
+    },
+  },
+  {
+    headerMode: "none",
+  }
+);
 
 const BasketPlus = createStackNavigator(
   {
@@ -83,8 +96,8 @@ const AppTabNavigator = createMaterialTopTabNavigator(
         ),
       },
     },
-    Search: {
-      screen: Search,
+    SearchPlus: {
+      screen: SearchPlus,
       navigationOptions: {
         tabBarLabel: "Search",
         tabBarIcon: ({ tintColor }) => (

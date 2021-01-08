@@ -109,6 +109,7 @@ class Home extends Component {
           description: data.item.description,
           navigation: this.props.navigation,
           user_id: this.state.user_id,
+          screen: "Home",
         });
       }}
     >
@@ -127,12 +128,17 @@ class Home extends Component {
         discount={data.item.discount}
       />
       <View styles={{ flex: 1, width: "80%" }}>
-        <TouchableOpacity style={{ width: "10%" }}>
-          <Image
-            style={styles.iconContainer}
-            source={require("../assets/icon_heart.png")}
-          />
-        </TouchableOpacity>
+        {
+          //if we add favorites feature
+          false && (
+            <TouchableOpacity style={{ width: "10%" }}>
+              <Image
+                style={styles.iconContainer}
+                source={require("../assets/icon_heart.png")}
+              />
+            </TouchableOpacity>
+          )
+        }
         <TouchableOpacity
           style={{ width: "10%", alignSelf: "flex-end" }}
           activeOpacity={0.5}
@@ -240,7 +246,7 @@ class Home extends Component {
         console.log("response status for add to basket", response.status);
         if (response.status == 201) {
           response.json().then((data) => {
-            console.log("data: ", data);
+            console.log("data of add to basket home : ", data);
             console.log("user id: ", data[0].user_id);
             console.log("state new_user: ", this.state.new_user);
             console.log("bool user_exists: ", data[0].user_exists);

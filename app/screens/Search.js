@@ -15,8 +15,7 @@ import {
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Picker } from "@react-native-picker/picker";
 import RNPickerSelect from "react-native-picker-select";
-
-import Icon from "react-native-vector-icons/Ionicons";
+import Icon from "react-native-vector-icons/Fontisto";
 import Product from "./Product";
 import Category from "./Category";
 
@@ -109,6 +108,7 @@ class Search extends Component {
           description: this.props.description,
           navigation: this.props.navigation,
           user_id: this.state.user_id,
+          screen: "Continue searching",
         });
       }}
     >
@@ -125,6 +125,32 @@ class Search extends Component {
         base_price={data.item.base_price}
         discount={data.item.discount}
       />
+      <View styles={{ flex: 1, width: "80%" }}>
+        {
+          //if we add favorites feature
+          false && (
+            <TouchableOpacity style={{ width: "10%" }}>
+              <Image
+                style={styles.iconContainer}
+                source={require("../assets/icon_heart.png")}
+              />
+            </TouchableOpacity>
+          )
+        }
+        <TouchableOpacity
+          style={{ width: "10%", alignSelf: "flex-end" }}
+          activeOpacity={0.5}
+          onPress={() => {
+            this.addToBasket(data.item.product_id);
+          }}
+        >
+          <Icon
+            name="shopping-basket-add"
+            size={20}
+            style={styles.iconContainer2}
+          />
+        </TouchableOpacity>
+      </View>
     </TouchableOpacity>
   );
   render() {
@@ -170,7 +196,7 @@ class Search extends Component {
                   activeOpacity={0.5}
                   onPress={() => this.searchResult(this.state.searchKey)}
                 >
-                  <Icon name="ios-search" size={20} />
+                  <Icon name="search" size={20} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -330,6 +356,42 @@ class Search extends Component {
       </SafeAreaView>
     );
   }
+  addToBasket = (product_id) => {
+    this.getId().then(console.log("getid worked in search add to basket."));
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({ product: product_id, quantity: 1 });
+    console.log(raw);
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(
+      "http://127.0.0.1:8000/basket/" + this.state.user_id + "/",
+      requestOptions
+    )
+      .then((response) => {
+        console.log(
+          "response status for add to basket in search",
+          response.status
+        );
+        if (response.status == 201) {
+          response.json().then((data) => {
+            console.log("data for add to basket in search: ", data);
+            console.log("user id: ", data[0].user_id);
+            console.log("state new_user: ", this.state.new_user);
+            console.log("bool user_exists: ", data[0].user_exists);
+          });
+        }
+      })
+      .then(() => this.handleUpdate())
+      .catch((error) => console.log("fetch error", error));
+  };
   searchResult = (searchKey) => {
     const fetchUrl = "http://127.0.0.1:8000/search/?search=";
     this.setState({ searchUrl: fetchUrl + this.state.searchKey }, () => {
@@ -379,6 +441,24 @@ const styles = StyleSheet.create({
     shadowRadius: 7.5,
     padding: 15,
     position: "relative",
+    flex: 1,
+  },
+  iconContainer: {
+    right: 10,
+    height: 40,
+    width: 40,
+    position: "absolute",
+    right: -5,
+    top: -45,
+    flex: 1,
+  },
+  iconContainer2: {
+    right: 10,
+    height: 40,
+    width: 40,
+    position: "absolute",
+    right: -5,
+    top: -30,
     flex: 1,
   },
   image: {
