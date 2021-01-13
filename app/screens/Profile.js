@@ -73,11 +73,14 @@ class Profile extends Component {
     this.getUserExists();
     this.getId();
     this.fetchUserInfo();
+    this.props.navigation.addListener(
+      "willFocus",
+      () => this.fetchUserInfo()
+      // run function that updates the data on entering the screen
+    );
   }
   handleRefresh = () => {
-    this.setState({ refreshing: true }, () => {
-      this.fetchUserInfo();
-    });
+    this.setState({ refreshing: true }, () => this.fetchUserInfo());
   };
 
   async onLogout() {
@@ -150,8 +153,10 @@ class Profile extends Component {
                 }}
               >
                 <View style={styles.menuItem}>
-                  <Icon name="ios-checkmark-circle" size={25} color={"green"} />
-                  <Text style={{ marginLeft: 10 }}>Verify my account!</Text>
+                  <Icon name="ios-checkmark-circle" size={25} color={"red"} />
+                  <Text style={{ marginLeft: 10, paddingTop: 5 }}>
+                    Verify my account
+                  </Text>
                 </View>
               </TouchableRipple>
             )}

@@ -62,6 +62,7 @@ export default class VerificationScreen extends Component {
         }
         if (response.status == 200) {
           alert("Account is verified.");
+
           this.props.navigation.goBack();
         }
       })
