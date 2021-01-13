@@ -16,7 +16,7 @@ import colors from "../config/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BasketItem from "./BasketItem";
 
-export default class PasswordDetailScreen extends Component {
+export default class OrderInvoiceScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {

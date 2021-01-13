@@ -7,6 +7,7 @@ import Search from "./Search";
 import Profile from "./Profile";
 import ProductDetailScreen from "./ProductDetailScreen";
 import PasswordDetailScreen from "./PasswordDetailScreen";
+import VerificationScreen from "./VerificationScreen";
 import PaymentScreen from "./PaymentScreen";
 
 import { createStackNavigator } from "react-navigation";
@@ -78,6 +79,9 @@ const ProfilePlus = createStackNavigator(
     },
     ProductDetailScreen: {
       screen: ProductDetailScreen,
+    },
+    VerificationScreen: {
+      screen: VerificationScreen,
     },
   },
   {

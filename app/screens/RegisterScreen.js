@@ -116,6 +116,7 @@ export default class RegisterScreen extends React.Component {
         <View style={styles.inputView}>
           <TextInput
             style={styles.inputText}
+            autoCorrect={false}
             placeholder="Name..."
             placeholderTextColor="#003f5c"
             onChangeText={(text) => this.setState({ name: text })}
@@ -124,6 +125,7 @@ export default class RegisterScreen extends React.Component {
         <View style={styles.inputView}>
           <TextInput
             style={styles.inputText}
+            autoCorrect={false}
             placeholder="Surname..."
             placeholderTextColor="#003f5c"
             onChangeText={(text) => this.setState({ surname: text })}
@@ -132,6 +134,7 @@ export default class RegisterScreen extends React.Component {
         <View style={styles.inputView}>
           <TextInput
             style={styles.inputText}
+            autoCorrect={false}
             placeholder="Email..."
             placeholderTextColor="#003f5c"
             onChangeText={(text) => this.setState({ email: text })}
@@ -140,6 +143,7 @@ export default class RegisterScreen extends React.Component {
         <View style={styles.inputView}>
           <TextInput
             style={styles.inputText}
+            autoCorrect={false}
             placeholder="Phone number..."
             placeholderTextColor="#003f5c"
             onChangeText={(text) => this.setState({ phoneNumber: text })}
@@ -150,6 +154,7 @@ export default class RegisterScreen extends React.Component {
           <TextInput
             secureTextEntry={true}
             style={styles.inputText}
+            autoCorrect={false}
             placeholder="Password..."
             placeholderTextColor="#003f5c"
             onChangeText={(text) => this.setState({ confirmPassword: text })}

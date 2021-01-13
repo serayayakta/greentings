@@ -2,10 +2,7 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, SafeAreaView } from "react-native";
 import { withNavigation } from "react-navigation";
 import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
-
 import Icon from "react-native-vector-icons/Ionicons";
-import PasswordDetailScreen from "./PasswordDetailScreen";
-import OrdersDetailScreen from "./OrdersDetailScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class Profile extends Component {
@@ -19,6 +16,7 @@ class Profile extends Component {
       last_name: "",
       email: "",
       user_exists: "0",
+      verified: false,
     };
   }
   async getUserExists() {
@@ -35,13 +33,11 @@ class Profile extends Component {
       if (value !== null) {
         console.log("value of id in profile", value);
         this.setState({ user_id: value });
-        // value previously stored
       } else {
         console.log("value of id is null");
       }
     } catch (e) {
       console.log("error in value id ", e);
-      // error reading value
     }
   }
   async fetchUserInfo() {
@@ -60,6 +56,7 @@ class Profile extends Component {
             this.setState({
               dataSource: result,
               refreshing: false,
+              verified: result.verified,
             });
             console.log(result);
           })
@@ -78,9 +75,9 @@ class Profile extends Component {
     this.fetchUserInfo();
   }
   handleRefresh = () => {
-    this.setState({ refreshing: false }, () => {
+    this.setState({ refreshing: true }, () => {
       this.fetchUserInfo();
-    }); // call fetchCats after setting the state
+    });
   };
 
   async onLogout() {
@@ -146,10 +143,30 @@ class Profile extends Component {
         )}
         {this.state.user_exists == "1" && (
           <View style={styles.menuWrapper}>
+            {this.state.verified == false && (
+              <TouchableRipple
+                onPress={() => {
+                  this.props.navigation.navigate("VerificationScreen", {});
+                }}
+              >
+                <View style={styles.menuItem}>
+                  <Icon name="ios-checkmark-circle" size={25} color={"green"} />
+                  <Text style={{ marginLeft: 10 }}>Verify my account!</Text>
+                </View>
+              </TouchableRipple>
+            )}
+            {this.state.verified == true && (
+              <View style={styles.menuItem}>
+                <Icon name="ios-checkmark-circle" size={25} color={"green"} />
+                <Text style={{ marginLeft: 10, paddingTop: 5 }}>
+                  Your account is verified.
+                </Text>
+              </View>
+            )}
             <TouchableRipple onPress={() => {}}>
               <View style={styles.menuItem}>
                 <Icon name="ios-heart" color="black" size={25} />
-                <Text style={{ marginLeft: 10 }}>Favorites</Text>
+                <Text style={{ marginLeft: 10, paddingTop: 5 }}>Favorites</Text>
               </View>
             </TouchableRipple>
             <TouchableRipple
@@ -159,7 +176,7 @@ class Profile extends Component {
             >
               <View style={styles.menuItem}>
                 <Icon name="ios-archive" size={25} />
-                <Text style={{ marginLeft: 10 }}>Orders</Text>
+                <Text style={{ marginLeft: 10, paddingTop: 5 }}>Orders</Text>
               </View>
             </TouchableRipple>
             <TouchableRipple
@@ -169,7 +186,7 @@ class Profile extends Component {
             >
               <View style={styles.menuItem}>
                 <Icon name="ios-chatbubbles" size={25} />
-                <Text style={{ marginLeft: 10 }}>Reviews</Text>
+                <Text style={{ marginLeft: 10, paddingTop: 5 }}>Reviews</Text>
               </View>
             </TouchableRipple>
             <TouchableRipple
@@ -179,7 +196,9 @@ class Profile extends Component {
             >
               <View style={styles.menuItem}>
                 <Icon name="ios-settings" size={25} />
-                <Text style={{ marginLeft: 10 }}>Change Password</Text>
+                <Text style={{ marginLeft: 10, paddingTop: 5 }}>
+                  Change Password
+                </Text>
               </View>
             </TouchableRipple>
             <TouchableRipple
@@ -189,7 +208,7 @@ class Profile extends Component {
             >
               <View style={styles.menuItem}>
                 <Icon name="ios-exit" size={25} />
-                <Text style={{ marginLeft: 10 }}>Logout</Text>
+                <Text style={{ marginLeft: 10, paddingTop: 5 }}>Logout</Text>
               </View>
             </TouchableRipple>
           </View>

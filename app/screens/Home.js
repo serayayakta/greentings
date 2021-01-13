@@ -185,7 +185,6 @@ class Home extends Component {
           style={{
             height: 200,
             width: "100%",
-            marginBottom: 5,
             border: 2.9,
             borderColor: "black",
             alignSelf: "center",
@@ -216,7 +215,7 @@ class Home extends Component {
             </TouchableOpacity>
           </ImageBackground>
         </View>
-        <View style={{ marginTop: 50 }}></View>
+        <View style={{ marginTop: 10 }}></View>
       </View>
     );
   };

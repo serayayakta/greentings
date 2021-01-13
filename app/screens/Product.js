@@ -17,12 +17,20 @@ class Product extends Component {
           <Image style={styles.image} source={{ uri: this.props.img }} />
         </View>
         <View styles={{ flex: 3 }}>
-          <Text style={styles.text}>{this.props.product_name}</Text>
+          <Text numberOfLines={1} style={styles.text}>
+            {this.props.product_name}
+          </Text>
           <Text style={styles.brandName}>{this.props.brand_name}</Text>
-          {this.props.discount == true && (
-            <Text style={styles.oldPrice}>${this.props.base_price}</Text>
-          )}
-          <Text style={styles.price}>price: ${this.props.price}</Text>
+          <Text style={styles.price}>
+            price:{"  "}
+            {this.props.discount == true && (
+              <Text style={styles.oldPrice}>
+                {"  "}${this.props.base_price}
+                {"  "}
+              </Text>
+            )}
+            {"  "}${this.props.price}
+          </Text>
         </View>
         <View style={{ alignItems: "center", marginTop: 5 }}>
           <StarRating
@@ -43,15 +51,15 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     fontFamily: "Helvetica Neue",
     textAlign: "center",
-    marginBottom: 8,
+    marginBottom: 5,
   },
   image: {
     height: 190,
     borderRadius: 4,
   },
   oldPrice: {
+    fontSize: 16,
     color: "black",
-    fontWeight: "bold",
     textDecorationLine: "line-through",
     textDecorationColor: "red",
     textTransform: "lowercase",
@@ -59,13 +67,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   price: {
-    color: "black",
     fontWeight: "bold",
+    fontSize: 16,
+    color: "black",
     textTransform: "lowercase",
     fontFamily: "Helvetica Neue",
     textAlign: "center",
   },
   text: {
+    marginTop: 5,
+    overflow: "hidden",
     textTransform: "lowercase",
     fontFamily: "Helvetica Neue",
     textAlign: "center",
