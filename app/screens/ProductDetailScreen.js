@@ -24,7 +24,7 @@ class ProductDetailScreen extends Component {
     this.state = {
       comments: [],
       refreshing: false,
-      user_id: "1",
+      user_id: "0",
       nickname: "",
       rating: "",
       text: "",
@@ -140,7 +140,7 @@ class ProductDetailScreen extends Component {
       <View style={styles.container}>
         <View style={styles.goBackButton}>
           <Button
-            title="< Products"
+            title={"< " + this.props.navigation.getParam("screen", "no id")}
             onPress={() => this.props.navigation.goBack()}
           />
         </View>

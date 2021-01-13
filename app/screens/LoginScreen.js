@@ -21,8 +21,15 @@ export default class LoginScreen extends Component {
       email: "",
       password: "",
       responseStatus: 0,
-      user_id: "1",
+      user_id: "0",
     };
+  }
+  async setUserExists(user_exists) {
+    try {
+      await AsyncStorage.setItem("@user_exists", user_exists);
+    } catch (e) {
+      console.log("error", e);
+    }
   }
   async setId() {
     try {
@@ -70,12 +77,92 @@ export default class LoginScreen extends Component {
               console.log("data.user_id string", data.user_id.toString());
               this.setId();
               this.getId();
+              this.setUserExists("1");
               this.props.navigation.navigate("MainScreen");
             });
           });
         }
       })
       .catch((error) => console.log("error", error));
+  };
+
+  async setIdZero() {
+    try {
+      await AsyncStorage.setItem("@user_id", "0");
+      console.log("entered as a guest and id set to zero!");
+    } catch (e) {
+      console.log("error", e);
+    }
+  }
+
+  deleteDummyBasket = (dummyProductId) => {
+    try {
+      const user_id = this.state.user_id;
+      console.log("user id in delete dummy: ", user_id);
+      if (user_id !== null) {
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        var raw = JSON.stringify({
+          product: dummyProductId,
+        });
+        var requestOptions = {
+          method: "DELETE",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
+        fetch("http://127.0.0.1:8000/basket/" + user_id + "/", requestOptions)
+          .then((response) => {
+            if (response.status == 204) {
+              console.log("dummy product removed, 204");
+              this.setUserExists("0");
+              this.props.navigation.navigate(MainScreen);
+            }
+            if (response.status == 404) {
+              console.log(" 404 item not found in dummy", response);
+            }
+            if (response.status == 500) {
+              console.log("dummyde 500????", response);
+            }
+          })
+          .catch((error) => console.log("fetch error in dummy delete", error));
+        this.setState({ refreshing: false });
+      } else {
+        console.log("user_id is null in dummy delete");
+      }
+    } catch (e) {
+      console.log("error in dummy delete", e);
+      //is checked alerti ver
+    }
+  };
+  addToBasketDummy = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    dummyProductId = 14;
+
+    var raw = JSON.stringify({ product: dummyProductId, quantity: 1 });
+    console.log(raw);
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch("http://127.0.0.1:8000/basket/0/", requestOptions)
+      .then((response) => {
+        console.log("response status for dummy add to basket", response.status);
+        if (response.status == 201) {
+          response.json().then((data) => {
+            console.log("new user added the dummy item.");
+            const user_id = data[0].user_id.toString();
+            this.setState({ user_id: user_id }, () => this.setId());
+            console.log("new user id is: ", this.state.user_id);
+            this.deleteDummyBasket(dummyProductId);
+          });
+        }
+      })
+      .catch((error) => console.log("fetch error", error));
   };
 
   render() {
@@ -118,7 +205,9 @@ export default class LoginScreen extends Component {
         </View>
 
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate(MainScreen)}
+          onPress={() => {
+            this.setIdZero().then(() => this.addToBasketDummy());
+          }}
         >
           <Text style={styles.guest}>Continue without account...</Text>
         </TouchableOpacity>

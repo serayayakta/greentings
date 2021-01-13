@@ -26,6 +26,13 @@ export default class RegisterScreen extends React.Component {
       user_id: "1",
     };
   }
+  async setUserExists(user_exists) {
+    try {
+      await AsyncStorage.setItem("@user_exists", user_exists);
+    } catch (e) {
+      console.log("error", e);
+    }
+  }
   async setId() {
     try {
       await AsyncStorage.setItem("@user_id", this.state.user_id);
@@ -80,6 +87,7 @@ export default class RegisterScreen extends React.Component {
               console.log("data.user_id string", data.user_id.toString());
               this.setId();
               this.getId();
+              this.setUserExists("1");
               this.props.navigation.navigate("MainScreen");
             });
           });

@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.8,
+    shadowOpacity: 0.5,
     shadowRadius: 7.5,
     padding: 15,
     position: "relative",
@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textDecorationLine: "line-through",
     fontSize: 17,
+    textDecorationColor: "red",
   },
   image: {
     width: "45%",

@@ -14,11 +14,20 @@ class Profile extends Component {
     this.state = {
       dataSource: [],
       refreshing: true,
-      user_id: "1",
+      user_id: "0",
       first_name: "",
       last_name: "",
       email: "",
+      user_exists: "0",
     };
+  }
+  async getUserExists() {
+    try {
+      const value = await AsyncStorage.getItem("@user_exists");
+      this.setState({ user_exists: value });
+    } catch (e) {
+      console.log("error in value user_exists /profile page/", e);
+    }
   }
   async getId() {
     try {
@@ -73,6 +82,32 @@ class Profile extends Component {
     }); // call fetchCats after setting the state
   };
 
+  async onLogout() {
+    //const { state, goBack } = this.props.navigation;
+    //const params = state.params || {};
+    try {
+      await AsyncStorage.setItem("@user_id", "0");
+      await AsyncStorage.setItem("@total", "0");
+      await AsyncStorage.setItem("@user_exists", "0");
+      console.log("logout is pressed, local storage is deleted");
+      () => this.handleRefresh();
+      /*this.props.navigation.navigate(
+        "Stack",
+        {},
+        NavigationActions.navigate({
+          routeName: "LoginScreen",
+        })
+      );*/
+      //goBack(params.go_back_key);
+      //this.props.navigation.goBack("LoginScreen");
+      /*this.props.navigation.navigate("AppNavigation", {
+        screen: "LoginScreen",
+      });*/
+    } catch (e) {
+      console.log("error", e);
+    }
+  }
+
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -93,50 +128,71 @@ class Profile extends Component {
             </Caption>
           </View>
         </View>
-        <View style={styles.menuWrapper}>
-          <TouchableRipple onPress={() => {}}>
-            <View style={styles.menuItem}>
-              <Icon name="ios-heart" color="black" size={25} />
-              <Text style={{ marginLeft: 10 }}>Favorites</Text>
-            </View>
-          </TouchableRipple>
-          <TouchableRipple
-            onPress={() => {
-              this.props.navigation.navigate("OrdersDetailScreen", {});
-            }}
-          >
-            <View style={styles.menuItem}>
-              <Icon name="ios-archive" size={25} />
-              <Text style={{ marginLeft: 10 }}>Orders</Text>
-            </View>
-          </TouchableRipple>
-          <TouchableRipple
-            onPress={() => {
-              this.props.navigation.navigate("UserCommentsScreen", {});
-            }}
-          >
-            <View style={styles.menuItem}>
-              <Icon name="ios-chatbubbles" size={25} />
-              <Text style={{ marginLeft: 10 }}>Reviews</Text>
-            </View>
-          </TouchableRipple>
-          <TouchableRipple
-            onPress={() => {
-              this.props.navigation.navigate("PasswordDetailScreen", {});
-            }}
-          >
-            <View style={styles.menuItem}>
-              <Icon name="ios-settings" size={25} />
-              <Text style={{ marginLeft: 10 }}>Change Password</Text>
-            </View>
-          </TouchableRipple>
-          <TouchableRipple onPress={() => {}}>
-            <View style={styles.menuItem}>
-              <Icon name="ios-exit" size={25} />
-              <Text style={{ marginLeft: 10 }}>Logout</Text>
-            </View>
-          </TouchableRipple>
-        </View>
+        {this.state.user_exists == "0" && (
+          <>
+            <Text style={styles.info}>{"You're not logged in, why :("}</Text>
+            <TouchableRipple
+              onPress={() => {
+                this.onLogout();
+              }}
+            >
+              <View style={styles.menuItem}>
+                <Icon name="ios-exit" size={25} />
+                <Text style={{ marginLeft: 10 }}>Sign Up</Text>
+              </View>
+            </TouchableRipple>
+          </>
+        )}
+        {this.state.user_exists == "1" && (
+          <View style={styles.menuWrapper}>
+            <TouchableRipple onPress={() => {}}>
+              <View style={styles.menuItem}>
+                <Icon name="ios-heart" color="black" size={25} />
+                <Text style={{ marginLeft: 10 }}>Favorites</Text>
+              </View>
+            </TouchableRipple>
+            <TouchableRipple
+              onPress={() => {
+                this.props.navigation.navigate("OrdersDetailScreen", {});
+              }}
+            >
+              <View style={styles.menuItem}>
+                <Icon name="ios-archive" size={25} />
+                <Text style={{ marginLeft: 10 }}>Orders</Text>
+              </View>
+            </TouchableRipple>
+            <TouchableRipple
+              onPress={() => {
+                this.props.navigation.navigate("UserCommentsScreen", {});
+              }}
+            >
+              <View style={styles.menuItem}>
+                <Icon name="ios-chatbubbles" size={25} />
+                <Text style={{ marginLeft: 10 }}>Reviews</Text>
+              </View>
+            </TouchableRipple>
+            <TouchableRipple
+              onPress={() => {
+                this.props.navigation.navigate("PasswordDetailScreen", {});
+              }}
+            >
+              <View style={styles.menuItem}>
+                <Icon name="ios-settings" size={25} />
+                <Text style={{ marginLeft: 10 }}>Change Password</Text>
+              </View>
+            </TouchableRipple>
+            <TouchableRipple
+              onPress={() => {
+                this.onLogout();
+              }}
+            >
+              <View style={styles.menuItem}>
+                <Icon name="ios-exit" size={25} />
+                <Text style={{ marginLeft: 10 }}>Logout</Text>
+              </View>
+            </TouchableRipple>
+          </View>
+        )}
       </SafeAreaView>
     );
   }
@@ -163,6 +219,12 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     marginBottom: 10,
+  },
+  info: {
+    margin: 20,
+    fontSize: 24,
+    fontWeight: "400",
+    fontFamily: "Helvetica Neue",
   },
   infoBoxWrapper: {
     borderBottomColor: "#dddddd",
