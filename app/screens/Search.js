@@ -124,6 +124,7 @@ class Search extends Component {
             navigation: data.item.navigation,
             user_id: data.item.user_id,
             screen: "Continue searching",
+            stock: data.item.stock,
           });
         }}
       >
@@ -139,6 +140,7 @@ class Search extends Component {
           description={data.item.description}
           base_price={data.item.base_price}
           discount={data.item.discount}
+          stock={data.item.stock}
         />
       </TouchableOpacity>
       <View
@@ -168,28 +170,44 @@ class Search extends Component {
             alignSelf: "flex-end",
           }}
         >
-          <TouchableOpacity
-            style={{
-              width: "100%",
-              height: "100%",
-              alignItems: "center",
-              alignSelf: "flex-end",
-            }}
-            activeOpacity={0.5}
-            onPress={() => {
-              console.log(
-                "user id in add to basket /search page/",
-                this.state.user_id
-              );
-              this.addToBasket(this.state.user_id, data.item.product_id);
-            }}
-          >
-            <Icon
-              name="shopping-basket-add"
-              size={20}
-              style={styles.iconContainer2}
-            />
-          </TouchableOpacity>
+          {data.item.stock <= 1 && (
+            <View
+              style={{
+                width: "100%",
+                height: "100%",
+                alignItems: "center",
+                alignSelf: "flex-end",
+                bottom: 10,
+              }}
+            >
+              <Text>SOLD</Text>
+              <Text>OUT</Text>
+            </View>
+          )}
+          {data.item.stock > 1 && (
+            <TouchableOpacity
+              style={{
+                width: "100%",
+                height: "100%",
+                alignItems: "center",
+                alignSelf: "flex-end",
+              }}
+              activeOpacity={0.5}
+              onPress={() => {
+                console.log(
+                  "user id in add to basket /search page/",
+                  this.state.user_id
+                );
+                this.addToBasket(this.state.user_id, data.item.product_id);
+              }}
+            >
+              <Icon
+                name="shopping-basket-add"
+                size={20}
+                style={styles.iconContainer2}
+              />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>

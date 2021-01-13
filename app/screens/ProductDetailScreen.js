@@ -33,7 +33,16 @@ class ProductDetailScreen extends Component {
       email: "",
       dataSource: [],
       starCount: 0,
+      user_exists: "0",
     };
+  }
+  async getUserExists() {
+    try {
+      const value = await AsyncStorage.getItem("@user_exists");
+      this.setState({ user_exists: value });
+    } catch (e) {
+      console.log("error in value user_exists /profile page/", e);
+    }
   }
   onStarRatingPress(value) {
     this.setState({
@@ -111,6 +120,7 @@ class ProductDetailScreen extends Component {
   };
   componentDidMount() {
     this.getId();
+    this.getUserExists();
     console.log(this.props.product_id);
     this.fetchComments();
     this.fetchUserInfo();
@@ -212,26 +222,29 @@ class ProductDetailScreen extends Component {
                 />
               </View>
               <View style={styles.separator}></View>
-              <View style={styles.menuItem}>
-                <TextInput
-                  placeholder="Comments..."
-                  placeholderTextColor="grey"
-                  style={styles.inputText}
-                  autoCorrect={false}
-                  onChangeText={(txt) => {
-                    this.setState({ text: txt }),
-                      console.log("comment", this.state.text);
-                  }}
-                />
-              </View>
 
-              <View style={{ alignItems: "center" }}>
-                <TouchableOpacity
-                  style={styles.commentBtn}
-                  onPress={this.addComment}
-                >
-                  <Text style={styles.btnText}>Send</Text>
-                </TouchableOpacity>
+              <View>
+                <View style={styles.menuItem}>
+                  <TextInput
+                    placeholder="Comments..."
+                    placeholderTextColor="grey"
+                    style={styles.inputText}
+                    autoCorrect={false}
+                    onChangeText={(txt) => {
+                      this.setState({ text: txt }),
+                        console.log("comment", this.state.text);
+                    }}
+                  />
+                </View>
+
+                <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    style={styles.commentBtn}
+                    onPress={this.addComment}
+                  >
+                    <Text style={styles.btnText}>Send</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>

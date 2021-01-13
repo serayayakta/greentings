@@ -24,14 +24,14 @@ class Product extends Component {
           )}
           <Text style={styles.price}>price: ${this.props.price}</Text>
         </View>
-        <View style={{ alignItems: "center" }}>
+        <View style={{ alignItems: "center", marginTop: 5 }}>
           <StarRating
             disabled={false}
             maxStars={5}
             rating={this.props.rating}
             selectedStar={(rating) => this.onStarRatingPress(rating)}
             fullStarColor={"darkgreen"}
-            starSize={14}
+            starSize={16}
           ></StarRating>
         </View>
       </View>

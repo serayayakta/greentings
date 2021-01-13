@@ -5,6 +5,7 @@ import RegisterScreen from "./app/screens/RegisterScreen";
 import React, { Component } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import ForgotScreen from "./app/screens/ForgotScreen";
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,7 @@ const AppNavigation = () => {
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
+        <Stack.Screen name="ForgotScreen" component={ForgotScreen} />
         <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
         <Stack.Screen name="MainScreen" component={MainScreen} />
       </Stack.Navigator>

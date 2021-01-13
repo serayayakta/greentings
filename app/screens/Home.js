@@ -110,6 +110,7 @@ class Home extends Component {
           navigation: this.props.navigation,
           user_id: this.state.user_id,
           screen: "Home",
+          stock: data.item.stock,
         });
       }}
     >
@@ -139,20 +140,36 @@ class Home extends Component {
             </TouchableOpacity>
           )
         }
-        <TouchableOpacity
-          style={{ width: "10%", alignSelf: "flex-end" }}
-          activeOpacity={0.5}
-          onPress={() => {
-            this.handleUpdate();
-            this.addToBasket(data.item.product_id);
-          }}
-        >
-          <Icon
-            name="shopping-basket-add"
-            size={20}
-            style={styles.iconContainer2}
-          />
-        </TouchableOpacity>
+        {data.item.stock <= 0 && (
+          <View
+            style={{
+              width: "100%",
+              height: "100%",
+              alignItems: "flex-end",
+              alignSelf: "flex-end",
+              bottom: 30,
+            }}
+          >
+            <Text>SOLD</Text>
+            <Text>OUT</Text>
+          </View>
+        )}
+        {data.item.stock > 0 && (
+          <TouchableOpacity
+            style={{ width: "10%", alignSelf: "flex-end" }}
+            activeOpacity={0.5}
+            onPress={() => {
+              this.handleUpdate();
+              this.addToBasket(data.item.product_id);
+            }}
+          >
+            <Icon
+              name="shopping-basket-add"
+              size={20}
+              style={styles.iconContainer2}
+            />
+          </TouchableOpacity>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -162,41 +179,44 @@ class Home extends Component {
         "https://cdn.discordapp.com/attachments/762783578710343686/781149405859282974/960x640-greenland_1579380596.jpg",
     };
     return (
-      <View
-        elevation={1}
-        style={{
-          height: 300,
-          width: "100%",
-          marginBottom: 5,
-          border: 2.9,
-          borderColor: "black",
-          alignSelf: "center",
-          shadowColor: "#000",
-          shadowOffset: {
-            width: 0,
-            height: 8,
-          },
-          shadowOpacity: 0.8,
-          shadowRadius: 7.49,
-          borderBottomLeftRadius: 20,
-          borderBottomRightRadius: 20,
-        }}
-      >
-        <ImageBackground
-          source={{
-            uri:
-              "https://cdn.discordapp.com/attachments/762783578710343686/781149405859282974/960x640-greenland_1579380596.jpg",
+      <View>
+        <View
+          elevation={1}
+          style={{
+            height: 200,
+            width: "100%",
+            marginBottom: 5,
+            border: 2.9,
+            borderColor: "black",
+            alignSelf: "center",
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 8,
+            },
+            shadowOpacity: 0.8,
+            shadowRadius: 7.49,
+            borderBottomLeftRadius: 20,
+            borderBottomRightRadius: 20,
           }}
-          style={styles.image}
         >
-          <Text style={styles.text}>Greentings</Text>
-          <Text style={styles.slogan}>
-            Reproduced | Safe | Clean | Green | Happy
-          </Text>
-          <TouchableOpacity>
-            <Text style={styles.aboutUs}>About Us</Text>
-          </TouchableOpacity>
-        </ImageBackground>
+          <ImageBackground
+            source={{
+              uri:
+                "https://cdn.discordapp.com/attachments/762783578710343686/781149405859282974/960x640-greenland_1579380596.jpg",
+            }}
+            style={styles.image}
+          >
+            <Text style={styles.text}>Greentings</Text>
+            <Text style={styles.slogan}>
+              Reproduced | Safe | Clean | Green | Happy
+            </Text>
+            <TouchableOpacity>
+              <Text style={styles.aboutUs}>About Us</Text>
+            </TouchableOpacity>
+          </ImageBackground>
+        </View>
+        <View style={{ marginTop: 50 }}></View>
       </View>
     );
   };
