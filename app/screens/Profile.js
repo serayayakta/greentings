@@ -173,7 +173,7 @@ class Profile extends Component {
             <TouchableRipple onPress={() => {}}>
               <View style={styles.menuItem}>
                 <Icon name="ios-heart" color="black" size={25} />
-                <Text style={{ marginLeft: 10, paddingTop: 5 }}>Favorites</Text>
+                <Text style={{ marginLeft: 10, paddingTop: 5 }}>For you</Text>
               </View>
             </TouchableRipple>
             <TouchableRipple

@@ -54,7 +54,7 @@ class Home extends Component {
     }
   }
   fetchProducts() {
-    fetch("http://127.0.0.1:8000/product/")
+    fetch("http://127.0.0.1:8000/reccom/")
       .then((response) => response.json())
       .then((result) => {
         this.setState({
@@ -216,6 +216,7 @@ class Home extends Component {
           </ImageBackground>
         </View>
         <View style={{ marginTop: 10 }}></View>
+        <Text style={styles.text_user}>Recommended products</Text>
       </View>
     );
   };
@@ -359,5 +360,16 @@ const styles = StyleSheet.create({
   },
   topLogoArea: {
     height: "20%",
+  },
+  text_user: {
+    marginTop: 7,
+    color: "grey",
+    fontSize: 24,
+    fontFamily: "Helvetica Neue",
+    fontWeight: "bold",
+    textAlign: "center",
+    //backgroundColor: "#004d4d",
+    textShadowOffset: { width: 1, height: 3 },
+    textShadowRadius: 10,
   },
 });
