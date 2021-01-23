@@ -10,6 +10,7 @@ import {
 } from "react-native";
 
 import MainScreen from "./MainScreen";
+import LoginScreen from "./LoginScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default class ForgotScreen extends Component {
@@ -248,6 +249,11 @@ export default class ForgotScreen extends Component {
           onPress={() => this.onVerify()}
         >
           <Text style={styles.guest}>Update</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate(LoginScreen)}
+        >
+          <Text style={styles.loginText}>Back To Login</Text>
         </TouchableOpacity>
       </ImageBackground>
     );

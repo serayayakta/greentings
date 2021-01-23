@@ -29,6 +29,7 @@ class OrderComponent extends Component {
   componentDidMount() {
     this.getId();
   }
+
   render() {
     return (
       <TouchableOpacity
@@ -46,8 +47,10 @@ class OrderComponent extends Component {
           <View style={styles.container}>
             <View styles={{ flexDirection: "column" }}>
               <View styles={{ flex: 8 }}>
-                <Text style={styles.text}>{this.props.order_id}</Text>
-                <Text style={styles.brandName}>{this.props.date}</Text>
+                <Text style={styles.text_user}>
+                  Order number{" " + this.props.order_id}
+                </Text>
+                <Text style={styles.text_user}>{this.props.date}</Text>
               </View>
               <View
                 styles={{
@@ -56,12 +59,9 @@ class OrderComponent extends Component {
                 }}
               >
                 <View styles={{ flex: 3 }}>
-                  <Text style={styles.text}>
+                  <Text style={styles.text_user}>
                     total price: ${this.props.total_price}
                   </Text>
-                </View>
-                <View styles={{ flex: 1 }}>
-                  <Text style={styles.text}>Adress: {this.props.adress}</Text>
                 </View>
               </View>
             </View>
@@ -121,6 +121,12 @@ const styles = StyleSheet.create({
     textTransform: "lowercase",
     fontFamily: "Helvetica Neue",
     textAlign: "center",
+  },
+  text_user: {
+    fontFamily: "Helvetica Neue",
+    textAlign: "left",
+    fontSize: 14,
+    color: "grey",
   },
 });
 
