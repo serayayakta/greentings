@@ -13,6 +13,12 @@ import {
   ImageBackground,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import RadioForm, {
+  RadioButton,
+  RadioButtonInput,
+  RadioButtonLabel,
+} from "react-native-simple-radio-button";
+import colors from "../config/colors";
 import { Picker } from "@react-native-picker/picker";
 import RNPickerSelect from "react-native-picker-select";
 import Icon from "react-native-vector-icons/Fontisto";
@@ -21,16 +27,28 @@ import Product from "./Product";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Category from "./Category";
 
+var radio_props = [
+  { label: "1 or above", value: 1 },
+  { label: "2 or above", value: 2 },
+  { label: "3 or above", value: 3 },
+  { label: "4 or above", value: 4 },
+];
 class Search extends Component {
   constructor(props) {
     super(props);
     this.state = {
       dataSource: [],
+      brand_name: [],
       searchKey: "",
       refreshing: true,
       searchUrl: "http://127.0.0.1:8000/search/?search=",
       value: "",
       user_id: "0",
+      price_lower: 0,
+      price_upper: 10000,
+      rating: 0,
+      categ_id: 0,
+      filter_show: false,
     };
   }
   async getId() {
@@ -72,7 +90,9 @@ class Search extends Component {
       .catch((error) => console.log("fetch error", error));
   }
   fetchCategoryItems(id) {
-    if (id == 1) {
+    this.setState({ categ_id: id });
+    console.log(this.state.categ_id);
+    if (id == 5) {
       fetch("http://127.0.0.1:8000/categoryitems/5/")
         .then((response) => response.json())
         .then((result) => {
@@ -80,10 +100,20 @@ class Search extends Component {
             dataSource: result,
             refreshing: false,
           });
+          fetch("http://127.0.0.1:8000/categorynames/5")
+            .then((response) => response.json())
+            .then((result) => {
+              this.setState({
+                brand_name: result,
+                refreshing: false,
+              });
+              console.log(this.state.brand_name);
+            })
+            .catch((error) => console.log("fetch error", error));
         })
         .catch((error) => console.log("fetch error", error));
     }
-    if (id == 2) {
+    if (id == 6) {
       fetch("http://127.0.0.1:8000/categoryitems/6/")
         .then((response) => response.json())
         .then((result) => {
@@ -91,10 +121,19 @@ class Search extends Component {
             dataSource: result,
             refreshing: false,
           });
+          fetch("http://127.0.0.1:8000/categorynames/6")
+            .then((response) => response.json())
+            .then((result) => {
+              this.setState({
+                brand_name: result,
+                refreshing: false,
+              });
+            })
+            .catch((error) => console.log("fetch error", error));
         })
         .catch((error) => console.log("fetch error", error));
     }
-    if (id == 4) {
+    if (id == 8) {
       fetch("http://127.0.0.1:8000/categoryitems/8/")
         .then((response) => response.json())
         .then((result) => {
@@ -102,11 +141,86 @@ class Search extends Component {
             dataSource: result,
             refreshing: false,
           });
+          fetch("http://127.0.0.1:8000/categorynames/8")
+            .then((response) => response.json())
+            .then((result) => {
+              this.setState({
+                brand_name: result,
+                refreshing: false,
+              });
+            })
+            .catch((error) => console.log("fetch error", error));
+        })
+        .catch((error) => console.log("fetch error", error));
+    }
+    if (id == 11) {
+      fetch("http://127.0.0.1:8000/categoryitems/11/")
+        .then((response) => response.json())
+        .then((result) => {
+          this.setState({
+            dataSource: result,
+            refreshing: false,
+          });
+
+          fetch("http://127.0.0.1:8000/categorynames/11")
+            .then((response) => response.json())
+            .then((result) => {
+              this.setState({
+                brand_name: result,
+                refreshing: false,
+              });
+              console.log(result);
+            })
+            .catch((error) => console.log("fetch error", error));
+        })
+        .catch((error) => console.log("fetch error", error));
+    }
+    if (id == 12) {
+      fetch("http://127.0.0.1:8000/categoryitems/12/")
+        .then((response) => response.json())
+        .then((result) => {
+          this.setState({
+            dataSource: result,
+            refreshing: false,
+          });
+          fetch("http://127.0.0.1:8000/categorynames/12")
+            .then((response) => response.json())
+            .then((result) => {
+              this.setState({
+                brand_name: result,
+                refreshing: false,
+              });
+            })
+            .catch((error) => console.log("fetch error", error));
         })
         .catch((error) => console.log("fetch error", error));
     }
   }
 
+  fetchFilter() {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      brand_name: [],
+      price_lower: this.state.price_lower,
+      price_upper: this.state.price_upper,
+      rating: this.state.rating,
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+    var i = this.state.categ_id.toString();
+    console.log(i);
+    fetch("127.0.0.1:8000/categoryitems/" + i + "/", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  }
   renderItemComponent = (data) => (
     <View style={styles.container}>
       <TouchableOpacity
@@ -289,7 +403,7 @@ class Search extends Component {
                   >
                     <TouchableOpacity
                       activeOpacity={0.5}
-                      onPress={() => this.fetchCategoryItems(1)}
+                      onPress={() => this.fetchCategoryItems(5)}
                     >
                       <View
                         style={{
@@ -320,7 +434,7 @@ class Search extends Component {
                     </TouchableOpacity>
                     <TouchableOpacity
                       activeOpacity={0.5}
-                      onPress={() => this.fetchCategoryItems(2)}
+                      onPress={() => this.fetchCategoryItems(6)}
                     >
                       <View
                         style={{
@@ -352,7 +466,7 @@ class Search extends Component {
 
                     <TouchableOpacity
                       activeOpacity={0.5}
-                      onPress={() => this.fetchCategoryItems(4)}
+                      onPress={() => this.fetchCategoryItems(8)}
                     >
                       <View
                         style={{
@@ -381,6 +495,68 @@ class Search extends Component {
                         </View>
                       </View>
                     </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      onPress={() => this.fetchCategoryItems(11)}
+                    >
+                      <View
+                        style={{
+                          height: 130,
+                          width: 130,
+                          marginLeft: 20,
+                          borderBottomWidth: 0.5,
+                          borderColor: "#dddddd",
+                        }}
+                      >
+                        <View style={{ flex: 2 }}>
+                          <Image
+                            source={require("../assets/categ4.jpeg")}
+                            style={{
+                              flex: 1,
+                              height: null,
+                              width: null,
+                              resizeMode: "cover",
+                            }}
+                          />
+                        </View>
+                        <View
+                          style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
+                        >
+                          <Text>Body Care</Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={0.5}
+                      onPress={() => this.fetchCategoryItems(12)}
+                    >
+                      <View
+                        style={{
+                          height: 130,
+                          width: 130,
+                          marginLeft: 20,
+                          borderBottomWidth: 0.5,
+                          borderColor: "#dddddd",
+                        }}
+                      >
+                        <View style={{ flex: 2 }}>
+                          <Image
+                            source={require("../assets/kitchen.jpg")}
+                            style={{
+                              flex: 1,
+                              height: null,
+                              width: null,
+                              resizeMode: "cover",
+                            }}
+                          />
+                        </View>
+                        <View
+                          style={{ flex: 1, paddingLeft: 10, paddingTop: 10 }}
+                        >
+                          <Text>Kitchen</Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
                   </ScrollView>
                 </View>
               </View>
@@ -401,6 +577,65 @@ class Search extends Component {
               ]}
             />
           </View>
+          {
+            (this.state.filter_show = false && (
+              <View>
+                <Text>Price range</Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ width: "10%" }}>
+                    <TextInput
+                      placeholder="min"
+                      placeholderTextColor="grey"
+                      style={styles.inputText}
+                      autoCorrect={false}
+                      onChangeText={(text) => {
+                        this.setState({ price_lower: text }),
+                          console.log("hey", this.state.price_lower);
+                      }}
+                    />
+                  </View>
+                  <Text>—</Text>
+                  <View style={{ width: "10%" }}>
+                    <TextInput
+                      placeholder="max"
+                      placeholderTextColor="grey"
+                      style={styles.inputText}
+                      autoCorrect={false}
+                      onChangeText={(text) => {
+                        this.setState({ price_upper: text }),
+                          console.log("hey", this.state.price_upper);
+                      }}
+                    />
+                  </View>
+                </View>
+                <View style={styles.separator}></View>
+                <Text>Select rating:</Text>
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ width: "60%" }}>
+                    <RadioForm
+                      radio_props={radio_props}
+                      initial={0}
+                      buttonColor={"black"}
+                      buttonSize={10}
+                      buttonOuterSize={20}
+                      onPress={(value) => {
+                        this.setState({ rating: value }),
+                          console.log(this.state.rating);
+                      }}
+                    />
+                  </View>
+                  <View style={{ width: "40%" }}>
+                    <TouchableOpacity
+                      style={styles.commentBtn}
+                      onPress={() => this.fetchFilter()}
+                    >
+                      <Text style={styles.btnText}>Filter</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            ))
+          }
           <View style={{ flex: 2.5 }}>
             <ScrollView>
               <FlatList
@@ -500,6 +735,18 @@ const styles = StyleSheet.create({
     position: "relative",
     flex: 1,
   },
+  commentBtn: {
+    width: "50%",
+    //backgroundColor: `#9acd32`,
+    borderRadius: 25,
+    height: 30,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 40,
+    marginBottom: 10,
+    backgroundColor: colors.primary,
+    alignSelf: "center",
+  },
   iconContainer: {
     right: 10,
     height: 40,
@@ -541,5 +788,14 @@ const styles = StyleSheet.create({
   },
   topLogoArea: {
     height: "20%",
+  },
+  separator: {
+    height: 0.2,
+    backgroundColor: "grey",
+    marginTop: 5,
+    marginHorizontal: 20,
+  },
+  btnText: {
+    color: "white",
   },
 });
