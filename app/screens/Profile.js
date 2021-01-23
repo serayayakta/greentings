@@ -4,6 +4,7 @@ import { withNavigation } from "react-navigation";
 import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
 import Icon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { DevSettings } from "react-native";
 
 class Profile extends Component {
   constructor(props) {
@@ -107,6 +108,7 @@ class Profile extends Component {
     } catch (e) {
       console.log("error", e);
     }
+    DevSettings.reload();
   }
 
   render() {
