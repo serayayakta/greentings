@@ -170,7 +170,11 @@ class Profile extends Component {
                 </Text>
               </View>
             )}
-            <TouchableRipple onPress={() => {}}>
+            <TouchableRipple
+              onPress={() => {
+                this.props.navigation.navigate("ForYouScreen", {});
+              }}
+            >
               <View style={styles.menuItem}>
                 <Icon name="ios-heart" color="black" size={25} />
                 <Text style={{ marginLeft: 10, paddingTop: 5 }}>For you</Text>

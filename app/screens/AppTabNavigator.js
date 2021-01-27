@@ -14,6 +14,7 @@ import { createStackNavigator } from "react-navigation";
 import OrdersDetailScreen from "./OrdersDetailScreen";
 import UserCommentsScreen from "./UserCommentsScreen";
 import OrderInvoiceScreen from "./OrderInvoiceScreen";
+import ForYouScreen from "./ForYouScreen";
 
 const HomePlus = createStackNavigator(
   {
@@ -82,6 +83,9 @@ const ProfilePlus = createStackNavigator(
     },
     VerificationScreen: {
       screen: VerificationScreen,
+    },
+    ForYouScreen: {
+      screen: ForYouScreen,
     },
   },
   {
